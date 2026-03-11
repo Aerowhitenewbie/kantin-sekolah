@@ -19,6 +19,7 @@
             --gray: #64748b;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --warning: #f97316;
         }
 
         * {
@@ -127,7 +128,7 @@
             color: var(--dark);
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e2e8f0;
@@ -137,7 +138,7 @@
             transition: border-color 0.3s;
         }
 
-        .input-group input:focus {
+        .input-group input:focus, .input-group select:focus {
             outline: none;
             border-color: var(--primary);
         }
@@ -171,6 +172,10 @@
 
         .btn-danger {
             background: var(--danger);
+        }
+
+        .btn-warning {
+            background: var(--warning);
         }
 
         .btn-outline {
@@ -231,6 +236,18 @@
             box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
         }
 
+        .tamu-badge {
+            background: linear-gradient(135deg, var(--warning), #ea580c);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2);
+        }
+
         .logout-btn {
             background: #fee2e2;
             color: var(--danger);
@@ -267,6 +284,10 @@
             box-shadow: var(--shadow-lg);
         }
 
+        .card.out-of-stock {
+            opacity: 0.7;
+        }
+
         .card-image {
             height: 180px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -276,6 +297,10 @@
             color: white;
             font-size: 48px;
             position: relative;
+        }
+
+        .card-image.out-of-stock {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
         }
 
         .card-badge {
@@ -288,6 +313,22 @@
             font-size: 12px;
             font-weight: 700;
             color: var(--dark);
+        }
+
+        .stock-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stock-badge.empty {
+            background: var(--danger);
         }
 
         .card-content {
@@ -325,6 +366,12 @@
 
         .btn-small:hover {
             opacity: 0.9;
+        }
+
+        .btn-small:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
         }
 
         /* Cart Section */
@@ -389,15 +436,39 @@
             margin-top: 20px;
             padding-top: 20px;
             border-top: 2px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .total-price {
-            font-size: 28px;
+        .cart-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+
+        .summary-row.pajak {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
             font-weight: 800;
             color: var(--primary);
+            border-top: 2px solid #e2e8f0;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
         }
 
         /* Admin Panel Specific */
@@ -465,7 +536,7 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 16px;
         }
@@ -483,7 +554,7 @@
             font-weight: 700;
             border-bottom: 1px solid #e2e8f0;
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 120px;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px;
             gap: 16px;
         }
 
@@ -491,7 +562,7 @@
             padding: 16px 20px;
             border-bottom: 1px solid #e2e8f0;
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 120px;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px;
             gap: 16px;
             align-items: center;
         }
@@ -600,6 +671,10 @@
             background: var(--danger);
         }
 
+        .toast.warning {
+            background: var(--warning);
+        }
+
         /* Animations */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -674,6 +749,10 @@
                 text-align: center;
             }
             
+            .role-selector {
+                grid-template-columns: 1fr;
+            }
+            
             .list-header, .list-item {
                 grid-template-columns: 1fr;
                 gap: 8px;
@@ -707,6 +786,41 @@
             font-weight: 700;
             letter-spacing: 2px;
         }
+
+        .user-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .user-type-badge.siswa {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .user-type-badge.tamu {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .info-box {
+            background: #fff7ed;
+            border: 2px solid var(--warning);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #9a3412;
+        }
+
+        .info-box i {
+            font-size: 24px;
+            color: var(--warning);
+        }
     </style>
 </head>
 <body>
@@ -723,7 +837,7 @@
             <div class="role-selector">
                 <button class="role-btn active" onclick="selectRole('customer')">
                     <i class="fas fa-user"></i>
-                    Siswa
+                    Login Siswa/Tamu
                 </button>
                 <button class="role-btn" onclick="selectRole('admin')">
                     <i class="fas fa-cog"></i>
@@ -776,14 +890,27 @@
                         <i class="fas fa-wallet"></i>
                         <span id="saldoAmount">Rp 0</span>
                     </div>
+                    <div class="tamu-badge" id="tamuDisplay" style="display: none;">
+                        <i class="fas fa-user-tag"></i>
+                        <span>Tamu (+10%)</span>
+                    </div>
                     <button class="logout-btn" onclick="logout()">
                         <i class="fas fa-sign-out-alt"></i> Keluar
                     </button>
                 </div>
             </div>
 
-            <!-- Customer View -->
+            <!-- Customer/Tamu View -->
             <div id="customerView">
+                <!-- Info Box for Tamu -->
+                <div class="info-box" id="tamuInfoBox" style="display: none;">
+                    <i class="fas fa-receipt"></i>
+                    <div>
+                        <strong>Anda terdaftar sebagai Tamu</strong>
+                        <p style="margin: 0; font-size: 14px;">Pajak 10% akan ditambahkan ke total pembelian Anda.</p>
+                    </div>
+                </div>
+
                 <!-- Menu Grid -->
                 <div class="grid" id="menuGrid">
                     <!-- Items will be inserted here -->
@@ -797,11 +924,21 @@
                     </h3>
                     <div id="cartItems"></div>
                     <div class="cart-total">
-                        <div>
-                            <p style="color: var(--gray); margin-bottom: 4px;">Total Pembayaran</p>
-                            <div class="total-price" id="cartTotal">Rp 0</div>
+                        <div class="cart-summary">
+                            <div class="summary-row">
+                                <span>Subtotal</span>
+                                <span id="cartSubtotal">Rp 0</span>
+                            </div>
+                            <div class="summary-row pajak" id="pajakRow" style="display: none;">
+                                <span>Pajak (10%)</span>
+                                <span id="cartPajak">Rp 0</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total Bayar</span>
+                                <span id="cartTotal">Rp 0</span>
+                            </div>
                         </div>
-                        <button class="btn btn-success" style="width: auto; padding: 16px 32px;" onclick="checkout()">
+                        <button class="btn btn-success checkout-btn" onclick="checkout()">
                             <i class="fas fa-check"></i> Bayar Sekarang
                         </button>
                     </div>
@@ -817,6 +954,10 @@
                         <div class="stat-label">Total Siswa</div>
                     </div>
                     <div class="stat-card">
+                        <div class="stat-value" id="totalTamu">0</div>
+                        <div class="stat-label">Total Tamu</div>
+                    </div>
+                    <div class="stat-card">
                         <div class="stat-value" id="totalSales">0</div>
                         <div class="stat-label">Transaksi Hari Ini</div>
                     </div>
@@ -824,12 +965,16 @@
                         <div class="stat-value" id="totalRevenue">Rp 0</div>
                         <div class="stat-label">Pendapatan</div>
                     </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #fff7ed, #ffedd5);">
+                        <div class="stat-value" id="totalPajak" style="color: var(--warning);">Rp 0</div>
+                        <div class="stat-label" style="color: #9a3412;">Pajak Tamu</div>
+                    </div>
                 </div>
 
                 <!-- Tabs -->
                 <div class="tabs">
                     <button class="tab active" onclick="switchTab('menu')">Kelola Menu</button>
-                    <button class="tab" onclick="switchTab('users')">Kelola Siswa</button>
+                    <button class="tab" onclick="switchTab('users')">Kelola Pengguna</button>
                     <button class="tab" onclick="switchTab('transactions')">Riwayat Transaksi</button>
                 </div>
 
@@ -850,6 +995,10 @@
                                 <label>Kategori</label>
                                 <input type="text" id="newItemCategory" placeholder="Makanan/Minuman">
                             </div>
+                            <div class="input-group">
+                                <label>Stok Awal</label>
+                                <input type="number" id="newItemStock" placeholder="10" value="10">
+                            </div>
                         </div>
                         <button class="btn" onclick="addMenuItem()" style="width: auto;">
                             <i class="fas fa-plus"></i> Tambah Menu
@@ -861,11 +1010,18 @@
                 <!-- Users Tab -->
                 <div class="tab-content" id="usersTab">
                     <div class="cart-section">
-                        <h3 class="section-title">Tambah Siswa Baru</h3>
+                        <h3 class="section-title">Tambah Pengguna Baru</h3>
                         <div class="form-grid">
                             <div class="input-group">
                                 <label>Nama Lengkap</label>
-                                <input type="text" id="newUserName" placeholder="Nama siswa">
+                                <input type="text" id="newUserName" placeholder="Nama pengguna">
+                            </div>
+                            <div class="input-group">
+                                <label>Tipe Pengguna</label>
+                                <select id="newUserType">
+                                    <option value="siswa">Siswa</option>
+                                    <option value="tamu">Tamu (Pajak 10%)</option>
+                                </select>
                             </div>
                             <div class="input-group">
                                 <label>PIN (6 digit)</label>
@@ -877,7 +1033,7 @@
                             </div>
                         </div>
                         <button class="btn btn-success" onclick="addUser()" style="width: auto;">
-                            <i class="fas fa-user-plus"></i> Tambah Siswa
+                            <i class="fas fa-user-plus"></i> Tambah Pengguna
                         </button>
                     </div>
 
@@ -885,9 +1041,9 @@
                         <h3 class="section-title">Top-up Saldo</h3>
                         <div class="form-grid">
                             <div class="input-group">
-                                <label>Pilih Siswa</label>
+                                <label>Pilih Pengguna</label>
                                 <select id="topupUserSelect" style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px;">
-                                    <option value="">-- Pilih Siswa --</option>
+                                    <option value="">-- Pilih Pengguna --</option>
                                 </select>
                             </div>
                             <div class="input-group">
@@ -902,10 +1058,12 @@
 
                     <div class="user-list" style="margin-top: 24px;">
                         <div class="list-header">
-                            <div>Nama Siswa</div>
+                            <div>Nama</div>
+                            <div>Tipe</div>
                             <div>PIN</div>
                             <div>Saldo</div>
                             <div>Dibuat</div>
+                            <div>Status</div>
                             <div>Aksi</div>
                         </div>
                         <div id="usersList"></div>
@@ -916,8 +1074,10 @@
                 <div class="tab-content" id="transactionsTab">
                     <div class="transaction-list">
                         <div class="list-header">
-                            <div>Detail</div>
+                            <div>Pengguna</div>
+                            <div>Tipe</div>
                             <div>Total</div>
+                            <div>Pajak</div>
                             <div>Waktu</div>
                             <div>Status</div>
                         </div>
@@ -952,23 +1112,25 @@
         let currentUser = null;
         let currentRole = 'customer';
         let cart = [];
+        const PAJAK_TAMU = 0.10; // 10%
         
         // Initialize data if empty
         if (!localStorage.getItem('kantin_users')) {
             localStorage.setItem('kantin_users', JSON.stringify([
-                { id: 1, name: 'Budi Santoso', pin: '111111', saldo: 50000, created: '2024-01-01' },
-                { id: 2, name: 'Ani Wijaya', pin: '222222', saldo: 75000, created: '2024-01-01' }
+                { id: 1, name: 'Budi Santoso', pin: '111111', saldo: 50000, type: 'siswa', created: '2024-01-01' },
+                { id: 2, name: 'Ani Wijaya', pin: '222222', saldo: 75000, type: 'siswa', created: '2024-01-01' },
+                { id: 3, name: 'Pak Guru Tamu', pin: '333333', saldo: 100000, type: 'tamu', created: '2024-01-01' }
             ]));
         }
         
         if (!localStorage.getItem('kantin_menu')) {
             localStorage.setItem('kantin_menu', JSON.stringify([
-                { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan', icon: '🍳' },
-                { id: 2, name: 'Mie Ayam Bakso', price: 12000, category: 'Makanan', icon: '🍜' },
-                { id: 3, name: 'Es Teh Manis', price: 5000, category: 'Minuman', icon: '🧃' },
-                { id: 4, name: 'Roti Bakar', price: 10000, category: 'Makanan', icon: '🍞' },
-                { id: 5, name: 'Kopi Susu', price: 8000, category: 'Minuman', icon: '☕' },
-                { id: 6, name: 'Pisang Goreng', price: 7000, category: 'Makanan', icon: '🍌' }
+                { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan', icon: '🍳', stock: 10 },
+                { id: 2, name: 'Mie Ayam Bakso', price: 12000, category: 'Makanan', icon: '🍜', stock: 15 },
+                { id: 3, name: 'Es Teh Manis', price: 5000, category: 'Minuman', icon: '🧃', stock: 20 },
+                { id: 4, name: 'Roti Bakar', price: 10000, category: 'Makanan', icon: '🍞', stock: 8 },
+                { id: 5, name: 'Kopi Susu', price: 8000, category: 'Minuman', icon: '☕', stock: 12 },
+                { id: 6, name: 'Pisang Goreng', price: 7000, category: 'Makanan', icon: '🍌', stock: 0 }
             ]));
         }
         
@@ -1032,7 +1194,6 @@
                 const user = document.getElementById('adminUser').value;
                 const pass = document.getElementById('adminPass').value;
                 
-                // PASSWORD BARU: supersecretpasswordaerow
                 if (user === 'admin' && pass === 'supersecretpasswordaerow') {
                     currentUser = { name: 'Admin', role: 'admin' };
                     enterApp();
@@ -1069,16 +1230,32 @@
                 document.getElementById('customerView').classList.add('hidden');
                 document.getElementById('adminView').classList.remove('hidden');
                 document.getElementById('saldoDisplay').style.display = 'none';
+                document.getElementById('tamuDisplay').style.display = 'none';
                 document.getElementById('welcomeText').textContent = 'Dashboard Admin';
                 document.getElementById('subText').textContent = 'Kelola kantin dengan mudah';
                 loadAdminData();
             } else {
                 document.getElementById('customerView').classList.remove('hidden');
                 document.getElementById('adminView').classList.add('hidden');
-                document.getElementById('saldoDisplay').style.display = 'flex';
+                
+                const isTamu = currentUser.type === 'tamu';
+                
+                if (isTamu) {
+                    document.getElementById('saldoDisplay').style.display = 'none';
+                    document.getElementById('tamuDisplay').style.display = 'flex';
+                    document.getElementById('tamuInfoBox').style.display = 'flex';
+                    document.getElementById('pajakRow').style.display = 'flex';
+                    document.getElementById('subText').textContent = 'Selamat berbelanja (Tamu +10%)';
+                } else {
+                    document.getElementById('saldoDisplay').style.display = 'flex';
+                    document.getElementById('tamuDisplay').style.display = 'none';
+                    document.getElementById('tamuInfoBox').style.display = 'none';
+                    document.getElementById('pajakRow').style.display = 'none';
+                    document.getElementById('subText').textContent = 'Selamat berbelanja';
+                    updateSaldoDisplay();
+                }
+                
                 document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
-                document.getElementById('subText').textContent = 'Selamat berbelanja';
-                updateSaldoDisplay();
                 loadMenu();
             }
         }
@@ -1094,7 +1271,7 @@
             document.getElementById('adminPass').value = '';
         }
 
-        // Customer Functions
+        // Customer/Tamu Functions
         function updateSaldoDisplay() {
             const users = getUsers();
             const user = users.find(u => u.id === currentUser.id);
@@ -1110,19 +1287,23 @@
             grid.innerHTML = '';
             
             menu.forEach(item => {
+                const isOutOfStock = item.stock <= 0;
                 const card = document.createElement('div');
-                card.className = 'card';
+                card.className = 'card' + (isOutOfStock ? ' out-of-stock' : '');
                 card.innerHTML = `
-                    <div class="card-image">
+                    <div class="card-image ${isOutOfStock ? 'out-of-stock' : ''}">
                         <div style="font-size: 64px;">${item.icon}</div>
                         <div class="card-badge">${item.category}</div>
+                        <div class="stock-badge ${isOutOfStock ? 'empty' : ''}">
+                            Stok: ${item.stock}
+                        </div>
                     </div>
                     <div class="card-content">
                         <div class="card-title">${item.name}</div>
                         <div class="card-price">${formatRupiah(item.price)}</div>
                         <div class="card-actions">
-                            <button class="btn-small btn-secondary" onclick="addToCart(${item.id})">
-                                <i class="fas fa-plus"></i> Tambah
+                            <button class="btn-small btn-secondary" onclick="addToCart(${item.id})" ${isOutOfStock ? 'disabled' : ''}>
+                                ${isOutOfStock ? '<i class="fas fa-times"></i> Habis' : '<i class="fas fa-plus"></i> Tambah'}
                             </button>
                         </div>
                     </div>
@@ -1134,9 +1315,19 @@
         function addToCart(itemId) {
             const menu = getMenu();
             const item = menu.find(m => m.id === itemId);
+            
+            if (item.stock <= 0) {
+                showToast('Maaf, stok habis!', 'error');
+                return;
+            }
+            
             const existingItem = cart.find(c => c.id === itemId);
             
             if (existingItem) {
+                if (existingItem.qty >= item.stock) {
+                    showToast('Stok tidak cukup!', 'error');
+                    return;
+                }
                 existingItem.qty++;
             } else {
                 cart.push({ ...item, qty: 1 });
@@ -1157,21 +1348,21 @@
             
             cartSection.style.display = 'block';
             cartItems.innerHTML = '';
-            let total = 0;
+            let subtotal = 0;
             
             cart.forEach((item, index) => {
-                total += item.price * item.qty;
+                subtotal += item.price * item.qty;
                 const div = document.createElement('div');
                 div.className = 'cart-item';
                 div.innerHTML = `
                     <div class="cart-item-info">
                         <h4>${item.name}</h4>
-                        <p>${formatRupiah(item.price)}</p>
+                        <p>${formatRupiah(item.price)} x ${item.qty}</p>
                     </div>
                     <div class="cart-item-actions">
                         <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
                         <span style="font-weight: 700; min-width: 30px; text-align: center;">${item.qty}</span>
-                        <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                        <button class="qty-btn" onclick="updateQty(${index}, 1)" ${item.qty >= getMenu().find(m => m.id === item.id).stock ? 'disabled' : ''}>+</button>
                         <span style="font-weight: 700; color: var(--primary); min-width: 100px; text-align: right;">
                             ${formatRupiah(item.price * item.qty)}
                         </span>
@@ -1180,30 +1371,82 @@
                 cartItems.appendChild(div);
             });
             
+            // Calculate totals
+            const isTamu = currentUser.type === 'tamu';
+            const pajak = isTamu ? subtotal * PAJAK_TAMU : 0;
+            const total = subtotal + pajak;
+            
+            document.getElementById('cartSubtotal').textContent = formatRupiah(subtotal);
+            document.getElementById('cartPajak').textContent = formatRupiah(pajak);
             document.getElementById('cartTotal').textContent = formatRupiah(total);
         }
 
         function updateQty(index, change) {
+            const menu = getMenu();
+            const item = menu.find(m => m.id === cart[index].id);
+            
             cart[index].qty += change;
+            
             if (cart[index].qty <= 0) {
                 cart.splice(index, 1);
+            } else if (cart[index].qty > item.stock) {
+                showToast('Stok tidak cukup!', 'error');
+                cart[index].qty = item.stock;
             }
+            
             updateCart();
         }
 
         function checkout() {
-            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const users = getUsers();
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            const menu = getMenu();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const isTamu = currentUser.type === 'tamu';
+            const pajak = isTamu ? subtotal * PAJAK_TAMU : 0;
+            const total = subtotal + pajak;
             
-            if (users[userIndex].saldo < total) {
-                showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
-                return;
+            // Check stock availability
+            for (let cartItem of cart) {
+                const menuItem = menu.find(m => m.id === cartItem.id);
+                if (cartItem.qty > menuItem.stock) {
+                    showToast(`Stok ${menuItem.name} tidak cukup! Tersisa: ${menuItem.stock}`, 'error');
+                    return;
+                }
             }
             
-            // Process payment
-            users[userIndex].saldo -= total;
-            saveUsers(users);
+            // For siswa, check saldo
+            if (!isTamu) {
+                const users = getUsers();
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                
+                if (users[userIndex].saldo < total) {
+                    showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
+                    return;
+                }
+                
+                // Deduct saldo
+                users[userIndex].saldo -= total;
+                saveUsers(users);
+            } else {
+                // For tamu, also deduct from saldo (if they have)
+                const users = getUsers();
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                
+                if (userIndex !== -1 && users[userIndex].saldo > 0) {
+                    if (users[userIndex].saldo < total) {
+                        showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
+                        return;
+                    }
+                    users[userIndex].saldo -= total;
+                    saveUsers(users);
+                }
+            }
+            
+            // Reduce stock
+            cart.forEach(cartItem => {
+                const menuItem = menu.find(m => m.id === cartItem.id);
+                menuItem.stock -= cartItem.qty;
+            });
+            saveMenu(menu);
             
             // Save transaction
             const transactions = getTransactions();
@@ -1211,7 +1454,10 @@
                 id: Date.now(),
                 user: currentUser.name,
                 userId: currentUser.id,
+                userType: currentUser.type,
                 items: [...cart],
+                subtotal: subtotal,
+                pajak: pajak,
                 total: total,
                 date: new Date().toLocaleString('id-ID'),
                 status: 'success'
@@ -1219,10 +1465,15 @@
             saveTransactions(transactions);
             
             // Clear cart and update UI
+            const message = isTamu 
+                ? `Pembayaran berhasil! Total: ${formatRupiah(total)} (termasuk pajak ${formatRupiah(pajak)})`
+                : 'Pembayaran berhasil! Terima kasih.';
+            
             cart = [];
             updateCart();
-            updateSaldoDisplay();
-            showToast('Pembayaran berhasil! Terima kasih.');
+            loadMenu();
+            if (!isTamu) updateSaldoDisplay();
+            showToast(message);
         }
 
         // Admin Functions
@@ -1240,10 +1491,16 @@
             const today = new Date().toDateString();
             const todayTransactions = transactions.filter(t => new Date(t.date).toDateString() === today);
             const revenue = todayTransactions.reduce((sum, t) => sum + t.total, 0);
+            const pajakTotal = todayTransactions.reduce((sum, t) => sum + (t.pajak || 0), 0);
             
-            document.getElementById('totalUsers').textContent = users.length;
+            const siswaCount = users.filter(u => u.type === 'siswa' || !u.type).length;
+            const tamuCount = users.filter(u => u.type === 'tamu').length;
+            
+            document.getElementById('totalUsers').textContent = siswaCount;
+            document.getElementById('totalTamu').textContent = tamuCount;
             document.getElementById('totalSales').textContent = todayTransactions.length;
             document.getElementById('totalRevenue').textContent = formatRupiah(revenue);
+            document.getElementById('totalPajak').textContent = formatRupiah(pajakTotal);
         }
 
         function switchTab(tab) {
@@ -1265,18 +1522,25 @@
             grid.innerHTML = '';
             
             menu.forEach(item => {
+                const isOutOfStock = item.stock <= 0;
                 const card = document.createElement('div');
-                card.className = 'card';
+                card.className = 'card' + (isOutOfStock ? ' out-of-stock' : '');
                 card.innerHTML = `
-                    <div class="card-image" style="height: 120px; font-size: 48px;">
+                    <div class="card-image ${isOutOfStock ? 'out-of-stock' : ''}" style="height: 120px; font-size: 48px;">
                         ${item.icon}
+                        <div class="stock-badge ${isOutOfStock ? 'empty' : ''}" style="font-size: 10px;">
+                            Stok: ${item.stock}
+                        </div>
                     </div>
                     <div class="card-content">
                         <div class="card-title">${item.name}</div>
                         <div class="card-price">${formatRupiah(item.price)}</div>
                         <div class="card-actions">
+                            <button class="btn-small btn-secondary" onclick="editStock(${item.id})">
+                                <i class="fas fa-edit"></i> Stok
+                            </button>
                             <button class="btn-small btn-danger" onclick="deleteMenuItem(${item.id})">
-                                <i class="fas fa-trash"></i> Hapus
+                                <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
@@ -1289,6 +1553,7 @@
             const name = document.getElementById('newItemName').value;
             const price = parseInt(document.getElementById('newItemPrice').value);
             const category = document.getElementById('newItemCategory').value;
+            const stock = parseInt(document.getElementById('newItemStock').value) || 0;
             
             if (!name || !price || !category) {
                 showToast('Mohon isi semua field!', 'error');
@@ -1302,6 +1567,7 @@
                 name: name,
                 price: price,
                 category: category,
+                stock: stock,
                 icon: icons[Math.floor(Math.random() * icons.length)]
             };
             
@@ -1311,9 +1577,23 @@
             document.getElementById('newItemName').value = '';
             document.getElementById('newItemPrice').value = '';
             document.getElementById('newItemCategory').value = '';
+            document.getElementById('newItemStock').value = '10';
             
             loadAdminMenu();
             showToast('Menu berhasil ditambahkan!');
+        }
+
+        function editStock(itemId) {
+            const menu = getMenu();
+            const item = menu.find(m => m.id === itemId);
+            const newStock = prompt(`Edit stok untuk ${item.name}:`, item.stock);
+            
+            if (newStock !== null && !isNaN(newStock)) {
+                item.stock = parseInt(newStock);
+                saveMenu(menu);
+                loadAdminMenu();
+                showToast(`Stok ${item.name} diupdate: ${item.stock}`);
+            }
         }
 
         function deleteMenuItem(id) {
@@ -1328,6 +1608,7 @@
         // User Management Functions
         function addUser() {
             const name = document.getElementById('newUserName').value.trim();
+            const type = document.getElementById('newUserType').value;
             const pin = document.getElementById('newUserPin').value;
             const saldo = parseInt(document.getElementById('newUserSaldo').value) || 0;
             
@@ -1338,9 +1619,8 @@
             
             let users = getUsers();
             
-            // Check if name already exists
             if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-                showToast('Nama siswa sudah ada!', 'error');
+                showToast('Nama pengguna sudah ada!', 'error');
                 return;
             }
             
@@ -1348,6 +1628,7 @@
                 id: Date.now(),
                 name: name,
                 pin: pin,
+                type: type,
                 saldo: saldo,
                 created: new Date().toLocaleDateString('id-ID')
             };
@@ -1355,19 +1636,21 @@
             users.push(newUser);
             saveUsers(users);
             
-            // Clear form
             document.getElementById('newUserName').value = '';
             document.getElementById('newUserPin').value = '';
             document.getElementById('newUserSaldo').value = '0';
+            document.getElementById('newUserType').value = 'siswa';
             
             loadUsersList();
             updateTopupSelect();
             updateAdminStats();
-            showToast(`Siswa ${name} berhasil ditambahkan!`);
+            
+            const typeLabel = type === 'tamu' ? 'Tamu (Pajak 10%)' : 'Siswa';
+            showToast(`${typeLabel} ${name} berhasil ditambahkan!`);
         }
 
         function deleteUser(id) {
-            if (!confirm('Yakin ingin menghapus siswa ini? Semua data akan hilang!')) return;
+            if (!confirm('Yakin ingin menghapus pengguna ini? Semua data akan hilang!')) return;
             
             let users = getUsers();
             const user = users.find(u => u.id === id);
@@ -1377,18 +1660,19 @@
             loadUsersList();
             updateTopupSelect();
             updateAdminStats();
-            showToast(`Siswa ${user.name} dihapus`);
+            showToast(`Pengguna ${user.name} dihapus`);
         }
 
         function updateTopupSelect() {
             const users = getUsers();
             const select = document.getElementById('topupUserSelect');
-            select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
+            select.innerHTML = '<option value="">-- Pilih Pengguna --</option>';
             
             users.sort((a, b) => a.name.localeCompare(b.name)).forEach(user => {
+                const typeLabel = user.type === 'tamu' ? '[Tamu]' : '[Siswa]';
                 const option = document.createElement('option');
                 option.value = user.id;
-                option.textContent = `${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
+                option.textContent = `${typeLabel} ${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
                 select.appendChild(option);
             });
         }
@@ -1402,22 +1686,27 @@
                 list.innerHTML = `
                     <div class="empty-state" style="padding: 40px;">
                         <i class="fas fa-users"></i>
-                        <p>Belum ada siswa terdaftar</p>
+                        <p>Belum ada pengguna terdaftar</p>
                     </div>
                 `;
                 return;
             }
             
             users.sort((a, b) => a.name.localeCompare(b.name)).forEach(user => {
+                const isTamu = user.type === 'tamu';
                 const div = document.createElement('div');
                 div.className = 'list-item';
                 div.innerHTML = `
                     <div><strong>${user.name}</strong></div>
+                    <div><span class="user-type-badge ${user.type || 'siswa'}">${isTamu ? 'Tamu' : 'Siswa'}</span></div>
                     <div><span class="pin-display">${user.pin}</span></div>
                     <div style="font-weight: 700; color: var(--success);">${formatRupiah(user.saldo)}</div>
                     <div style="font-size: 12px; color: var(--gray);">${user.created}</div>
+                    <div style="font-size: 12px; color: ${isTamu ? 'var(--warning)' : 'var(--success)'};">
+                        ${isTamu ? '+Pajak 10%' : 'Normal'}
+                    </div>
                     <div class="action-btns">
-                        <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})" title="Hapus Siswa">
+                        <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})" title="Hapus Pengguna">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -1431,7 +1720,7 @@
             const amount = parseInt(document.getElementById('topupAmount').value);
             
             if (!userId || !amount || amount <= 0) {
-                showToast('Mohon pilih siswa dan masukkan jumlah!', 'error');
+                showToast('Mohon pilih pengguna dan masukkan jumlah!', 'error');
                 return;
             }
             
@@ -1439,7 +1728,7 @@
             const userIndex = users.findIndex(u => u.id == userId);
             
             if (userIndex === -1) {
-                showToast('Siswa tidak ditemukan!', 'error');
+                showToast('Pengguna tidak ditemukan!', 'error');
                 return;
             }
             
@@ -1471,14 +1760,16 @@
             }
             
             transactions.forEach(t => {
+                const isTamu = t.userType === 'tamu';
                 const div = document.createElement('div');
                 div.className = 'list-item';
                 div.innerHTML = `
-                    <div>
-                        <strong>${t.user}</strong>
-                        <div style="font-size: 12px; color: var(--gray);">${t.items.length} item</div>
-                    </div>
+                    <div><strong>${t.user}</strong></div>
+                    <div><span class="user-type-badge ${t.userType || 'siswa'}">${isTamu ? 'Tamu' : 'Siswa'}</span></div>
                     <div style="font-weight: 700;">${formatRupiah(t.total)}</div>
+                    <div style="color: ${isTamu ? 'var(--warning)' : 'var(--gray)'}; font-weight: 600;">
+                        ${t.pajak > 0 ? formatRupiah(t.pajak) : '-'}
+                    </div>
                     <div style="font-size: 14px; color: var(--gray);">${t.date}</div>
                     <div class="status-success">Sukses</div>
                 `;
