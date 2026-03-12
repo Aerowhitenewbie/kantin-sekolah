@@ -1,263 +1,1901 @@
-                div.innerHTML = `
-                    <div><strong>${user.name}</strong></div>
-                    <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                    <div><span class="pin-display">${user.pin}</span></div>
-                    <div style="font-weight: 700; color: var(--success);">${formatRupiah(user.saldo)}</div>
-                    <div style="font-size: 12px; color: var(--gray);">${user.created}</div>
-                    <div style="font-size: 12px; color: var(--success);">Aktif</div>
-                    <div class="action-btns">
-                        <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})" title="Hapus Pengguna">
-                            <i class="fas fa-trash"></i>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kantin Sekolah - Smart Canteen</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --warning: #f97316;
+            --info: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            animation: slideUp 0.5s ease;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+        }
+
+        .login-card h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .login-card p {
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .role-btn {
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            font-weight: 600;
+        }
+
+        .role-btn:hover, .role-btn.active {
+            border-color: var(--primary);
+            background: #eef2ff;
+            color: var(--primary);
+        }
+
+        .role-btn i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .btn-info {
+            background: var(--info);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main App */
+        .app {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-info h2 {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .header-info p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .saldo-badge {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+        }
+
+        .kelas-badge {
+            background: linear-gradient(135deg, var(--info), #1d4ed8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #fee2e2;
+            color: var(--danger);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #fecaca;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card.out-of-stock {
+            opacity: 0.7;
+        }
+
+        .card-image {
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .card-image.out-of-stock {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.9);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stock-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stock-badge.empty {
+            background: var(--danger);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-price {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-small:hover {
+            opacity: 0.9;
+        }
+
+        .btn-small:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* Cart Section */
+        .cart-section {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .cart-item-info h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-info p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .cart-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            border-top: 2px solid #e2e8f0;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+        }
+
+        /* Admin Panel Specific */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .user-list, .transaction-list {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .list-header {
+            background: #f8fafc;
+            padding: 16px 20px;
+            font-weight: 700;
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px;
+            gap: 16px;
+        }
+
+        .list-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .list-item:hover {
+            background: #f8fafc;
+        }
+
+        .status-success {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-pending {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-size: 24px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #f1f5f9;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--dark);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        /* Action Buttons in List */
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .role-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .list-header, .list-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .list-header {
+                display: none;
+            }
+            
+            .list-item {
+                padding: 20px;
+                border: 1px solid #e2e8f0;
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+
+            .action-btns {
+                justify-content: flex-end;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .pin-display {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .kelas-badge-small {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .kelas-10 { background: #dbeafe; color: #1e40af; }
+        .kelas-11 { background: #dcfce7; color: #166534; }
+        .kelas-12 { background: #f3e8ff; color: #6b21a8; }
+        .kelas-guru { background: #ffedd5; color: #9a3412; }
+
+        .backup-section {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .backup-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .backup-btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            padding: 12px 24px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .riwayat-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .riwayat-tab {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .riwayat-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .riwayat-content {
+            display: none;
+        }
+
+        .riwayat-content.active {
+            display: block;
+        }
+
+        .transaction-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .type-buy { background: #dbeafe; color: #1e40af; }
+        .type-topup { background: #dcfce7; color: #166534; }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h1>Kantin Sekolah</h1>
+            <p>Sistem pembayaran digital tanpa uang kembalian</p>
+            
+            <div class="role-selector">
+                <button class="role-btn active" onclick="selectRole('customer')">
+                    <i class="fas fa-user"></i>
+                    Siswa/Guru
+                </button>
+                <button class="role-btn" onclick="selectRole('admin')">
+                    <i class="fas fa-cog"></i>
+                    Admin
+                </button>
+            </div>
+
+            <div id="customerLogin">
+                <div class="input-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="customerName" placeholder="Masukkan nama">
+                </div>
+                <div class="input-group">
+                    <label>PIN (6 digit)</label>
+                    <input type="password" id="customerPin" placeholder="Contoh: 123456" maxlength="6">
+                </div>
+            </div>
+
+            <div id="adminLogin" class="hidden">
+                <div class="input-group">
+                    <label>Username Admin</label>
+                    <input type="text" id="adminUser" placeholder="admin">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="adminPass" placeholder="••••••">
+                </div>
+            </div>
+
+            <button class="btn" onclick="login()">Masuk</button>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="app" id="mainApp">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="logo" style="margin: 0;">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="header-info">
+                        <h2 id="welcomeText">Selamat Datang!</h2>
+                        <p id="subText">Kantin Digital</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="kelas-badge" id="kelasDisplay" style="display: none;">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span id="kelasText">Kelas</span>
+                    </div>
+                    <div class="saldo-badge" id="saldoDisplay" style="display: none;">
+                        <i class="fas fa-wallet"></i>
+                        <span id="saldoAmount">Rp 0</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Keluar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Customer View -->
+            <div id="customerView">
+                <!-- Menu Grid -->
+                <div class="grid" id="menuGrid">
+                    <!-- Items will be inserted here -->
+                </div>
+
+                <!-- Cart Section -->
+                <div class="cart-section" id="cartSection" style="display: none;">
+                    <h3 class="section-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        Keranjang Belanja
+                    </h3>
+                    <div id="cartItems"></div>
+                    <div class="cart-total">
+                        <div class="cart-summary">
+                            <div class="summary-row">
+                                <span>Subtotal</span>
+                                <span id="cartSubtotal">Rp 0</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total Bayar</span>
+                                <span id="cartTotal">Rp 0</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-success checkout-btn" onclick="checkout()">
+                            <i class="fas fa-check"></i> Bayar Sekarang
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Admin View -->
+            <div id="adminView" class="hidden">
+                <!-- Backup Section -->
+                <div class="backup-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-database"></i>
+                        Backup & Restore Data
+                    </h3>
+                    <div class="backup-buttons">
+                        <button class="backup-btn btn-success" onclick="exportAllData()">
+                            <i class="fas fa-download"></i> Export Semua Data
+                        </button>
+                        <button class="backup-btn btn-info" onclick="exportUsers()">
+                            <i class="fas fa-users"></i> Export Users
+                        </button>
+                        <button class="backup-btn btn-secondary" onclick="exportTransactions()">
+                            <i class="fas fa-receipt"></i> Export Transaksi
+                        </button>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="importFile" accept=".json" onchange="importData(this)">
+                            <label for="importFile" class="file-input-label">
+                                <i class="fas fa-upload"></i> Import Data
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label">Total Pengguna</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalSales">0</div>
+                        <div class="stat-label">Transaksi Hari Ini</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalRevenue">Rp 0</div>
+                        <div class="stat-label">Pendapatan</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTopup">Rp 0</div>
+                        <div class="stat-label">Total Top-up</div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('menu')">Kelola Menu</button>
+                    <button class="tab" onclick="switchTab('users')">Kelola Pengguna</button>
+                    <button class="tab" onclick="switchTab('riwayat')">Riwayat Transaksi</button>
+                </div>
+
+                <!-- Menu Tab -->
+                <div class="tab-content active" id="menuTab">
+                    <div class="cart-section">
+                        <h3 class="section-title">Tambah Menu Baru</h3>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Nama Item</label>
+                                <input type="text" id="newItemName" placeholder="Nama makanan/minuman">
+                            </div>
+                            <div class="input-group">
+                                <label>Harga (Rp)</label>
+                                <input type="number" id="newItemPrice" placeholder="10000">
+                            </div>
+                            <div class="input-group">
+                                <label>Kategori</label>
+                                <input type="text" id="newItemCategory" placeholder="Makanan/Minuman">
+                            </div>
+                            <div class="input-group">
+                                <label>Stok Awal</label>
+                                <input type="number" id="newItemStock" placeholder="10" value="10">
+                            </div>
+                        </div>
+                        <button class="btn" onclick="addMenuItem()" style="width: auto;">
+                            <i class="fas fa-plus"></i> Tambah Menu
+                        </button>
+                    </div>
+                    <div class="grid" id="adminMenuGrid"></div>
+                </div>
+
+                <!-- Users Tab -->
+                <div class="tab-content" id="usersTab">
+                    <div class="cart-section">
+                        <h3 class="section-title">Tambah Pengguna Baru</h3>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Nama Lengkap</label>
+                                <input type="text" id="newUserName" placeholder="Nama pengguna">
+                            </div>
+                            <div class="input-group">
+                                <label>Kelas</label>
+                                <select id="newUserKelas">
+                                    <option value="10">Kelas 10</option>
+                                    <option value="11">Kelas 11</option>
+                                    <option value="12">Kelas 12</option>
+                                    <option value="guru">Guru</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>PIN (6 digit)</label>
+                                <input type="password" id="newUserPin" placeholder="123456" maxlength="6">
+                            </div>
+                            <div class="input-group">
+                                <label>Saldo Awal (Rp)</label>
+                                <input type="number" id="newUserSaldo" placeholder="0" value="0">
+                            </div>
+                        </div>
+                        <button class="btn btn-success" onclick="addUser()" style="width: auto;">
+                            <i class="fas fa-user-plus"></i> Tambah Pengguna
+                        </button>
+                    </div>
+
+                    <div class="cart-section" style="margin-top: 24px;">
+                        <h3 class="section-title">Top-up Saldo</h3>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Pilih Pengguna</label>
+                                <select id="topupUserSelect" style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px;">
+                                    <option value="">-- Pilih Pengguna --</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Jumlah Top-up (Rp)</label>
+                                <input type="number" id="topupAmount" placeholder="50000">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="topupSaldo()" style="width: auto;">
+                            <i class="fas fa-plus-circle"></i> Top-up Sekarang
+                        </button>
+                    </div>
+
+                    <div class="user-list" style="margin-top: 24px;">
+                        <div class="list-header">
+                            <div>Nama</div>
+                            <div>Kelas</div>
+                            <div>PIN</div>
+                            <div>Saldo</div>
+                            <div>Dibuat</div>
+                            <div>Status</div>
+                            <div>Aksi</div>
+                        </div>
+                        <div id="usersList"></div>
+                    </div>
+                </div>
+
+                <!-- Riwayat Tab -->
+                <div class="tab-content" id="riwayatTab">
+                    <div class="riwayat-tabs">
+                        <button class="riwayat-tab active" onclick="switchRiwayatTab('pembelian')">
+                            <i class="fas fa-shopping-bag"></i> Riwayat Pembelian
+                        </button>
+                        <button class="riwayat-tab" onclick="switchRiwayatTab('topup')">
+                            <i class="fas fa-coins"></i> Riwayat Top-up
+                        </button>
+                    </div>
+
+                    <!-- Riwayat Pembelian -->
+                    <div class="riwayat-content active" id="riwayatPembelian">
+                        <div class="transaction-list">
+                            <div class="list-header">
+                                <div>Pengguna</div>
+                                <div>Kelas</div>
+                                <div>Item</div>
+                                <div>Total</div>
+                                <div>Waktu</div>
+                                <div>Status</div>
+                            </div>
+                            <div id="pembelianList"></div>
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Top-up -->
+                    <div class="riwayat-content" id="riwayatTopup">
+                        <div class="transaction-list">
+                            <div class="list-header">
+                                <div>Pengguna</div>
+                                <div>Kelas</div>
+                                <div>Jumlah</div>
+                                <div>Saldo Akhir</div>
+                                <div>Waktu</div>
+                                <div>Admin</div>
+                            </div>
+                            <div id="topupList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Title</h3>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Message</span>
+    </div>
+
+    <script>
+        // Data Storage
+        let currentUser = null;
+        let currentRole = 'customer';
+        let cart = [];
+        
+        // Predefined users with classes
+        const DEFAULT_USERS = [
+            // Kelas 10
+            { id: 1, name: 'Axcel', pin: '482719', saldo: 0, kelas: '10', created: '2024-03-01' },
+            { id: 2, name: 'Chavon', pin: '193650', saldo: 500, kelas: '10', created: '2024-03-01' },
+            { id: 3, name: 'Eivory', pin: '740285', saldo: 0, kelas: '10', created: '2024-03-01' },
+            { id: 4, name: 'Jeremy', pin: '561904', saldo: 0, kelas: '10', created: '2024-03-01' },
+            { id: 5, name: 'Raphael', pin: '836127', saldo: 50000, kelas: '10', created: '2024-03-01' },
+            { id: 6, name: 'Reynard', pin: '205973', saldo: 0, kelas: '10', created: '2024-03-01' },
+            { id: 7, name: 'Sharon', pin: '694318', saldo: 0, kelas: '10', created: '2024-03-01' },
+            { id: 8, name: 'Victoria', pin: '127540', saldo: 0, kelas: '10', created: '2024-03-01' },
+            { id: 9, name: 'Yungci', pin: '358261', saldo: 0, kelas: '10', created: '2024-03-01' },
+            
+            // Kelas 11
+            { id: 10, name: 'Cayla', pin: '904176', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 11, name: 'Sema', pin: '271639', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 12, name: 'Kenneth', pin: '583024', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 13, name: 'Loisa', pin: '746192', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 14, name: 'Marvelle', pin: '315870', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 15, name: 'Matthew', pin: '690452', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 16, name: 'Samuel', pin: '148903', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 17, name: 'Stephanie', pin: '527641', saldo: 0, kelas: '11', created: '2024-03-01' },
+            { id: 18, name: 'Yehonadav', pin: '802316', saldo: 0, kelas: '11', created: '2024-03-01' },
+            
+            // Kelas 12
+            { id: 19, name: 'Briana', pin: '471590', saldo: 0, kelas: '12', created: '2024-03-01' },
+            { id: 20, name: 'Fidelia', pin: '239864', saldo: 0, kelas: '12', created: '2024-03-01' },
+            { id: 21, name: 'Jonathan', pin: '658107', saldo: 0, kelas: '12', created: '2024-03-01' },
+            { id: 22, name: 'Kezia', pin: '914275', saldo: 0, kelas: '12', created: '2024-03-01' },
+            
+            // Guru
+            { id: 23, name: 'Meliana', pin: '360918', saldo: 0, kelas: 'guru', created: '2024-03-01' },
+            { id: 24, name: 'Theresia', pin: '742561', saldo: 0, kelas: 'guru', created: '2024-03-01' },
+            { id: 25, name: 'Luyse', pin: '195480', saldo: 5500, kelas: 'guru', created: '2024-03-01' },
+            { id: 26, name: 'Zefanya', pin: '823604', saldo: 0, kelas: 'guru', created: '2024-03-01' }
+        ];
+
+        // Migration data from old system
+        const MIGRATION_TOPUP = [
+            { user: 'Chavon', amount: 500, date: '2026-03-09 05:29:43' },
+            { user: 'Raphael', amount: 50000, date: '2026-03-09 05:29:25' },
+            { user: 'semaya', amount: 2000, date: '2026-03-09 05:05:50' },
+            { user: 'Jeremy', amount: 20000, date: '2026-03-11 03:18:58' },
+            { user: 'Yungci', amount: 1000, date: '2026-03-11 02:20:15' },
+            { user: 'Luyse', amount: 5500, date: '2026-03-11 03:39:04' }
+        ];
+
+        const MIGRATION_PEMBELIAN = [
+            { user: 'Raphael', items: 'Nasi Goreng', total: 1200, date: '2026-03-11 05:20:54' },
+            { user: 'Luyse', items: 'Es Teh', total: 500, date: '2026-03-11 03:40:12' },
+            { user: 'Luyse', items: 'Roti Bakar', total: 500, date: '2026-03-11 03:40:07' },
+            { user: 'Luyse', items: 'Kopi', total: 500, date: '2026-03-11 03:40:04' },
+            { user: 'Luyse', items: 'Pisang Goreng', total: 500, date: '2026-03-11 03:40:01' },
+            { user: 'Luyse', items: 'Paket Komplit', total: 1200, date: '2026-03-11 03:39:56' },
+            { user: 'Raphael', items: 'Mie Ayam', total: 1200, date: '2026-03-11 03:26:39' },
+            { user: 'Jeremy', items: 'Nasi Goreng Spesial', total: 2000, date: '2026-03-11 03:21:57' },
+            { user: 'Jeremy', items: 'Nasi Goreng', total: 2000, date: '2026-03-11 03:21:56' },
+            { user: 'Jeremy', items: 'Mie Ayam', total: 2000, date: '2026-03-11 03:21:54' },
+            { user: 'Jeremy', items: 'Es Teh', total: 2000, date: '2026-03-11 03:21:52' },
+            { user: 'Jeremy', items: 'Roti Bakar', total: 2000, date: '2026-03-11 03:21:52' },
+            { user: 'Jeremy', items: 'Kopi', total: 2000, date: '2026-03-11 03:21:47' },
+            { user: 'Jeremy', items: 'Pisang Goreng', total: 2000, date: '2026-03-11 03:21:47' },
+            { user: 'Jeremy', items: 'Paket 1', total: 2000, date: '2026-03-11 03:21:45' },
+            { user: 'Jeremy', items: 'Paket 2', total: 2000, date: '2026-03-11 03:21:45' },
+            { user: 'Jeremy', items: 'Paket 3', total: 2000, date: '2026-03-11 03:21:40' },
+            { user: 'Yungci', items: 'Es Teh', total: 500, date: '2026-03-11 02:21:10' },
+            { user: 'Yungci', items: 'Roti Bakar', total: 500, date: '2026-03-11 02:21:06' },
+            { user: 'semaya', items: 'Item A', total: 500, date: '2026-03-09 05:07:05' },
+            { user: 'semaya', items: 'Item B', total: 500, date: '2026-03-09 05:07:02' },
+            { user: 'semaya', items: 'Item C', total: 500, date: '2026-03-09 05:06:58' },
+            { user: 'semaya', items: 'Item D', total: 500, date: '2026-03-09 05:06:54' }
+        ];
+
+        // Initialize data
+        function initializeData() {
+            if (!localStorage.getItem('kantin_initialized')) {
+                // Set users
+                localStorage.setItem('kantin_users', JSON.stringify(DEFAULT_USERS));
+                
+                // Set menu
+                localStorage.setItem('kantin_menu', JSON.stringify([
+                    { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan', icon: '🍳', stock: 10 },
+                    { id: 2, name: 'Mie Ayam Bakso', price: 12000, category: 'Makanan', icon: '🍜', stock: 15 },
+                    { id: 3, name: 'Es Teh Manis', price: 5000, category: 'Minuman', icon: '🧃', stock: 20 },
+                    { id: 4, name: 'Roti Bakar', price: 10000, category: 'Makanan', icon: '🍞', stock: 8 },
+                    { id: 5, name: 'Kopi Susu', price: 8000, category: 'Minuman', icon: '☕', stock: 12 },
+                    { id: 6, name: 'Pisang Goreng', price: 7000, category: 'Makanan', icon: '🍌', stock: 5 }
+                ]));
+                
+                // Migrate transactions
+                const transactions = [];
+                const topups = [];
+                
+                // Migrate topups
+                MIGRATION_TOPUP.forEach(t => {
+                    const user = DEFAULT_USERS.find(u => u.name.toLowerCase() === t.user.toLowerCase());
+                    topups.push({
+                        id: Date.now() + Math.random(),
+                        user: t.user,
+                        userId: user ? user.id : null,
+                        kelas: user ? user.kelas : 'unknown',
+                        amount: t.amount,
+                        type: 'topup',
+                        date: t.date,
+                        admin: 'System Migration'
+                    });
+                    
+                    // Update user saldo
+                    if (user) {
+                        user.saldo += t.amount;
+                    }
+                });
+                
+                // Migrate pembelian
+                MIGRATION_PEMBELIAN.forEach(p => {
+                    const user = DEFAULT_USERS.find(u => u.name.toLowerCase() === p.user.toLowerCase());
+                    transactions.push({
+                        id: Date.now() + Math.random(),
+                        user: p.user,
+                        userId: user ? user.id : null,
+                        kelas: user ? user.kelas : 'unknown',
+                        items: [{ name: p.items, qty: 1, price: p.total }],
+                        subtotal: p.total,
+                        total: p.total,
+                        type: 'buy',
+                        date: p.date,
+                        status: 'success'
+                    });
+                });
+                
+                // Update users with new saldo
+                localStorage.setItem('kantin_users', JSON.stringify(DEFAULT_USERS));
+                localStorage.setItem('kantin_transactions', JSON.stringify(transactions));
+                localStorage.setItem('kantin_topups', JSON.stringify(topups));
+                localStorage.setItem('kantin_initialized', 'true');
+            }
+        }
+
+        // Helper Functions
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('kantin_users')) || [];
+        }
+        
+        function getMenu() {
+            return JSON.parse(localStorage.getItem('kantin_menu')) || [];
+        }
+        
+        function getTransactions() {
+            return JSON.parse(localStorage.getItem('kantin_transactions')) || [];
+        }
+        
+        function getTopups() {
+            return JSON.parse(localStorage.getItem('kantin_topups')) || [];
+        }
+        
+        function saveUsers(users) {
+            localStorage.setItem('kantin_users', JSON.stringify(users));
+        }
+        
+        function saveMenu(menu) {
+            localStorage.setItem('kantin_menu', JSON.stringify(menu));
+        }
+        
+        function saveTransactions(transactions) {
+            localStorage.setItem('kantin_transactions', JSON.stringify(transactions));
+        }
+        
+        function saveTopups(topups) {
+            localStorage.setItem('kantin_topups', JSON.stringify(topups));
+        }
+
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.className = 'toast show ' + type;
+            document.getElementById('toastMessage').textContent = message;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Login Functions
+        function selectRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.role-btn').classList.add('active');
+            
+            if (role === 'customer') {
+                document.getElementById('customerLogin').classList.remove('hidden');
+                document.getElementById('adminLogin').classList.add('hidden');
+            } else {
+                document.getElementById('customerLogin').classList.add('hidden');
+                document.getElementById('adminLogin').classList.remove('hidden');
+            }
+        }
+
+        function login() {
+            if (currentRole === 'admin') {
+                const user = document.getElementById('adminUser').value;
+                const pass = document.getElementById('adminPass').value;
+                
+                if (user === 'admin' && pass === 'supersecretpasswordaerow') {
+                    currentUser = { name: 'Admin', role: 'admin' };
+                    enterApp();
+                } else {
+                    showToast('Username atau password salah!', 'error');
+                }
+            } else {
+                const name = document.getElementById('customerName').value.trim();
+                const pin = document.getElementById('customerPin').value;
+                
+                if (!name || !pin || pin.length !== 6) {
+                    showToast('Mohon isi nama dan PIN 6 digit!', 'error');
+                    return;
+                }
+                
+                let users = getUsers();
+                let user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.pin === pin);
+                
+                if (!user) {
+                    showToast('Nama atau PIN salah!', 'error');
+                    return;
+                }
+                
+                currentUser = { ...user, role: 'customer' };
+                enterApp();
+            }
+        }
+
+        function enterApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            
+            if (currentUser.role === 'admin') {
+                document.getElementById('customerView').classList.add('hidden');
+                document.getElementById('adminView').classList.remove('hidden');
+                document.getElementById('saldoDisplay').style.display = 'none';
+                document.getElementById('kelasDisplay').style.display = 'none';
+                document.getElementById('welcomeText').textContent = 'Dashboard Admin';
+                document.getElementById('subText').textContent = 'Kelola kantin dengan mudah';
+                loadAdminData();
+            } else {
+                document.getElementById('customerView').classList.remove('hidden');
+                document.getElementById('adminView').classList.add('hidden');
+                document.getElementById('saldoDisplay').style.display = 'flex';
+                document.getElementById('kelasDisplay').style.display = 'flex';
+                
+                const kelasText = currentUser.kelas === 'guru' ? 'Guru' : `Kelas ${currentUser.kelas}`;
+                document.getElementById('kelasText').textContent = kelasText;
+                document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
+                document.getElementById('subText').textContent = kelasText;
+                
+                updateSaldoDisplay();
+                loadMenu();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            cart = [];
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPin').value = '';
+            document.getElementById('adminUser').value = '';
+            document.getElementById('adminPass').value = '';
+        }
+
+        // Customer Functions
+        function updateSaldoDisplay() {
+            const users = getUsers();
+            const user = users.find(u => u.id === currentUser.id);
+            if (user) {
+                document.getElementById('saldoAmount').textContent = formatRupiah(user.saldo);
+                currentUser.saldo = user.saldo;
+            }
+        }
+
+        function loadMenu() {
+            const menu = getMenu();
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = '';
+            
+            menu.forEach(item => {
+                const isOutOfStock = item.stock <= 0;
+                const card = document.createElement('div');
+                card.className = 'card' + (isOutOfStock ? ' out-of-stock' : '');
+                card.innerHTML = `
+                    <div class="card-image ${isOutOfStock ? 'out-of-stock' : ''}">
+                        <div style="font-size: 64px;">${item.icon}</div>
+                        <div class="card-badge">${item.category}</div>
+                        <div class="stock-badge ${isOutOfStock ? 'empty' : ''}">
+                            Stok: ${item.stock}
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-price">${formatRupiah(item.price)}</div>
+                        <div class="card-actions">
+                            <button class="btn-small btn-secondary" onclick="addToCart(${item.id})" ${isOutOfStock ? 'disabled' : ''}>
+                                ${isOutOfStock ? '<i class="fas fa-times"></i> Habis' : '<i class="fas fa-plus"></i> Tambah'}
+                            </button>
+                        </div>
+                    </div>
                 `;
-                list.appendChild(div);
+                grid.appendChild(card);
             });
         }
 
-        function topupSaldo() {
-            const userId = document.getElementById('topupUserSelect').value;
-            const amount = parseInt(document.getElementById('topupAmount').value);
+        function addToCart(itemId) {
+            const menu = getMenu();
+            const item = menu.find(m => m.id === itemId);
             
-            if (!userId || !amount || amount <= 0) {
-                showToast('Mohon pilih pengguna dan masukkan jumlah!', 'error');
+            if (item.stock <= 0) {
+                showToast('Maaf, stok habis!', 'error');
+                return;
+            }
+            
+            const existingItem = cart.find(c => c.id === itemId);
+            
+            if (existingItem) {
+                if (existingItem.qty >= item.stock) {
+                    showToast('Stok tidak cukup!', 'error');
+                    return;
+                }
+                existingItem.qty++;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+            
+            updateCart();
+            showToast(`${item.name} ditambahkan ke keranjang`);
+        }
+
+        function updateCart() {
+            const cartSection = document.getElementById('cartSection');
+            const cartItems = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartSection.style.display = 'none';
+                return;
+            }
+            
+            cartSection.style.display = 'block';
+            cartItems.innerHTML = '';
+            let subtotal = 0;
+            
+            cart.forEach((item, index) => {
+                subtotal += item.price * item.qty;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>${formatRupiah(item.price)} x ${item.qty}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                        <span style="font-weight: 700; min-width: 30px; text-align: center;">${item.qty}</span>
+                        <button class="qty-btn" onclick="updateQty(${index}, 1)" ${item.qty >= getMenu().find(m => m.id === item.id).stock ? 'disabled' : ''}>+</button>
+                        <span style="font-weight: 700; color: var(--primary); min-width: 100px; text-align: right;">
+                            ${formatRupiah(item.price * item.qty)}
+                        </span>
+                    </div>
+                `;
+                cartItems.appendChild(div);
+            });
+            
+            document.getElementById('cartSubtotal').textContent = formatRupiah(subtotal);
+            document.getElementById('cartTotal').textContent = formatRupiah(subtotal);
+        }
+
+        function updateQty(index, change) {
+            const menu = getMenu();
+            const item = menu.find(m => m.id === cart[index].id);
+            
+            cart[index].qty += change;
+            
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            } else if (cart[index].qty > item.stock) {
+                showToast('Stok tidak cukup!', 'error');
+                cart[index].qty = item.stock;
+            }
+            
+            updateCart();
+        }
+
+        function checkout() {
+            const menu = getMenu();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            // Check stock availability
+            for (let cartItem of cart) {
+                const menuItem = menu.find(m => m.id === cartItem.id);
+                if (cartItem.qty > menuItem.stock) {
+                    showToast(`Stok ${menuItem.name} tidak cukup! Tersisa: ${menuItem.stock}`, 'error');
+                    return;
+                }
+            }
+            
+            // Check saldo
+            const users = getUsers();
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            
+            if (users[userIndex].saldo < subtotal) {
+                showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
+                return;
+            }
+            
+            // Deduct saldo
+            users[userIndex].saldo -= subtotal;
+            saveUsers(users);
+            
+            // Reduce stock
+            cart.forEach(cartItem => {
+                const menuItem = menu.find(m => m.id === cartItem.id);
+                menuItem.stock -= cartItem.qty;
+            });
+            saveMenu(menu);
+            
+            // Save transaction
+            const transactions = getTransactions();
+            transactions.unshift({
+                id: Date.now(),
+                user: currentUser.name,
+                userId: currentUser.id,
+                kelas: currentUser.kelas,
+                items: [...cart],
+                subtotal: subtotal,
+                total: subtotal,
+                type: 'buy',
+                date: new Date().toLocaleString('id-ID'),
+                status: 'success'
+            });
+            saveTransactions(transactions);
+            
+            // Clear cart and update UI
+            cart = [];
+            updateCart();
+            loadMenu();
+            updateSaldoDisplay();
+            showToast('Pembayaran berhasil! Terima kasih.');
+        }
+
+        // Admin Functions
+        function loadAdminData() {
+            updateAdminStats();
+            loadAdminMenu();
+            loadUsersList();
+            loadRiwayat();
+            updateTopupSelect();
+        }
+
+        function updateAdminStats() {
+            const users = getUsers();
+            const transactions = getTransactions();
+            const topups = getTopups();
+            const today = new Date().toDateString();
+            
+            const todayTransactions = transactions.filter(t => new Date(t.date).toDateString() === today);
+            const revenue = todayTransactions.reduce((sum, t) => sum + t.total, 0);
+            const totalTopup = topups.reduce((sum, t) => sum + t.amount, 0);
+            
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalSales').textContent = todayTransactions.length;
+            document.getElementById('totalRevenue').textContent = formatRupiah(revenue);
+            document.getElementById('totalTopup').textContent = formatRupiah(totalTopup);
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+            
+            if (tab === 'users') {
+                loadUsersList();
+                updateTopupSelect();
+            }
+            if (tab === 'riwayat') loadRiwayat();
+        }
+
+        function switchRiwayatTab(type) {
+            document.querySelectorAll('.riwayat-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.riwayat-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('riwayat' + (type === 'pembelian' ? 'Pembelian' : 'Topup')).classList.add('active');
+        }
+
+        function loadAdminMenu() {
+            const menu = getMenu();
+            const grid = document.getElementById('adminMenuGrid');
+            grid.innerHTML = '';
+            
+            menu.forEach(item => {
+                const isOutOfStock = item.stock <= 0;
+                const card = document.createElement('div');
+                card.className = 'card' + (isOutOfStock ? ' out-of-stock' : '');
+                card.innerHTML = `
+                    <div class="card-image ${isOutOfStock ? 'out-of-stock' : ''}" style="height: 120px; font-size: 48px;">
+                        ${item.icon}
+                        <div class="stock-badge ${isOutOfStock ? 'empty' : ''}" style="font-size: 10px;">
+                            Stok: ${item.stock}
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-price">${formatRupiah(item.price)}</div>
+                        <div class="card-actions">
+                            <button class="btn-small btn-secondary" onclick="editStock(${item.id})">
+                                <i class="fas fa-edit"></i> Stok
+                            </button>
+                            <button class="btn-small btn-danger" onclick="deleteMenuItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addMenuItem() {
+            const name = document.getElementById('newItemName').value;
+            const price = parseInt(document.getElementById('newItemPrice').value);
+            const category = document.getElementById('newItemCategory').value;
+            const stock = parseInt(document.getElementById('newItemStock').value) || 0;
+            
+            if (!name || !price || !category) {
+                showToast('Mohon isi semua field!', 'error');
+                return;
+            }
+            
+            const menu = getMenu();
+            const icons = ['🍳', '🍜', '🧃', '🍞', '☕', '🍌', '🍔', '🍕', '🥗', '🥤'];
+            const newItem = {
+                id: Date.now(),
+                name: name,
+                price: price,
+                category: category,
+                stock: stock,
+                icon: icons[Math.floor(Math.random() * icons.length)]
+            };
+            
+            menu.push(newItem);
+            saveMenu(menu);
+            
+            document.getElementById('newItemName').value = '';
+            document.getElementById('newItemPrice').value = '';
+            document.getElementById('newItemCategory').value = '';
+            document.getElementById('newItemStock').value = '10';
+            
+            loadAdminMenu();
+            showToast('Menu berhasil ditambahkan!');
+        }
+
+        function editStock(itemId) {
+            const menu = getMenu();
+            const item = menu.find(m => m.id === itemId);
+            const newStock = prompt(`Edit stok untuk ${item.name}:`, item.stock);
+            
+            if (newStock !== null && !isNaN(newStock)) {
+                item.stock = parseInt(newStock);
+                saveMenu(menu);
+                loadAdminMenu();
+                showToast(`Stok ${item.name} diupdate: ${item.stock}`);
+            }
+        }
+
+        function deleteMenuItem(id) {
+            if (!confirm('Yakin ingin menghapus menu ini?')) return;
+            let menu = getMenu();
+            menu = menu.filter(m => m.id !== id);
+            saveMenu(menu);
+            loadAdminMenu();
+            showToast('Menu dihapus');
+        }
+
+        // User Management Functions
+        function addUser() {
+            const name = document.getElementById('newUserName').value.trim();
+            const kelas = document.getElementById('newUserKelas').value;
+            const pin = document.getElementById('newUserPin').value;
+            const saldo = parseInt(document.getElementById('newUserSaldo').value) || 0;
+            
+            if (!name || !pin || pin.length !== 6) {
+                showToast('Mohon isi nama dan PIN 6 digit!', 'error');
                 return;
             }
             
             let users = getUsers();
-            const userIndex = users.findIndex(u => u.id == userId);
             
-            if (userIndex === -1) {
-                showToast('Pengguna tidak ditemukan!', 'error');
+            if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
+                showToast('Nama pengguna sudah ada!', 'error');
                 return;
             }
             
-            // Update saldo
-            users[userIndex].saldo += amount;
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                pin: pin,
+                kelas: kelas,
+                saldo: saldo,
+                created: new Date().toLocaleDateString('id-ID')
+            };
+            
+            users.push(newUser);
             saveUsers(users);
             
-            // Save topup history
-            const topups = getTopups();
-            topups.unshift({
-                id: Date.now(),
-                user: users[userIndex].name,
-                userId: users[userIndex].id,
-                kelas: users[userIndex].kelas,
-                amount: amount,
-                saldoAkhir: users[userIndex].saldo,
-                type: 'topup',
-                date: new Date().toLocaleString('id-ID'),
-                admin: 'Admin'
-            });
-            saveTopups(topups);
-            
-            document.getElementById('topupUserSelect').value = '';
-            document.getElementById('topupAmount').value = '';
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserPin').value = '';
+            document.getElementById('newUserSaldo').value = '0';
+            document.getElementById('newUserKelas').value = '10';
             
             loadUsersList();
             updateTopupSelect();
-            loadRiwayat();
             updateAdminStats();
-            showToast(`Top-up berhasil! Saldo ${users[userIndex].name}: ${formatRupiah(users[userIndex].saldo)}`);
+            
+            const kelasLabel = kelas === 'guru' ? 'Guru' : `Kelas ${kelas}`;
+            showToast(`${kelasLabel} ${name} berhasil ditambahkan!`);
         }
 
-        function loadRiwayat() {
-            loadPembelianList();
-            loadTopupList();
+        function deleteUser(id) {
+            if (!confirm('Yakin ingin menghapus pengguna ini? Semua data akan hilang!')) return;
+            
+            let users = getUsers();
+            const user = users.find(u => u.id === id);
+            users = users.filter(u => u.id !== id);
+            saveUsers(users);
+            
+            loadUsersList();
+            updateTopupSelect();
+            updateAdminStats();
+            showToast(`Pengguna ${user.name} dihapus`);
         }
 
-        function loadPembelianList() {
-            const transactions = getTransactions();
-            const list = document.getElementById('pembelianList');
-            list.innerHTML = '';
-            
-            if (transactions.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-shopping-bag"></i>
-                        <p>Belum ada riwayat pembelian</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            transactions.forEach(t => {
-                const kelasClass = t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`;
-                const kelasText = t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`;
-                const itemNames = t.items.map(i => `${i.name} (${i.qty})`).join(', ');
-                
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                div.innerHTML = `
-                    <div><strong>${t.user}</strong></div>
-                    <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                    <div style="font-size: 12px; color: var(--gray);">${itemNames}</div>
-                    <div style="font-weight: 700;">${formatRupiah(t.total)}</div>
-                    <div style="font-size: 14px; color: var(--gray);">${t.date}</div>
-                    <div><span class="transaction-type type-buy">BELI</span></div>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function loadTopupList() {
-            const topups = getTopups();
-            const list = document.getElementById('topupList');
-            list.innerHTML = '';
-            
-            if (topups.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-coins"></i>
-                        <p>Belum ada riwayat top-up</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            topups.forEach(t => {
-                const kelasClass = t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`;
-                const kelasText = t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`;
-                
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                div.innerHTML = `
-                    <div><strong>${t.user}</strong></div>
-                    <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                    <div style="font-weight: 700; color: var(--success);">${formatRupiah(t.amount)}</div>
-                    <div style="font-weight: 600;">${formatRupiah(t.saldoAkhir || t.amount)}</div>
-                    <div style="font-size: 14px; color: var(--gray);">${t.date}</div>
-                    <div><span class="transaction-type type-topup">TOPUP</span></div>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        // Export/Import Functions
-        function exportAllData() {
-            const data = {
-                users: getUsers(),
-                menu: getMenu(),
-                transactions: getTransactions(),
-                topups: getTopups(),
-                exportDate: new Date().toISOString(),
-                version: '1.0'
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `kantin_backup_${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('Semua data berhasil di-export!');
-        }
-
-        function exportUsers() {
+        function updateTopupSelect() {
             const users = getUsers();
-            const dataStr = JSON.stringify(users, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
+            const select = document.getElementById('topupUserSelect');
+            select.innerHTML = '<option value="">-- Pilih Pengguna --</option>';
             
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `kantin_users_${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('Data pengguna berhasil di-export!');
+            users.sort((a, b) => a.name.localeCompare(b.name)).forEach(user => {
+                const kelasLabel = user.kelas === 'guru' ? '[Guru]' : `[Kelas ${user.kelas}]`;
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${kelasLabel} ${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
+                select.appendChild(option);
+            });
         }
 
-        function exportTransactions() {
-            const data = {
-                pembelian: getTransactions(),
-                topup: getTopups(),
-                exportDate: new Date().toISOString()
-            };
+        function loadUsersList() {
+            const users = getUsers();
+            const list = document.getElementById('usersList');
+            list.innerHTML = '';
             
-            const dataStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
+            if (users.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state" style="padding: 40px;">
+                        <i class="fas fa-users"></i>
+                        <p>Belum ada pengguna terdaftar</p>
+                    </div>
+                `;
+                return;
+            }
             
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `kantin_riwayat_${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('Riwayat transaksi berhasil di-export!');
-        }
-
-        function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    // Validate data structure
-                    if (data.users) {
-                        saveUsers(data.users);
-                    }
-                    if (data.menu) {
-                        saveMenu(data.menu);
-                    }
-                    if (data.transactions) {
-                        saveTransactions(data.transactions);
-                    }
-                    if (data.topups) {
-                        saveTopups(data.topups);
-                    }
-                    
-                    // If only users array (from exportUsers)
-                    if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].pin) {
-                        saveUsers(data);
-                    }
-                    
-                    // If only transactions object (from exportTransactions)
-                    if (data.pembelian && data.topup) {
-                        saveTransactions(data.pembelian);
-                        saveTopups(data.topup);
-                    }
-                    
-                    loadAdminData();
-                    showToast('Data berhasil di-import!');
-                } catch (error) {
-                    showToast('Gagal import data! Format tidak valid.', 'error');
-                    console.error(error);
-                }
-            };
-            reader.readAsText(file);
-            
-            // Reset input
-            input.value = '';
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        // Close modal on outside click
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-
-        // Initialize on load
-        window.onload = function() {
-            initializeData();
-        };
-    </script>
-</body>
-</html>
+            users.sort((a, b) => {
+                if (a.kelas === 'guru' && b.kelas !== 'guru') return 1;
+                if (a.kelas !== 'guru' && b.kelas === 'guru') return -1;
+                if (a.kelas !== b.kelas) return a.kelas.localeCompare(b.kelas);
+                return a.name.localeCompare(b.name);
+            }).forEach(user => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                const kelasClass = user.kelas === 'guru' ? 'kelas-guru' : `kelas-${user.kelas}`;
+                const kelasText = user.kelas === 'guru' ? 'Guru' : `Kelas ${user.kelas}`;
+                
+                div.innerHTML = `
+                    <div><strong>${user.name}</strong></div>
+                    <div><span class="kelas-badge-small ${kelasClass}">${kelas
