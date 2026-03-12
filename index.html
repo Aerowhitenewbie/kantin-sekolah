@@ -34,8 +34,8 @@
         .login-card h1 { font-size: 24px; margin-bottom: 8px; color: var(--dark); }
         .login-card p { color: var(--gray); margin-bottom: 30px; }
 
-        .role-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-        .role-btn { padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: white; cursor: pointer; transition: all 0.3s; font-family: inherit; font-weight: 600; font-size: 13px; }
+        .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .role-btn { padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: white; cursor: pointer; transition: all 0.3s; font-family: inherit; font-weight: 600; }
         .role-btn:hover, .role-btn.active { border-color: var(--primary); background: #eef2ff; color: var(--primary); }
         .role-btn i { display: block; font-size: 24px; margin-bottom: 8px; }
 
@@ -134,6 +134,7 @@
         .kelas-11 { background: #dcfce7; color: #166534; }
         .kelas-12 { background: #f3e8ff; color: #6b21a8; }
         .kelas-guru { background: #ffedd5; color: #9a3412; }
+        .kelas-guest { background: #fed7aa; color: #9a3412; }
 
         .transaction-type { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
         .type-buy { background: #dbeafe; color: #1e40af; }
@@ -200,9 +201,6 @@
             <div class="role-selector">
                 <button class="role-btn active" onclick="selectRole('customer', event)">
                     <i class="fas fa-user"></i>Siswa/Guru
-                </button>
-                <button class="role-btn" onclick="selectRole('guest', event)">
-                    <i class="fas fa-user-clock"></i>Tamu
                 </button>
                 <button class="role-btn" onclick="selectRole('admin', event)">
                     <i class="fas fa-cog"></i>Admin
@@ -331,12 +329,13 @@
                         <div class="form-grid">
                             <div class="input-group"><label>Nama Lengkap</label><input type="text" id="newUserName" placeholder="Nama pengguna"></div>
                             <div class="input-group">
-                                <label>Kelas</label>
+                                <label>Kelas / Tipe</label>
                                 <select id="newUserKelas">
                                     <option value="10">Kelas 10</option>
                                     <option value="11">Kelas 11</option>
                                     <option value="12">Kelas 12</option>
                                     <option value="guru">Guru</option>
+                                    <option value="guest">Tamu (Guest)</option>
                                 </select>
                             </div>
                             <div class="input-group"><label>PIN (6 digit)</label><input type="password" id="newUserPin" placeholder="123456" maxlength="6"></div>
@@ -361,7 +360,7 @@
 
                     <div class="user-list" style="margin-top: 24px;">
                         <div class="list-header">
-                            <div>Nama</div><div>Kelas</div><div>PIN</div><div>Saldo</div><div>Dibuat</div><div>Status</div><div>Aksi</div>
+                            <div>Nama</div><div>Kelas/Tipe</div><div>PIN</div><div>Saldo</div><div>Dibuat</div><div>Status</div><div>Aksi</div>
                         </div>
                         <div id="usersList"></div>
                     </div>
@@ -375,14 +374,14 @@
 
                     <div class="riwayat-content active" id="riwayatPembelian">
                         <div class="transaction-list">
-                            <div class="list-header"><div>Pengguna</div><div>Kelas</div><div>Item</div><div>Total</div><div>Waktu</div><div>Status</div></div>
+                            <div class="list-header"><div>Pengguna</div><div>Kelas/Tipe</div><div>Item</div><div>Total</div><div>Waktu</div><div>Status</div></div>
                             <div id="pembelianList"></div>
                         </div>
                     </div>
 
                     <div class="riwayat-content" id="riwayatTopup">
                         <div class="transaction-list">
-                            <div class="list-header"><div>Pengguna</div><div>Kelas</div><div>Jumlah</div><div>Saldo Akhir</div><div>Waktu</div><div>Admin</div></div>
+                            <div class="list-header"><div>Pengguna</div><div>Kelas/Tipe</div><div>Jumlah</div><div>Saldo Akhir</div><div>Waktu</div><div>Admin</div></div>
                             <div id="topupList"></div>
                         </div>
                     </div>
@@ -413,7 +412,7 @@
         let currentUser = null;
         let currentRole = 'customer';
         let cart = [];
-        const GUEST_TAX_RATE = 0.10;
+        const GUEST_TAX_RATE = 0.10; // 10% pajak untuk tamu
 
         // Default Users
         const DEFAULT_USERS = [
@@ -484,6 +483,11 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
+        // Check if user is guest
+        function isGuest(user) {
+            return user && user.kelas === 'guest';
+        }
+
         // Login Functions
         function selectRole(role, event) {
             currentRole = role;
@@ -493,9 +497,6 @@
             if (role === 'customer') {
                 document.getElementById('customerLogin').classList.remove('hidden');
                 document.getElementById('adminLogin').classList.add('hidden');
-            } else if (role === 'guest') {
-                document.getElementById('customerLogin').classList.add('hidden');
-                document.getElementById('adminLogin').classList.add('hidden');
             } else {
                 document.getElementById('customerLogin').classList.add('hidden');
                 document.getElementById('adminLogin').classList.remove('hidden');
@@ -503,17 +504,6 @@
         }
 
         function login() {
-            if (currentRole === 'guest') {
-                currentUser = { 
-                    name: 'Tamu', 
-                    role: 'guest',
-                    id: 'guest_' + Date.now(),
-                    kelas: 'guest'
-                };
-                enterApp();
-                return;
-            }
-            
             if (currentRole === 'admin') {
                 const user = document.getElementById('adminUser').value;
                 const pass = document.getElementById('adminPass').value;
@@ -558,13 +548,17 @@
                 document.getElementById('customerView').classList.remove('hidden');
                 document.getElementById('adminView').classList.add('hidden');
                 
-                if (currentUser.role === 'guest') {
-                    document.getElementById('saldoDisplay').style.display = 'none';
+                const userIsGuest = isGuest(currentUser);
+                
+                if (userIsGuest) {
+                    // Guest user view
+                    document.getElementById('saldoDisplay').style.display = 'flex';
                     document.getElementById('kelasDisplay').style.display = 'none';
                     document.getElementById('guestDisplay').style.display = 'flex';
-                    document.getElementById('welcomeText').textContent = 'Selamat Datang, Tamu!';
-                    document.getElementById('subText').textContent = 'Silakan hubungi admin untuk daftar member';
+                    document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
+                    document.getElementById('subText').textContent = 'Tamu - Hubungi admin untuk jadi member';
                     
+                    // Add guest notice
                     const customerView = document.getElementById('customerView');
                     let notice = document.getElementById('guestNotice');
                     if (!notice) {
@@ -572,15 +566,16 @@
                         notice.id = 'guestNotice';
                         notice.className = 'guest-notice';
                         notice.innerHTML = `
-                            <i class="fas fa-info-circle" style="font-size: 20px;"></i>
+                            <i class="fas fa-exclamation-triangle" style="font-size: 20px;"></i>
                             <div>
                                 <strong>Perhatian:</strong> Anda dikenakan biaya tambahan 10% sebagai tamu. 
-                                Hubungi admin untuk mendaftar sebagai member dan hemat 10%!
+                                Total pembayaran akan ditambah pajak 10%. Hubungi admin untuk mendaftar sebagai member reguler!
                             </div>
                         `;
                         customerView.insertBefore(notice, document.getElementById('menuGrid'));
                     }
                 } else {
+                    // Regular member view
                     document.getElementById('saldoDisplay').style.display = 'flex';
                     document.getElementById('kelasDisplay').style.display = 'flex';
                     document.getElementById('guestDisplay').style.display = 'none';
@@ -590,8 +585,8 @@
                     document.getElementById('kelasText').textContent = kelasText;
                     document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
                     document.getElementById('subText').textContent = kelasText;
-                    updateSaldoDisplay();
                 }
+                updateSaldoDisplay();
                 loadMenu();
             }
         }
@@ -706,9 +701,11 @@
             });
             
             // Calculate tax for guests
+            const userIsGuest = isGuest(currentUser);
             let tax = 0;
             let total = subtotal;
-            if (currentUser && currentUser.role === 'guest') {
+            
+            if (userIsGuest) {
                 tax = Math.round(subtotal * GUEST_TAX_RATE);
                 total = subtotal + tax;
             }
@@ -724,10 +721,10 @@
             summaryHTML += `<div class="summary-row total"><span>Total Bayar</span><span>${formatRupiah(total)}</span></div>`;
             cartSummary.innerHTML = summaryHTML;
             
-            // Update button
+            // Update button text
             const checkoutBtn = document.querySelector('.checkout-btn');
-            if (currentUser && currentUser.role === 'guest') {
-                checkoutBtn.innerHTML = `<i class="fas fa-hand-holding-usd"></i> Bayar Cash ${formatRupiah(total)}`;
+            if (userIsGuest) {
+                checkoutBtn.innerHTML = `<i class="fas fa-check"></i> Bayar ${formatRupiah(total)} (Termasuk Pajak)`;
             } else {
                 checkoutBtn.innerHTML = `<i class="fas fa-check"></i> Bayar Sekarang`;
             }
@@ -756,9 +753,11 @@
             let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             
             // Calculate with tax for guests
+            const userIsGuest = isGuest(currentUser);
             let tax = 0;
             let total = subtotal;
-            if (currentUser.role === 'guest') {
+            
+            if (userIsGuest) {
                 tax = Math.round(subtotal * GUEST_TAX_RATE);
                 total = subtotal + tax;
             }
@@ -772,17 +771,18 @@
                 }
             }
             
-            // For members: check and deduct saldo
-            if (currentUser.role !== 'guest') {
-                const users = getUsers();
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                if (userIndex === -1 || users[userIndex].saldo < total) {
-                    showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
-                    return;
-                }
-                users[userIndex].saldo -= total;
-                saveUsers(users);
+            // Check saldo (sama untuk guest dan member)
+            const users = getUsers();
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            
+            if (userIndex === -1 || users[userIndex].saldo < total) {
+                showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
+                return;
             }
+            
+            // Deduct saldo
+            users[userIndex].saldo -= total;
+            saveUsers(users);
             
             // Reduce stock
             cart.forEach(cartItem => {
@@ -804,20 +804,19 @@
                 total: total,
                 type: 'buy',
                 date: new Date().toLocaleString('id-ID'),
-                status: 'success',
-                userType: currentUser.role
+                status: 'success'
             });
             saveTransactions(transactions);
             
-            // Clear cart
+            // Clear cart and update UI
             cart = [];
             updateCart();
             loadMenu();
-            if (currentUser.role !== 'guest') updateSaldoDisplay();
+            updateSaldoDisplay();
             
             // Success message
-            if (currentUser.role === 'guest') {
-                showToast(`Pembayaran cash ${formatRupiah(total)} berhasil! (Pajak: ${formatRupiah(tax)})`);
+            if (userIsGuest) {
+                showToast(`Pembayaran berhasil! Total: ${formatRupiah(total)} (Pajak: ${formatRupiah(tax)})`);
             } else {
                 showToast('Pembayaran berhasil! Terima kasih.');
             }
@@ -843,7 +842,7 @@
             const totalTopup = topups.reduce((sum, t) => sum + t.amount, 0);
             
             // Guest stats
-            const guestTransactions = todayTransactions.filter(t => t.userType === 'guest');
+            const guestTransactions = todayTransactions.filter(t => t.kelas === 'guest');
             const guestTax = guestTransactions.reduce((sum, t) => sum + (t.tax || 0), 0);
             
             document.getElementById('totalUsers').textContent = users.length;
@@ -990,11 +989,14 @@
             document.getElementById('newUserName').value = '';
             document.getElementById('newUserPin').value = '';
             document.getElementById('newUserSaldo').value = '0';
+            document.getElementById('newUserKelas').value = '10';
             
             loadUsersList();
             updateTopupSelect();
             updateAdminStats();
-            showToast(`${kelas === 'guru' ? 'Guru' : 'Kelas ' + kelas} ${name} berhasil ditambahkan!`);
+            
+            const kelasLabel = kelas === 'guest' ? 'Tamu' : (kelas === 'guru' ? 'Guru' : 'Kelas ' + kelas);
+            showToast(`${kelasLabel} ${name} berhasil ditambahkan!`);
         }
 
         function deleteUser(id) {
@@ -1014,9 +1016,10 @@
             const select = document.getElementById('topupUserSelect');
             select.innerHTML = '<option value="">-- Pilih Pengguna --</option>';
             users.sort((a, b) => a.name.localeCompare(b.name)).forEach(user => {
+                const kelasLabel = user.kelas === 'guest' ? '[Tamu]' : (user.kelas === 'guru' ? '[Guru]' : '[Kelas ' + user.kelas + ']');
                 const option = document.createElement('option');
                 option.value = user.id;
-                option.textContent = `${user.kelas === 'guru' ? '[Guru]' : '[Kelas ' + user.kelas + ']'} ${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
+                option.textContent = `${kelasLabel} ${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
                 select.appendChild(option);
             });
         }
@@ -1032,22 +1035,28 @@
             }
             
             users.sort((a, b) => {
+                if (a.kelas === 'guest' && b.kelas !== 'guest') return 1;
+                if (a.kelas !== 'guest' && b.kelas === 'guest') return -1;
                 if (a.kelas === 'guru' && b.kelas !== 'guru') return 1;
                 if (a.kelas !== 'guru' && b.kelas === 'guru') return -1;
                 if (a.kelas !== b.kelas) return a.kelas.localeCompare(b.kelas);
                 return a.name.localeCompare(b.name);
             }).forEach(user => {
-                const kelasClass = user.kelas === 'guru' ? 'kelas-guru' : `kelas-${user.kelas}`;
-                const kelasText = user.kelas === 'guru' ? 'Guru' : `Kelas ${user.kelas}`;
+                const isGuest = user.kelas === 'guest';
+                const kelasClass = isGuest ? 'kelas-guest' : (user.kelas === 'guru' ? 'kelas-guru' : `kelas-${user.kelas}`);
+                const kelasText = isGuest ? 'Tamu' : (user.kelas === 'guru' ? 'Guru' : `Kelas ${user.kelas}`);
+                
                 const div = document.createElement('div');
                 div.className = 'list-item';
+                if (isGuest) div.style.background = '#fff7ed';
+                
                 div.innerHTML = `
                     <div><strong>${user.name}</strong></div>
                     <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
                     <div><span class="pin-display">${user.pin}</span></div>
                     <div style="font-weight: 700; color: var(--success);">${formatRupiah(user.saldo)}</div>
                     <div style="font-size: 12px; color: var(--gray);">${user.created}</div>
-                    <div style="font-size: 12px; color: var(--success);">Aktif</div>
+                    <div style="font-size: 12px; color: ${isGuest ? '#ea580c' : 'var(--success)'};">${isGuest ? 'Tamu (+10%)' : 'Aktif'}</div>
                     <div class="action-btns">
                         <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})" title="Hapus"><i class="fas fa-trash"></i></button>
                     </div>
@@ -1115,17 +1124,17 @@
             }
             
             transactions.forEach(t => {
-                const isGuest = t.userType === 'guest';
-                const kelasClass = isGuest ? 'kelas-guru' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
-                const kelasText = isGuest ? 'TAMU' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
+                const isGuest = t.kelas === 'guest';
+                const kelasClass = isGuest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
+                const kelasText = isGuest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
                 const itemNames = t.items.map(i => `${i.name} (${i.qty})`).join(', ');
                 
                 const div = document.createElement('div');
                 div.className = 'list-item';
                 if (isGuest) div.style.background = '#fff7ed';
                 
-                div.innerHTML = `
-                    <div><strong>${t.user}</strong> ${isGuest ? '<span style="color: #ea580c; font-size: 11px;">(GUEST)</span>' : ''}</div>
+                                div.innerHTML = `
+                    <div><strong>${t.user}</strong> ${isGuest ? '<span style="color: #ea580c; font-size: 11px;">(+10%)</span>' : ''}</div>
                     <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
                     <div style="font-size: 12px; color: var(--gray);">${itemNames}</div>
                     <div style="font-weight: 700;">
@@ -1150,12 +1159,16 @@
             }
             
             topups.forEach(t => {
-                const kelasClass = t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`;
-                const kelasText = t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`;
+                const isGuest = t.kelas === 'guest';
+                const kelasClass = isGuest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
+                const kelasText = isGuest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
+                
                 const div = document.createElement('div');
                 div.className = 'list-item';
+                if (isGuest) div.style.background = '#fff7ed';
+                
                 div.innerHTML = `
-                    <div><strong>${t.user}</strong></div>
+                    <div><strong>${t.user}</strong> ${isGuest ? '<span style="color: #ea580c; font-size: 11px;">(Tamu)</span>' : ''}</div>
                     <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
                     <div style="font-weight: 700; color: var(--success);">${formatRupiah(t.amount)}</div>
                     <div style="font-weight: 600;">${formatRupiah(t.saldoAkhir || t.amount)}</div>
