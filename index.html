@@ -463,14 +463,50 @@
         }
 
         // Storage Helpers
-        function getUsers() { return JSON.parse(localStorage.getItem('kantin_users')) || []; }
-        function getMenu() { return JSON.parse(localStorage.getItem('kantin_menu')) || []; }
-        function getTransactions() { return JSON.parse(localStorage.getItem('kantin_transactions')) || []; }
-        function getTopups() { return JSON.parse(localStorage.getItem('kantin_topups')) || []; }
-        function saveUsers(users) { localStorage.setItem('kantin_users', JSON.stringify(users)); }
-        function saveMenu(menu) { localStorage.setItem('kantin_menu', JSON.stringify(menu)); }
-        function saveTransactions(transactions) { localStorage.setItem('kantin_transactions', JSON.stringify(transactions)); }
-        function saveTopups(topups) { localStorage.setItem('kantin_topups', JSON.stringify(topups)); }
+        async function getUsers() {
+  const res = await fetch("/.netlify/functions/getUsers");
+  return await res.json();
+}
+
+async function saveUsers(users) {
+  await fetch("/.netlify/functions/saveUsers", {
+    method: "POST",
+    body: JSON.stringify(users)
+  });
+}
+async function getMenu() {
+  const res = await fetch("/.netlify/functions/getMenu");
+  return await res.json();
+}
+
+async function saveMenu(menu) {
+  await fetch("/.netlify/functions/saveMenu", {
+    method: "POST",
+    body: JSON.stringify(menu)
+  });
+}
+async function getTransactions() {
+  const res = await fetch("/.netlify/functions/getTransactions");
+  return await res.json();
+}
+
+async function saveTransactions(transactions) {
+  await fetch("/.netlify/functions/saveTransactions", {
+    method: "POST",
+    body: JSON.stringify(transactions)
+  });
+}
+async function getTopups() {
+  const res = await fetch("/.netlify/functions/getTopups");
+  return await res.json();
+}
+
+async function saveTopups(topups) {
+  await fetch("/.netlify/functions/saveTopups", {
+    method: "POST",
+    body: JSON.stringify(topups)
+  });
+}
 
         function formatRupiah(angka) {
             return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
