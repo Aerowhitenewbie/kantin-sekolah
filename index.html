@@ -445,67 +445,86 @@
         ];
 
         // Initialize
-        function initializeData() {
-            if (!localStorage.getItem('kantin_initialized')) {
-                localStorage.setItem('kantin_users', JSON.stringify(DEFAULT_USERS));
-                localStorage.setItem('kantin_menu', JSON.stringify([
-                    { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan', icon: '🍳', stock: 10 },
-                    { id: 2, name: 'Mie Ayam Bakso', price: 12000, category: 'Makanan', icon: '🍜', stock: 15 },
-                    { id: 3, name: 'Es Teh Manis', price: 5000, category: 'Minuman', icon: '🧃', stock: 20 },
-                    { id: 4, name: 'Roti Bakar', price: 10000, category: 'Makanan', icon: '🍞', stock: 8 },
-                    { id: 5, name: 'Kopi Susu', price: 8000, category: 'Minuman', icon: '☕', stock: 12 },
-                    { id: 6, name: 'Pisang Goreng', price: 7000, category: 'Makanan', icon: '🍌', stock: 5 }
-                ]));
-                localStorage.setItem('kantin_transactions', JSON.stringify([]));
-                localStorage.setItem('kantin_topups', JSON.stringify([]));
-                localStorage.setItem('kantin_initialized', 'true');
+        async function initializeData() {
+    // Cek apakah MongoDB kosong, kalau iya seed data
+    try {
+        const users = await getUsers();
+        const menu = await getMenu();
+        
+        if (users.length === 0 && menu.length === 0) {
+            // Seed default users
+            for (const user of DEFAULT_USERS) {
+                await apiCall('auth', 'POST', {
+                    action: 'register',
+                    ...user
+                });
             }
+            
+            // Seed default menu
+            const defaultMenu = [
+                { name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan', icon: '🍳', stock: 10 },
+                { name: 'Mie Ayam Bakso', price: 12000, category: 'Makanan', icon: '🍜', stock: 15 },
+                { name: 'Es Teh Manis', price: 5000, category: 'Minuman', icon: '🧃', stock: 20 },
+                { name: 'Roti Bakar', price: 10000, category: 'Makanan', icon: '🍞', stock: 8 },
+                { name: 'Kopi Susu', price: 8000, category: 'Minuman', icon: '☕', stock: 12 },
+                { name: 'Pisang Goreng', price: 7000, category: 'Makanan', icon: '🍌', stock: 5 }
+            ];
+            await saveMenu(defaultMenu);
+            
+            showToast('Database initialized!');
         }
-
-        // Storage Helpers
-        async function getUsers() {
-  const res = await fetch("/.netlify/functions/getUsers");
-  return await res.json();
+    } catch (err) {
+        console.error('Init error:', err);
+    }
 }
 
-async function saveUsers(users) {
-  await fetch("/.netlify/functions/saveUsers", {
-    method: "POST",
-    body: JSON.stringify(users)
-  });
+        // API Config
+const API_BASE = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8888/.netlify/functions'
+    : '/.netlify/functions';
+
+// Storage Helpers - MongoDB Version
+async function apiCall(endpoint, method = 'GET', body = null) {
+    try {
+        const options = {
+            method,
+            headers: { 'Content-Type': 'application/json' }
+        };
+        if (body) options.body = JSON.stringify(body);
+        
+        const res = await fetch(`${API_BASE}/${endpoint}`, options);
+        const data = await res.json();
+        
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+        return data;
+    } catch (err) {
+        console.error(`API Error (${endpoint}):`, err);
+        throw err;
+    }
 }
+
+async function getUsers() {
+    return await apiCall('users');
+}
+
 async function getMenu() {
-  const res = await fetch("/.netlify/functions/getMenu");
-  return await res.json();
+    return await apiCall('menu');
 }
 
 async function saveMenu(menu) {
-  await fetch("/.netlify/functions/saveMenu", {
-    method: "POST",
-    body: JSON.stringify(menu)
-  });
+    return await apiCall('menu', 'POST', menu);
 }
+
 async function getTransactions() {
-  const res = await fetch("/.netlify/functions/getTransactions");
-  return await res.json();
+    return await apiCall('transactions');
 }
 
-async function saveTransactions(transactions) {
-  await fetch("/.netlify/functions/saveTransactions", {
-    method: "POST",
-    body: JSON.stringify(transactions)
-  });
+async function saveTransaction(transaction) {
+    return await apiCall('transactions', 'POST', transaction);
 }
+
 async function getTopups() {
-  const res = await fetch("/.netlify/functions/getTopups");
-  return await res.json();
-}
-
-async function saveTopups(topups) {
-  await fetch("/.netlify/functions/saveTopups", {
-    method: "POST",
-    body: JSON.stringify(topups)
-  });
+    return await apiCall('topups');
 }
 
         function formatRupiah(angka) {
@@ -556,18 +575,34 @@ async function saveTopups(topups) {
                     showToast('Mohon isi nama dan PIN 6 digit!', 'error');
                     return;
                 }
-                let users = getUsers();
-                let user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.pin === pin);
-                if (!user) {
-                    showToast('Nama atau PIN salah!', 'error');
-                    return;
-                }
-                currentUser = { ...user, role: 'customer' };
+                try {
+    const result = await apiCall('auth', 'POST', { 
+        action: 'login', 
+        name: name, 
+        pin: pin 
+    });
+    
+    if (!result.success) {
+        showToast(result.error || 'Login gagal!', 'error');
+        return;
+    }
+    
+    currentUser = { 
+        id: result.user.id,  // MongoDB _id sebagai string
+        name: result.user.name,
+        kelas: result.user.kelas,
+        saldo: result.user.saldo,
+        role: 'customer'
+    };
+} catch (err) {
+    showToast('Gagal terhubung ke server!', 'error');
+    return;
+}
                 enterApp();
             }
         }
 
-        function enterApp() {
+        async function enterApp() {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             
@@ -642,8 +677,8 @@ async function saveTopups(topups) {
 
         // Customer Functions
         function updateSaldoDisplay() {
-            const users = getUsers();
-            const user = users.find(u => u.id === currentUser.id);
+            const users = await getUsers();
+const user = users.find(u => u._id === currentUser.id || u.id === currentUser.id)
             if (user) {
                 document.getElementById('saldoAmount').textContent = formatRupiah(user.saldo);
                 currentUser.saldo = user.saldo;
@@ -681,7 +716,7 @@ async function saveTopups(topups) {
 
         function addToCart(itemId) {
             const menu = getMenu();
-            const item = menu.find(m => m.id === itemId);
+            const item = menu.find(m => m._id === itemId || m.id === itemId)
             if (item.stock <= 0) {
                 showToast('Maaf, stok habis!', 'error');
                 return;
@@ -828,21 +863,20 @@ async function saveTopups(topups) {
             saveMenu(menu);
             
             // Save transaction
-            const transactions = getTransactions();
-            transactions.unshift({
-                id: Date.now(),
-                user: currentUser.name,
-                userId: currentUser.id,
-                kelas: currentUser.kelas,
-                items: [...cart],
-                subtotal: subtotal,
-                tax: tax,
-                total: total,
-                type: 'buy',
-                date: new Date().toLocaleString('id-ID'),
-                status: 'success'
-            });
-            saveTransactions(transactions);
+            // Simpan transaksi ke MongoDB
+await saveTransaction({
+    userId: currentUser.id,
+    items: cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        qty: item.qty
+    })),
+    subtotal: subtotal,
+    tax: tax,
+    total: total,
+    type: 'buy'
+});
             
             // Clear cart and update UI
             cart = [];
@@ -995,14 +1029,13 @@ async function saveTopups(topups) {
             showToast('Menu dihapus');
         }
 
-        function addUser() {
-            const name = document.getElementById('newUserName').value.trim();
-            const kelas = document.getElementById('newUserKelas').value;
-            const pin = document.getElementById('newUserPin').value;
-            const saldo = parseInt(document.getElementById('newUserSaldo').value) || 0;
-            
-            if (!name || !pin || pin.length !== 6) {
-                showToast('Mohon isi nama dan PIN 6 digit!', 'error');
+        await apiCall('auth', 'POST', {
+    action: 'register',
+    name: name,
+    pin: pin,
+    kelas: kelas,
+    saldo: saldo
+});
                 return;
             }
             
@@ -1035,16 +1068,10 @@ async function saveTopups(topups) {
             showToast(`${kelasLabel} ${name} berhasil ditambahkan!`);
         }
 
-        function deleteUser(id) {
-            if (!confirm('Yakin ingin menghapus pengguna ini?')) return;
-            let users = getUsers();
-            const user = users.find(u => u.id === id);
-            users = users.filter(u => u.id !== id);
-            saveUsers(users);
-            loadUsersList();
-            updateTopupSelect();
-            updateAdminStats();
-            showToast(`Pengguna ${user.name} dihapus`);
+        await apiCall('users', 'POST', {
+    action: 'delete',
+    userId: id.toString()
+});
         }
 
         function updateTopupSelect() {
@@ -1110,28 +1137,12 @@ async function saveTopups(topups) {
                 return;
             }
             
-            let users = getUsers();
-            const userIndex = users.findIndex(u => u.id == userId);
-            if (userIndex === -1) {
-                showToast('Pengguna tidak ditemukan!', 'error');
-                return;
-            }
-            
-            users[userIndex].saldo += amount;
-            saveUsers(users);
-            
-            const topups = getTopups();
-            topups.unshift({
-                id: Date.now(),
-                user: users[userIndex].name,
-                userId: users[userIndex].id,
-                kelas: users[userIndex].kelas,
-                amount: amount,
-                saldoAkhir: users[userIndex].saldo,
-                type: 'topup',
-                date: new Date().toLocaleString('id-ID'),
-                admin: 'Admin'
-            });
+            await apiCall('users', 'POST', {
+    action: 'topup',
+    userId: userId,
+    amount: amount,
+    adminName: 'Admin'
+});
             saveTopups(topups);
             
             document.getElementById('topupUserSelect').value = '';
