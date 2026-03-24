@@ -1,16 +1,6 @@
 {
-  "name": "kantin-sekolah",
-  "version": "1.0.0",
-  "description": "Sistem Kantin Sekolah dengan MongoDB",
-  "scripts": {
-    "dev": "netlify dev",
-    "build": "echo 'No build step needed for static site'"
-  },
   "dependencies": {
     "mongodb": "^6.3.0",
     "bcryptjs": "^2.4.3"
-  },
-  "devDependencies": {
-    "netlify-cli": "^17.0.0"
   }
 }
