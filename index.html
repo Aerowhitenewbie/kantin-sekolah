@@ -446,9 +446,10 @@
         ];
 
         // ─── API config ───────────────────────────────────────────────────────────
+        // Vercel API routes live at /api/*
         const API_BASE = window.location.hostname === 'localhost'
-            ? 'http://localhost:8888/.netlify/functions'
-            : '/.netlify/functions';
+            ? 'http://localhost:3000/api'
+            : '/api';
 
         async function apiCall(endpoint, method = 'GET', body = null) {
             try {
@@ -471,6 +472,7 @@
         async function getTransactions()        { return await apiCall('transactions'); }
         async function saveTransaction(t)       { return await apiCall('transactions', 'POST', t); }
         async function getTopups()              { return await apiCall('topups'); }
+        // Note: Vercel file is api/topups.js → endpoint is /api/topups
 
         // ─── Initialise ───────────────────────────────────────────────────────────
         async function initializeData() {
