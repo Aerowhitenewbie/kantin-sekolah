@@ -27,7 +27,6 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: var(--dark); }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-        /* Login Screen */
         .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
         .login-card { background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; box-shadow: var(--shadow-lg); text-align: center; animation: slideUp 0.5s ease; }
         .logo { width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 32px; }
@@ -54,7 +53,6 @@
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
         .btn-outline:hover { background: var(--primary); color: white; }
 
-        /* Main App */
         .app { display: none; animation: fadeIn 0.5s ease; }
         .header { background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
         .header-left { display: flex; align-items: center; gap: 16px; }
@@ -85,7 +83,6 @@
         .btn-small:hover { opacity: 0.9; }
         .btn-small:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
 
-        /* Cart Section */
         .cart-section { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
         .section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
@@ -101,10 +98,8 @@
         .tax-row { color: var(--warning); font-weight: 600; }
         .checkout-btn { width: 100%; padding: 16px; font-size: 18px; }
 
-        /* Guest Notice */
         .guest-notice { background: #fff7ed; border: 2px solid var(--warning); border-radius: 12px; padding: 16px; margin-bottom: 20px; color: #9a3412; font-weight: 600; display: flex; align-items: center; gap: 12px; }
 
-        /* Admin Panel */
         .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
         .stat-card { background: white; padding: 24px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; }
         .stat-value { font-size: 36px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
@@ -142,7 +137,7 @@
 
         .backup-section { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
         .backup-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-        .backup-btn { padding: 12px 24px; border-radius: 12px; font-family: inherit; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; }
+        .backup-btn { padding: 12px 24px; border-radius: 12px; font-family: inherit; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; color: white; }
         .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
         .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
         .file-input-label { padding: 12px 24px; background: var(--secondary); color: white; border-radius: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
@@ -153,7 +148,6 @@
         .riwayat-content { display: none; }
         .riwayat-content.active { display: block; }
 
-        /* Modal & Toast */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: white; border-radius: 24px; padding: 32px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
@@ -170,16 +164,14 @@
         .pin-display { font-family: monospace; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: 700; letter-spacing: 2px; }
 
         .empty-state { text-align: center; padding: 60px 20px; color: var(--gray); }
-        .empty-state i { font-size: 64px; margin-bottom: 16px; opacity: 0.3; }
+        .empty-state i { font-size: 64px; margin-bottom: 16px; opacity: 0.3; display: block; }
 
         .hidden { display: none !important; }
 
-        /* Animations */
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .header { flex-direction: column; text-align: center; }
             .role-selector { grid-template-columns: 1fr; }
@@ -245,7 +237,7 @@
                         <p id="subText">Kantin Digital</p>
                     </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
                     <div class="kelas-badge" id="kelasDisplay" style="display: none;">
                         <i class="fas fa-graduation-cap"></i><span id="kelasText">Kelas</span>
                     </div>
@@ -408,127 +400,99 @@
     </div>
 
     <script>
-        // Data Storage
+        // ─── State ────────────────────────────────────────────────────────────────
         let currentUser = null;
         let currentRole = 'customer';
         let cart = [];
-        const GUEST_TAX_RATE = 0.10; // 10% pajak untuk tamu
+        const GUEST_TAX_RATE = 0.10;
 
-        // Default Users
+        // ─── Default seed data ────────────────────────────────────────────────────
         const DEFAULT_USERS = [
-            { id: 1, name: 'Axcel', pin: '482719', saldo: 0, kelas: '10', created: '2024-03-01' },
-            { id: 2, name: 'Chavon', pin: '193650', saldo: 500, kelas: '10', created: '2024-03-01' },
-            { id: 3, name: 'Eivory', pin: '740285', saldo: 0, kelas: '10', created: '2024-03-01' },
-            { id: 4, name: 'Jeremy', pin: '561904', saldo: 0, kelas: '10', created: '2024-03-01' },
-            { id: 5, name: 'Raphael', pin: '836127', saldo: 50000, kelas: '10', created: '2024-03-01' },
-            { id: 6, name: 'Reynard', pin: '205973', saldo: 0, kelas: '10', created: '2024-03-01' },
-            { id: 7, name: 'Sharon', pin: '694318', saldo: 0, kelas: '10', created: '2024-03-01' },
-            { id: 8, name: 'Victoria', pin: '127540', saldo: 0, kelas: '10', created: '2024-03-01' },
-            { id: 9, name: 'Yungci', pin: '358261', saldo: 0, kelas: '10', created: '2024-03-01' },
-            { id: 10, name: 'Cayla', pin: '904176', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 11, name: 'Sema', pin: '271639', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 12, name: 'Kenneth', pin: '583024', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 13, name: 'Loisa', pin: '746192', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 14, name: 'Marvelle', pin: '315870', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 15, name: 'Matthew', pin: '690452', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 16, name: 'Samuel', pin: '148903', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 17, name: 'Stephanie', pin: '527641', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 18, name: 'Yehonadav', pin: '802316', saldo: 0, kelas: '11', created: '2024-03-01' },
-            { id: 19, name: 'Briana', pin: '471590', saldo: 0, kelas: '12', created: '2024-03-01' },
-            { id: 20, name: 'Fidelia', pin: '239864', saldo: 0, kelas: '12', created: '2024-03-01' },
-            { id: 21, name: 'Jonathan', pin: '658107', saldo: 0, kelas: '12', created: '2024-03-01' },
-            { id: 22, name: 'Kezia', pin: '914275', saldo: 0, kelas: '12', created: '2024-03-01' },
-            { id: 23, name: 'Meliana', pin: '360918', saldo: 0, kelas: 'guru', created: '2024-03-01' },
-            { id: 24, name: 'Theresia', pin: '742561', saldo: 0, kelas: 'guru', created: '2024-03-01' },
-            { id: 25, name: 'Luyse', pin: '195480', saldo: 5500, kelas: 'guru', created: '2024-03-01' },
-            { id: 26, name: 'Zefanya', pin: '823604', saldo: 0, kelas: 'guru', created: '2024-03-01' }
+            { id: 1,  name: 'Axcel',      pin: '482719', saldo: 0,     kelas: '10',   created: '2024-03-01' },
+            { id: 2,  name: 'Chavon',     pin: '193650', saldo: 500,   kelas: '10',   created: '2024-03-01' },
+            { id: 3,  name: 'Eivory',     pin: '740285', saldo: 0,     kelas: '10',   created: '2024-03-01' },
+            { id: 4,  name: 'Jeremy',     pin: '561904', saldo: 0,     kelas: '10',   created: '2024-03-01' },
+            { id: 5,  name: 'Raphael',    pin: '836127', saldo: 50000, kelas: '10',   created: '2024-03-01' },
+            { id: 6,  name: 'Reynard',    pin: '205973', saldo: 0,     kelas: '10',   created: '2024-03-01' },
+            { id: 7,  name: 'Sharon',     pin: '694318', saldo: 0,     kelas: '10',   created: '2024-03-01' },
+            { id: 8,  name: 'Victoria',   pin: '127540', saldo: 0,     kelas: '10',   created: '2024-03-01' },
+            { id: 9,  name: 'Yungci',     pin: '358261', saldo: 0,     kelas: '10',   created: '2024-03-01' },
+            { id: 10, name: 'Cayla',      pin: '904176', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 11, name: 'Sema',       pin: '271639', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 12, name: 'Kenneth',    pin: '583024', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 13, name: 'Loisa',      pin: '746192', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 14, name: 'Marvelle',   pin: '315870', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 15, name: 'Matthew',    pin: '690452', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 16, name: 'Samuel',     pin: '148903', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 17, name: 'Stephanie',  pin: '527641', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 18, name: 'Yehonadav',  pin: '802316', saldo: 0,     kelas: '11',   created: '2024-03-01' },
+            { id: 19, name: 'Briana',     pin: '471590', saldo: 0,     kelas: '12',   created: '2024-03-01' },
+            { id: 20, name: 'Fidelia',    pin: '239864', saldo: 0,     kelas: '12',   created: '2024-03-01' },
+            { id: 21, name: 'Jonathan',   pin: '658107', saldo: 0,     kelas: '12',   created: '2024-03-01' },
+            { id: 22, name: 'Kezia',      pin: '914275', saldo: 0,     kelas: '12',   created: '2024-03-01' },
+            { id: 23, name: 'Meliana',    pin: '360918', saldo: 0,     kelas: 'guru', created: '2024-03-01' },
+            { id: 24, name: 'Theresia',   pin: '742561', saldo: 0,     kelas: 'guru', created: '2024-03-01' },
+            { id: 25, name: 'Luyse',      pin: '195480', saldo: 5500,  kelas: 'guru', created: '2024-03-01' },
+            { id: 26, name: 'Zefanya',    pin: '823604', saldo: 0,     kelas: 'guru', created: '2024-03-01' }
         ];
 
-        // Initialize
-        async function initializeData() {
-    // Cek apakah MongoDB kosong, kalau iya seed data
-    try {
-        const users = await getUsers();
-        const menu = await getMenu();
-        
-        if (users.length === 0 && menu.length === 0) {
-            // Seed default users
-            for (const user of DEFAULT_USERS) {
-                await apiCall('auth', 'POST', {
-                    action: 'register',
-                    ...user
-                });
+        const DEFAULT_MENU = [
+            { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan',  icon: '🍳', stock: 10 },
+            { id: 2, name: 'Mie Ayam Bakso',      price: 12000, category: 'Makanan',  icon: '🍜', stock: 15 },
+            { id: 3, name: 'Es Teh Manis',         price: 5000,  category: 'Minuman',  icon: '🧃', stock: 20 },
+            { id: 4, name: 'Roti Bakar',           price: 10000, category: 'Makanan',  icon: '🍞', stock: 8  },
+            { id: 5, name: 'Kopi Susu',            price: 8000,  category: 'Minuman',  icon: '☕', stock: 12 },
+            { id: 6, name: 'Pisang Goreng',        price: 7000,  category: 'Makanan',  icon: '🍌', stock: 5  }
+        ];
+
+        // ─── API config ───────────────────────────────────────────────────────────
+        const API_BASE = window.location.hostname === 'localhost'
+            ? 'http://localhost:8888/.netlify/functions'
+            : '/.netlify/functions';
+
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            try {
+                const options = { method, headers: { 'Content-Type': 'application/json' } };
+                if (body) options.body = JSON.stringify(body);
+                const res  = await fetch(`${API_BASE}/${endpoint}`, options);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+                return data;
+            } catch (err) {
+                console.error(`API Error (${endpoint}):`, err);
+                throw err;
             }
-            
-            // Seed default menu
-            const defaultMenu = [
-                { name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan', icon: '🍳', stock: 10 },
-                { name: 'Mie Ayam Bakso', price: 12000, category: 'Makanan', icon: '🍜', stock: 15 },
-                { name: 'Es Teh Manis', price: 5000, category: 'Minuman', icon: '🧃', stock: 20 },
-                { name: 'Roti Bakar', price: 10000, category: 'Makanan', icon: '🍞', stock: 8 },
-                { name: 'Kopi Susu', price: 8000, category: 'Minuman', icon: '☕', stock: 12 },
-                { name: 'Pisang Goreng', price: 7000, category: 'Makanan', icon: '🍌', stock: 5 }
-            ];
-            await saveMenu(defaultMenu);
-            
-            showToast('Database initialized!');
         }
-    } catch (err) {
-        console.error('Init error:', err);
-    }
-}
 
-        // API Config
-const API_BASE = window.location.hostname === 'localhost' 
-    ? 'http://localhost:8888/.netlify/functions'
-    : '/.netlify/functions';
+        // ─── Data helpers (all async, all await apiCall) ───────────────────────────
+        async function getUsers()               { return await apiCall('users'); }
+        async function getMenu()                { return await apiCall('menu'); }
+        async function saveMenu(menu)           { return await apiCall('menu', 'POST', menu); }
+        async function getTransactions()        { return await apiCall('transactions'); }
+        async function saveTransaction(t)       { return await apiCall('transactions', 'POST', t); }
+        async function getTopups()              { return await apiCall('topups'); }
 
-// Storage Helpers - MongoDB Version
-async function apiCall(endpoint, method = 'GET', body = null) {
-    try {
-        const options = {
-            method,
-            headers: { 'Content-Type': 'application/json' }
-        };
-        if (body) options.body = JSON.stringify(body);
-        
-        const res = await fetch(`${API_BASE}/${endpoint}`, options);
-        const data = await res.json();
-        
-        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-        return data;
-    } catch (err) {
-        console.error(`API Error (${endpoint}):`, err);
-        throw err;
-    }
-}
+        // ─── Initialise ───────────────────────────────────────────────────────────
+        async function initializeData() {
+            try {
+                const [users, menu] = await Promise.all([getUsers(), getMenu()]);
 
-async function getUsers() {
-    return await apiCall('users');
-}
+                if (users.length === 0) {
+                    for (const user of DEFAULT_USERS) {
+                        await apiCall('auth', 'POST', { action: 'register', ...user });
+                    }
+                }
+                if (menu.length === 0) {
+                    await saveMenu(DEFAULT_MENU);
+                }
+            } catch (err) {
+                console.error('Init error:', err);
+            }
+        }
 
-async function getMenu() {
-    return await apiCall('menu');
-}
-
-async function saveMenu(menu) {
-    return await apiCall('menu', 'POST', menu);
-}
-
-async function getTransactions() {
-    return await apiCall('transactions');
-}
-
-async function saveTransaction(transaction) {
-    return await apiCall('transactions', 'POST', transaction);
-}
-
-async function getTopups() {
-    return await apiCall('topups');
-}
-
+        // ─── Utilities ────────────────────────────────────────────────────────────
         function formatRupiah(angka) {
-            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         }
 
         function showToast(message, type = 'success') {
@@ -538,74 +502,62 @@ async function getTopups() {
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Check if user is guest
         function isGuest(user) {
             return user && user.kelas === 'guest';
         }
 
-        // Login Functions
+        // ─── Login ────────────────────────────────────────────────────────────────
         function selectRole(role, event) {
             currentRole = role;
-            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
             event.target.closest('.role-btn').classList.add('active');
-            
-            if (role === 'customer') {
-                document.getElementById('customerLogin').classList.remove('hidden');
-                document.getElementById('adminLogin').classList.add('hidden');
-            } else {
-                document.getElementById('customerLogin').classList.add('hidden');
-                document.getElementById('adminLogin').classList.remove('hidden');
-            }
+            document.getElementById('customerLogin').classList.toggle('hidden', role !== 'customer');
+            document.getElementById('adminLogin').classList.toggle('hidden', role !== 'admin');
         }
 
-        function login() {
+        async function login() {
             if (currentRole === 'admin') {
                 const user = document.getElementById('adminUser').value;
                 const pass = document.getElementById('adminPass').value;
                 if (user === 'admin' && pass === 'supersecretpasswordaerow') {
                     currentUser = { name: 'Admin', role: 'admin' };
-                    enterApp();
+                    await enterApp();
                 } else {
                     showToast('Username atau password salah!', 'error');
                 }
-            } else {
-                const name = document.getElementById('customerName').value.trim();
-                const pin = document.getElementById('customerPin').value;
-                if (!name || !pin || pin.length !== 6) {
-                    showToast('Mohon isi nama dan PIN 6 digit!', 'error');
+                return;
+            }
+
+            // Customer login
+            const name = document.getElementById('customerName').value.trim();
+            const pin  = document.getElementById('customerPin').value;
+            if (!name || !pin || pin.length !== 6) {
+                showToast('Mohon isi nama dan PIN 6 digit!', 'error');
+                return;
+            }
+            try {
+                const result = await apiCall('auth', 'POST', { action: 'login', name, pin });
+                if (!result.success) {
+                    showToast(result.error || 'Login gagal!', 'error');
                     return;
                 }
-                try {
-    const result = await apiCall('auth', 'POST', { 
-        action: 'login', 
-        name: name, 
-        pin: pin 
-    });
-    
-    if (!result.success) {
-        showToast(result.error || 'Login gagal!', 'error');
-        return;
-    }
-    
-    currentUser = { 
-        id: result.user.id,  // MongoDB _id sebagai string
-        name: result.user.name,
-        kelas: result.user.kelas,
-        saldo: result.user.saldo,
-        role: 'customer'
-    };
-} catch (err) {
-    showToast('Gagal terhubung ke server!', 'error');
-    return;
-}
-                enterApp();
+                currentUser = {
+                    id:    result.user.id || result.user._id,
+                    name:  result.user.name,
+                    kelas: result.user.kelas,
+                    saldo: result.user.saldo,
+                    role:  'customer'
+                };
+                await enterApp();
+            } catch (err) {
+                showToast('Gagal terhubung ke server!', 'error');
             }
         }
 
         async function enterApp() {
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            
+            document.getElementById('mainApp').style.display   = 'block';
+
             if (currentUser.role === 'admin') {
                 document.getElementById('customerView').classList.add('hidden');
                 document.getElementById('adminView').classList.remove('hidden');
@@ -613,52 +565,47 @@ async function getTopups() {
                 document.getElementById('kelasDisplay').style.display = 'none';
                 document.getElementById('guestDisplay').style.display = 'none';
                 document.getElementById('welcomeText').textContent = 'Dashboard Admin';
-                document.getElementById('subText').textContent = 'Kelola kantin dengan mudah';
-                loadAdminData();
+                document.getElementById('subText').textContent     = 'Kelola kantin dengan mudah';
+                await loadAdminData();
             } else {
                 document.getElementById('customerView').classList.remove('hidden');
                 document.getElementById('adminView').classList.add('hidden');
-                
+
                 const userIsGuest = isGuest(currentUser);
-                
                 if (userIsGuest) {
-                    // Guest user view
                     document.getElementById('saldoDisplay').style.display = 'flex';
                     document.getElementById('kelasDisplay').style.display = 'none';
                     document.getElementById('guestDisplay').style.display = 'flex';
-                    document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
-                    document.getElementById('subText').textContent = 'Tamu - Hubungi admin untuk jadi member';
-                    
-                    // Add guest notice
+                    document.getElementById('welcomeText').textContent    = `Halo, ${currentUser.name}!`;
+                    document.getElementById('subText').textContent        = 'Tamu - Hubungi admin untuk jadi member';
+
                     const customerView = document.getElementById('customerView');
                     let notice = document.getElementById('guestNotice');
                     if (!notice) {
                         notice = document.createElement('div');
-                        notice.id = 'guestNotice';
+                        notice.id        = 'guestNotice';
                         notice.className = 'guest-notice';
                         notice.innerHTML = `
                             <i class="fas fa-exclamation-triangle" style="font-size: 20px;"></i>
                             <div>
-                                <strong>Perhatian:</strong> Anda dikenakan biaya tambahan 10% sebagai tamu. 
+                                <strong>Perhatian:</strong> Anda dikenakan biaya tambahan 10% sebagai tamu.
                                 Total pembayaran akan ditambah pajak 10%. Hubungi admin untuk mendaftar sebagai member reguler!
-                            </div>
-                        `;
+                            </div>`;
                         customerView.insertBefore(notice, document.getElementById('menuGrid'));
                     }
                 } else {
-                    // Regular member view
                     document.getElementById('saldoDisplay').style.display = 'flex';
                     document.getElementById('kelasDisplay').style.display = 'flex';
                     document.getElementById('guestDisplay').style.display = 'none';
                     const notice = document.getElementById('guestNotice');
                     if (notice) notice.remove();
                     const kelasText = currentUser.kelas === 'guru' ? 'Guru' : `Kelas ${currentUser.kelas}`;
-                    document.getElementById('kelasText').textContent = kelasText;
-                    document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
-                    document.getElementById('subText').textContent = kelasText;
+                    document.getElementById('kelasText').textContent    = kelasText;
+                    document.getElementById('welcomeText').textContent  = `Halo, ${currentUser.name}!`;
+                    document.getElementById('subText').textContent      = kelasText;
                 }
-                updateSaldoDisplay();
-                loadMenu();
+                await updateSaldoDisplay();
+                await loadMenu();
             }
         }
 
@@ -666,94 +613,105 @@ async function getTopups() {
             currentUser = null;
             cart = [];
             document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('mainApp').style.display     = 'none';
             const notice = document.getElementById('guestNotice');
             if (notice) notice.remove();
             document.getElementById('customerName').value = '';
-            document.getElementById('customerPin').value = '';
-            document.getElementById('adminUser').value = '';
-            document.getElementById('adminPass').value = '';
+            document.getElementById('customerPin').value  = '';
+            document.getElementById('adminUser').value    = '';
+            document.getElementById('adminPass').value    = '';
         }
 
-        // Customer Functions
-        function updateSaldoDisplay() {
-            const users = await getUsers();
-const user = users.find(u => u._id === currentUser.id || u.id === currentUser.id)
-            if (user) {
-                document.getElementById('saldoAmount').textContent = formatRupiah(user.saldo);
-                currentUser.saldo = user.saldo;
-            }
-        }
-
-        function loadMenu() {
-            const menu = getMenu();
-            const grid = document.getElementById('menuGrid');
-            grid.innerHTML = '';
-            
-            menu.forEach(item => {
-                const isOutOfStock = item.stock <= 0;
-                const card = document.createElement('div');
-                card.className = 'card' + (isOutOfStock ? ' out-of-stock' : '');
-                card.innerHTML = `
-                    <div class="card-image ${isOutOfStock ? 'out-of-stock' : ''}">
-                        <div style="font-size: 64px;">${item.icon}</div>
-                        <div class="card-badge">${item.category}</div>
-                        <div class="stock-badge ${isOutOfStock ? 'empty' : ''}">Stok: ${item.stock}</div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-title">${item.name}</div>
-                        <div class="card-price">${formatRupiah(item.price)}</div>
-                        <div class="card-actions">
-                            <button class="btn-small btn-secondary" onclick="addToCart(${item.id})" ${isOutOfStock ? 'disabled' : ''}>
-                                ${isOutOfStock ? '<i class="fas fa-times"></i> Habis' : '<i class="fas fa-plus"></i> Tambah'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function addToCart(itemId) {
-            const menu = getMenu();
-            const item = menu.find(m => m._id === itemId || m.id === itemId)
-            if (item.stock <= 0) {
-                showToast('Maaf, stok habis!', 'error');
-                return;
-            }
-            const existingItem = cart.find(c => c.id === itemId);
-            if (existingItem) {
-                if (existingItem.qty >= item.stock) {
-                    showToast('Stok tidak cukup!', 'error');
-                    return;
+        // ─── Customer ─────────────────────────────────────────────────────────────
+        async function updateSaldoDisplay() {
+            try {
+                const users = await getUsers();
+                const user  = users.find(u => String(u._id || u.id) === String(currentUser.id));
+                if (user) {
+                    document.getElementById('saldoAmount').textContent = formatRupiah(user.saldo);
+                    currentUser.saldo = user.saldo;
                 }
-                existingItem.qty++;
-            } else {
-                cart.push({ ...item, qty: 1 });
+            } catch (err) {
+                console.error('updateSaldoDisplay error:', err);
             }
-            updateCart();
-            showToast(`${item.name} ditambahkan ke keranjang`);
         }
 
-        function updateCart() {
-            const cartSection = document.getElementById('cartSection');
-            const cartItems = document.getElementById('cartItems');
-            
-            if (cart.length === 0) {
-                cartSection.style.display = 'none';
-                return;
+        async function loadMenu() {
+            try {
+                const menu = await getMenu();
+                const grid = document.getElementById('menuGrid');
+                grid.innerHTML = '';
+                menu.forEach(item => {
+                    const oos  = item.stock <= 0;
+                    const card = document.createElement('div');
+                    card.className = 'card' + (oos ? ' out-of-stock' : '');
+                    card.innerHTML = `
+                        <div class="card-image ${oos ? 'out-of-stock' : ''}">
+                            <div style="font-size: 64px;">${item.icon}</div>
+                            <div class="card-badge">${item.category}</div>
+                            <div class="stock-badge ${oos ? 'empty' : ''}">Stok: ${item.stock}</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">${item.name}</div>
+                            <div class="card-price">${formatRupiah(item.price)}</div>
+                            <div class="card-actions">
+                                <button class="btn-small btn-secondary" onclick="addToCart('${item._id || item.id}')" ${oos ? 'disabled' : ''}>
+                                    ${oos ? '<i class="fas fa-times"></i> Habis' : '<i class="fas fa-plus"></i> Tambah'}
+                                </button>
+                            </div>
+                        </div>`;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                console.error('loadMenu error:', err);
             }
-            
+        }
+
+        // We keep a local copy of the menu after loading to avoid repeated API calls
+        // while managing cart interactions.
+        let _cachedMenu = null;
+
+        async function getMenuCached() {
+            if (!_cachedMenu) _cachedMenu = await getMenu();
+            return _cachedMenu;
+        }
+
+        async function addToCart(itemId) {
+            try {
+                const menu = await getMenu();
+                const item = menu.find(m => String(m._id || m.id) === String(itemId));
+                if (!item || item.stock <= 0) { showToast('Maaf, stok habis!', 'error'); return; }
+
+                const existing = cart.find(c => String(c.id) === String(itemId));
+                if (existing) {
+                    if (existing.qty >= item.stock) { showToast('Stok tidak cukup!', 'error'); return; }
+                    existing.qty++;
+                } else {
+                    cart.push({ id: String(item._id || item.id), name: item.name, price: item.price, icon: item.icon, qty: 1 });
+                }
+                await updateCart();
+                showToast(`${item.name} ditambahkan ke keranjang`);
+            } catch (err) {
+                showToast('Gagal menambahkan item!', 'error');
+            }
+        }
+
+        async function updateCart() {
+            const cartSection = document.getElementById('cartSection');
+            const cartItems   = document.getElementById('cartItems');
+
+            if (cart.length === 0) { cartSection.style.display = 'none'; return; }
             cartSection.style.display = 'block';
             cartItems.innerHTML = '';
+
             let subtotal = 0;
-            
-            const menu = getMenu();
-            const menuMap = new Map(menu.map(m => [m.id, m]));
-            
+            let menu;
+            try { menu = await getMenu(); } catch { menu = []; }
+            const menuMap = new Map(menu.map(m => [String(m._id || m.id), m]));
+
             cart.forEach((item, index) => {
                 subtotal += item.price * item.qty;
-                const maxStock = menuMap.get(item.id)?.stock || 0;
+                const maxStock = menuMap.get(String(item.id))?.stock ?? 0;
                 const div = document.createElement('div');
                 div.className = 'cart-item';
                 div.innerHTML = `
@@ -763,170 +721,131 @@ const user = users.find(u => u._id === currentUser.id || u.id === currentUser.id
                     </div>
                     <div class="cart-item-actions">
                         <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
-                        <span style="font-weight: 700; min-width: 30px; text-align: center;">${item.qty}</span>
+                        <span style="font-weight:700;min-width:30px;text-align:center;">${item.qty}</span>
                         <button class="qty-btn" onclick="updateQty(${index}, 1)" ${item.qty >= maxStock ? 'disabled' : ''}>+</button>
-                        <span style="font-weight: 700; color: var(--primary); min-width: 100px; text-align: right;">${formatRupiah(item.price * item.qty)}</span>
-                    </div>
-                `;
+                        <span style="font-weight:700;color:var(--primary);min-width:100px;text-align:right;">${formatRupiah(item.price * item.qty)}</span>
+                    </div>`;
                 cartItems.appendChild(div);
             });
-            
-            // Calculate tax for guests
+
             const userIsGuest = isGuest(currentUser);
-            let tax = 0;
-            let total = subtotal;
-            
-            if (userIsGuest) {
-                tax = Math.round(subtotal * GUEST_TAX_RATE);
-                total = subtotal + tax;
-            }
-            
-            // Update summary HTML
+            const tax   = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
+            const total = subtotal + tax;
+
             const cartSummary = document.getElementById('cartSummary');
-            let summaryHTML = `
-                <div class="summary-row"><span>Subtotal</span><span>${formatRupiah(subtotal)}</span></div>
-            `;
-            if (tax > 0) {
-                summaryHTML += `<div class="summary-row tax-row"><span>Pajak Tamu (10%)</span><span>${formatRupiah(tax)}</span></div>`;
-            }
+            let summaryHTML = `<div class="summary-row"><span>Subtotal</span><span>${formatRupiah(subtotal)}</span></div>`;
+            if (tax > 0) summaryHTML += `<div class="summary-row tax-row"><span>Pajak Tamu (10%)</span><span>${formatRupiah(tax)}</span></div>`;
             summaryHTML += `<div class="summary-row total"><span>Total Bayar</span><span>${formatRupiah(total)}</span></div>`;
             cartSummary.innerHTML = summaryHTML;
-            
-            // Update button text
+
             const checkoutBtn = document.querySelector('.checkout-btn');
-            if (userIsGuest) {
-                checkoutBtn.innerHTML = `<i class="fas fa-check"></i> Bayar ${formatRupiah(total)} (Termasuk Pajak)`;
-            } else {
-                checkoutBtn.innerHTML = `<i class="fas fa-check"></i> Bayar Sekarang`;
-            }
+            checkoutBtn.innerHTML = userIsGuest
+                ? `<i class="fas fa-check"></i> Bayar ${formatRupiah(total)} (Termasuk Pajak)`
+                : `<i class="fas fa-check"></i> Bayar Sekarang`;
         }
 
-        function updateQty(index, change) {
-            const menu = getMenu();
+        async function updateQty(index, change) {
+            let menu;
+            try { menu = await getMenu(); } catch { menu = []; }
             const cartItem = cart[index];
-            const menuItem = menu.find(m => m.id === cartItem.id);
+            const menuItem = menu.find(m => String(m._id || m.id) === String(cartItem.id));
             if (!menuItem) return;
-            
+
             const newQty = cartItem.qty + change;
             if (newQty <= 0) {
                 cart.splice(index, 1);
             } else if (newQty > menuItem.stock) {
-                showToast('Stok tidak cukup!', 'error');
-                return;
+                showToast('Stok tidak cukup!', 'error'); return;
             } else {
                 cartItem.qty = newQty;
             }
-            updateCart();
+            await updateCart();
         }
 
-        function checkout() {
-            const menu = getMenu();
-            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            
-            // Calculate with tax for guests
-            const userIsGuest = isGuest(currentUser);
-            let tax = 0;
-            let total = subtotal;
-            
-            if (userIsGuest) {
-                tax = Math.round(subtotal * GUEST_TAX_RATE);
-                total = subtotal + tax;
-            }
-            
-            // Check stock
-            for (let cartItem of cart) {
-                const menuItem = menu.find(m => m.id === cartItem.id);
-                if (!menuItem || cartItem.qty > menuItem.stock) {
-                    showToast(`Stok ${menuItem ? menuItem.name : 'item'} tidak cukup!`, 'error');
+        async function checkout() {
+            try {
+                const menu     = await getMenu();
+                let subtotal   = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+                const userIsGuest = isGuest(currentUser);
+                const tax      = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
+                const total    = subtotal + tax;
+
+                // Validate stock
+                for (const cartItem of cart) {
+                    const menuItem = menu.find(m => String(m._id || m.id) === String(cartItem.id));
+                    if (!menuItem || cartItem.qty > menuItem.stock) {
+                        showToast(`Stok ${menuItem ? menuItem.name : 'item'} tidak cukup!`, 'error');
+                        return;
+                    }
+                }
+
+                // Validate saldo
+                if (currentUser.saldo < total) {
+                    showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
                     return;
                 }
-            }
-            
-            // Check saldo (sama untuk guest dan member)
-            const users = getUsers();
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
-            
-            if (userIndex === -1 || users[userIndex].saldo < total) {
-                showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
-                return;
-            }
-            
-            // Deduct saldo
-            users[userIndex].saldo -= total;
-            saveUsers(users);
-            
-            // Reduce stock
-            cart.forEach(cartItem => {
-                const menuItem = menu.find(m => m.id === cartItem.id);
-                if (menuItem) menuItem.stock -= cartItem.qty;
-            });
-            saveMenu(menu);
-            
-            // Save transaction
-            // Simpan transaksi ke MongoDB
-await saveTransaction({
-    userId: currentUser.id,
-    items: cart.map(item => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        qty: item.qty
-    })),
-    subtotal: subtotal,
-    tax: tax,
-    total: total,
-    type: 'buy'
-});
-            
-            // Clear cart and update UI
-            cart = [];
-            updateCart();
-            loadMenu();
-            updateSaldoDisplay();
-            
-            // Success message
-            if (userIsGuest) {
-                showToast(`Pembayaran berhasil! Total: ${formatRupiah(total)} (Pajak: ${formatRupiah(tax)})`);
-            } else {
-                showToast('Pembayaran berhasil! Terima kasih.');
+
+                // Save transaction
+                await saveTransaction({
+                    userId:   currentUser.id,
+                    userName: currentUser.name,
+                    kelas:    currentUser.kelas,
+                    items: cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
+                    subtotal, tax, total,
+                    type: 'buy',
+                    date: new Date().toISOString()
+                });
+
+                cart = [];
+                await updateCart();
+                await loadMenu();
+                await updateSaldoDisplay();
+
+                showToast(userIsGuest
+                    ? `Pembayaran berhasil! Total: ${formatRupiah(total)} (Pajak: ${formatRupiah(tax)})`
+                    : 'Pembayaran berhasil! Terima kasih.');
+            } catch (err) {
+                showToast('Gagal melakukan pembayaran!', 'error');
+                console.error('checkout error:', err);
             }
         }
 
-        // Admin Functions
-        function loadAdminData() {
-            updateAdminStats();
-            loadAdminMenu();
-            loadUsersList();
-            loadRiwayat();
-            updateTopupSelect();
+        // ─── Admin ────────────────────────────────────────────────────────────────
+        async function loadAdminData() {
+            await Promise.all([
+                updateAdminStats(),
+                loadAdminMenu(),
+                loadUsersList(),
+                loadRiwayat(),
+                updateTopupSelect()
+            ]);
         }
 
-        function updateAdminStats() {
-            const users = getUsers();
-            const transactions = getTransactions();
-            const topups = getTopups();
-            const today = new Date().toDateString();
-            
-            const todayTransactions = transactions.filter(t => new Date(t.date).toDateString() === today);
-            const revenue = todayTransactions.reduce((sum, t) => sum + t.total, 0);
-            const totalTopup = topups.reduce((sum, t) => sum + t.amount, 0);
-            
-            // Guest stats
-            const guestTransactions = todayTransactions.filter(t => t.kelas === 'guest');
-            const guestTax = guestTransactions.reduce((sum, t) => sum + (t.tax || 0), 0);
-            
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalSales').textContent = todayTransactions.length;
-            document.getElementById('totalRevenue').textContent = formatRupiah(revenue);
-            document.getElementById('totalTopup').textContent = formatRupiah(totalTopup);
-            
-            const guestStats = document.getElementById('guestStats');
-            if (guestTransactions.length > 0) {
-                document.getElementById('guestCount').textContent = guestTransactions.length;
-                document.getElementById('guestTax').textContent = formatRupiah(guestTax);
-                guestStats.style.display = 'block';
-            } else {
-                guestStats.style.display = 'none';
+        async function updateAdminStats() {
+            try {
+                const [users, transactions, topups] = await Promise.all([getUsers(), getTransactions(), getTopups()]);
+                const today = new Date().toDateString();
+                const todayTx  = transactions.filter(t => new Date(t.date).toDateString() === today);
+                const revenue  = todayTx.reduce((s, t) => s + t.total, 0);
+                const totalTopupSum = topups.reduce((s, t) => s + t.amount, 0);
+                const guestTx  = todayTx.filter(t => t.kelas === 'guest');
+                const guestTax = guestTx.reduce((s, t) => s + (t.tax || 0), 0);
+
+                document.getElementById('totalUsers').textContent   = users.length;
+                document.getElementById('totalSales').textContent   = todayTx.length;
+                document.getElementById('totalRevenue').textContent = formatRupiah(revenue);
+                document.getElementById('totalTopup').textContent   = formatRupiah(totalTopupSum);
+
+                const guestStats = document.getElementById('guestStats');
+                if (guestTx.length > 0) {
+                    document.getElementById('guestCount').textContent = guestTx.length;
+                    document.getElementById('guestTax').textContent   = formatRupiah(guestTax);
+                    guestStats.style.display = 'block';
+                } else {
+                    guestStats.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('updateAdminStats error:', err);
             }
         }
 
@@ -935,10 +854,7 @@ await saveTransaction({
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(tab + 'Tab').classList.add('active');
-            if (tab === 'users') {
-                loadUsersList();
-                updateTopupSelect();
-            }
+            if (tab === 'users')    { loadUsersList(); updateTopupSelect(); }
             if (tab === 'riwayat') loadRiwayat();
         }
 
@@ -949,372 +865,351 @@ await saveTransaction({
             document.getElementById('riwayat' + (type === 'pembelian' ? 'Pembelian' : 'Topup')).classList.add('active');
         }
 
-        function loadAdminMenu() {
-            const menu = getMenu();
-            const grid = document.getElementById('adminMenuGrid');
-            grid.innerHTML = '';
-            menu.forEach(item => {
-                const isOutOfStock = item.stock <= 0;
-                const card = document.createElement('div');
-                card.className = 'card' + (isOutOfStock ? ' out-of-stock' : '');
-                card.innerHTML = `
-                    <div class="card-image ${isOutOfStock ? 'out-of-stock' : ''}" style="height: 120px; font-size: 48px;">
-                        ${item.icon}
-                        <div class="stock-badge ${isOutOfStock ? 'empty' : ''}" style="font-size: 10px;">Stok: ${item.stock}</div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-title">${item.name}</div>
-                        <div class="card-price">${formatRupiah(item.price)}</div>
-                        <div class="card-actions">
-                            <button class="btn-small btn-secondary" onclick="editStock(${item.id})"><i class="fas fa-edit"></i> Stok</button>
-                            <button class="btn-small btn-danger" onclick="deleteMenuItem(${item.id})"><i class="fas fa-trash"></i></button>
+        async function loadAdminMenu() {
+            try {
+                const menu = await getMenu();
+                const grid = document.getElementById('adminMenuGrid');
+                grid.innerHTML = '';
+                menu.forEach(item => {
+                    const oos  = item.stock <= 0;
+                    const id   = item._id || item.id;
+                    const card = document.createElement('div');
+                    card.className = 'card' + (oos ? ' out-of-stock' : '');
+                    card.innerHTML = `
+                        <div class="card-image ${oos ? 'out-of-stock' : ''}" style="height:120px;font-size:48px;">
+                            ${item.icon}
+                            <div class="stock-badge ${oos ? 'empty' : ''}" style="font-size:10px;">Stok: ${item.stock}</div>
                         </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+                        <div class="card-content">
+                            <div class="card-title">${item.name}</div>
+                            <div class="card-price">${formatRupiah(item.price)}</div>
+                            <div class="card-actions">
+                                <button class="btn-small btn-secondary" onclick="editStock('${id}')"><i class="fas fa-edit"></i> Stok</button>
+                                <button class="btn-small btn-danger"    onclick="deleteMenuItem('${id}')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>`;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                console.error('loadAdminMenu error:', err);
+            }
         }
 
-        function addMenuItem() {
-            const name = document.getElementById('newItemName').value.trim();
-            const price = parseInt(document.getElementById('newItemPrice').value);
+        async function addMenuItem() {
+            const name     = document.getElementById('newItemName').value.trim();
+            const price    = parseInt(document.getElementById('newItemPrice').value);
             const category = document.getElementById('newItemCategory').value.trim();
-            const stock = parseInt(document.getElementById('newItemStock').value) || 0;
-            
-            if (!name || !price || !category) {
-                showToast('Mohon isi semua field!', 'error');
-                return;
-            }
-            
-            const menu = getMenu();
-            const icons = ['🍳', '🍜', '🧃', '🍞', '☕', '🍌', '🍔', '🍕', '🥗', '🥤'];
-            menu.push({
-                id: Date.now(),
-                name: name,
-                price: price,
-                category: category,
-                stock: stock,
-                icon: icons[Math.floor(Math.random() * icons.length)]
-            });
-            saveMenu(menu);
-            
-            document.getElementById('newItemName').value = '';
-            document.getElementById('newItemPrice').value = '';
-            document.getElementById('newItemCategory').value = '';
-            document.getElementById('newItemStock').value = '10';
-            
-            loadAdminMenu();
-            showToast('Menu berhasil ditambahkan!');
-        }
+            const stock    = parseInt(document.getElementById('newItemStock').value) || 0;
 
-        function editStock(itemId) {
-            const menu = getMenu();
-            const item = menu.find(m => m.id === itemId);
-            if (!item) return;
-            const newStock = prompt(`Edit stok untuk ${item.name}:`, item.stock);
-            if (newStock !== null && !isNaN(newStock) && newStock !== '') {
-                item.stock = parseInt(newStock);
-                saveMenu(menu);
-                loadAdminMenu();
-                showToast(`Stok ${item.name} diupdate: ${item.stock}`);
+            if (!name || !price || !category) { showToast('Mohon isi semua field!', 'error'); return; }
+
+            try {
+                const menu  = await getMenu();
+                const icons = ['🍳','🍜','🧃','🍞','☕','🍌','🍔','🍕','🥗','🥤'];
+                menu.push({ id: Date.now(), name, price, category, stock, icon: icons[Math.floor(Math.random() * icons.length)] });
+                await saveMenu(menu);
+
+                document.getElementById('newItemName').value    = '';
+                document.getElementById('newItemPrice').value   = '';
+                document.getElementById('newItemCategory').value = '';
+                document.getElementById('newItemStock').value   = '10';
+
+                await loadAdminMenu();
+                showToast('Menu berhasil ditambahkan!');
+            } catch (err) {
+                showToast('Gagal menambahkan menu!', 'error');
             }
         }
 
-        function deleteMenuItem(id) {
+        async function editStock(itemId) {
+            try {
+                const menu = await getMenu();
+                const item = menu.find(m => String(m._id || m.id) === String(itemId));
+                if (!item) return;
+                const newStock = prompt(`Edit stok untuk ${item.name}:`, item.stock);
+                if (newStock !== null && !isNaN(newStock) && newStock !== '') {
+                    item.stock = parseInt(newStock);
+                    await saveMenu(menu);
+                    await loadAdminMenu();
+                    showToast(`Stok ${item.name} diupdate: ${item.stock}`);
+                }
+            } catch (err) {
+                showToast('Gagal mengupdate stok!', 'error');
+            }
+        }
+
+        async function deleteMenuItem(itemId) {
             if (!confirm('Yakin ingin menghapus menu ini?')) return;
-            let menu = getMenu();
-            menu = menu.filter(m => m.id !== id);
-            saveMenu(menu);
-            loadAdminMenu();
-            showToast('Menu dihapus');
+            try {
+                let menu = await getMenu();
+                menu = menu.filter(m => String(m._id || m.id) !== String(itemId));
+                await saveMenu(menu);
+                await loadAdminMenu();
+                showToast('Menu dihapus');
+            } catch (err) {
+                showToast('Gagal menghapus menu!', 'error');
+            }
         }
 
-        await apiCall('auth', 'POST', {
-    action: 'register',
-    name: name,
-    pin: pin,
-    kelas: kelas,
-    saldo: saldo
-});
+        async function addUser() {
+            const name  = document.getElementById('newUserName').value.trim();
+            const pin   = document.getElementById('newUserPin').value;
+            const kelas = document.getElementById('newUserKelas').value;
+            const saldo = parseInt(document.getElementById('newUserSaldo').value) || 0;
+
+            if (!name || !pin || pin.length !== 6) {
+                showToast('Mohon isi nama dan PIN 6 digit!', 'error');
                 return;
             }
-            
-            let users = getUsers();
-            if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-                showToast('Nama pengguna sudah ada!', 'error');
-                return;
+
+            try {
+                await apiCall('auth', 'POST', { action: 'register', name, pin, kelas, saldo });
+
+                document.getElementById('newUserName').value  = '';
+                document.getElementById('newUserPin').value   = '';
+                document.getElementById('newUserSaldo').value = '0';
+                document.getElementById('newUserKelas').value = '10';
+
+                await loadUsersList();
+                await updateTopupSelect();
+                await updateAdminStats();
+
+                const kelasLabel = kelas === 'guest' ? 'Tamu' : (kelas === 'guru' ? 'Guru' : 'Kelas ' + kelas);
+                showToast(`${kelasLabel} ${name} berhasil ditambahkan!`);
+            } catch (err) {
+                showToast('Gagal menambahkan pengguna!', 'error');
             }
-            
-            users.push({
-                id: Date.now(),
-                name: name,
-                pin: pin,
-                kelas: kelas,
-                saldo: saldo,
-                created: new Date().toLocaleDateString('id-ID')
-            });
-            saveUsers(users);
-            
-            document.getElementById('newUserName').value = '';
-            document.getElementById('newUserPin').value = '';
-            document.getElementById('newUserSaldo').value = '0';
-            document.getElementById('newUserKelas').value = '10';
-            
-            loadUsersList();
-            updateTopupSelect();
-            updateAdminStats();
-            
-            const kelasLabel = kelas === 'guest' ? 'Tamu' : (kelas === 'guru' ? 'Guru' : 'Kelas ' + kelas);
-            showToast(`${kelasLabel} ${name} berhasil ditambahkan!`);
         }
 
-        await apiCall('users', 'POST', {
-    action: 'delete',
-    userId: id.toString()
-});
-        }
-
-        function updateTopupSelect() {
-            const users = getUsers();
-            const select = document.getElementById('topupUserSelect');
-            select.innerHTML = '<option value="">-- Pilih Pengguna --</option>';
-            users.sort((a, b) => a.name.localeCompare(b.name)).forEach(user => {
-                const kelasLabel = user.kelas === 'guest' ? '[Tamu]' : (user.kelas === 'guru' ? '[Guru]' : '[Kelas ' + user.kelas + ']');
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = `${kelasLabel} ${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
-                select.appendChild(option);
-            });
-        }
-
-        function loadUsersList() {
-            const users = getUsers();
-            const list = document.getElementById('usersList');
-            list.innerHTML = '';
-            
-            if (users.length === 0) {
-                list.innerHTML = `<div class="empty-state" style="padding: 40px;"><i class="fas fa-users"></i><p>Belum ada pengguna terdaftar</p></div>`;
-                return;
+        async function deleteUser(userId) {
+            if (!confirm('Yakin ingin menghapus pengguna ini?')) return;
+            try {
+                await apiCall('users', 'POST', { action: 'delete', userId: String(userId) });
+                await loadUsersList();
+                await updateTopupSelect();
+                await updateAdminStats();
+                showToast('Pengguna dihapus');
+            } catch (err) {
+                showToast('Gagal menghapus pengguna!', 'error');
             }
-            
-            users.sort((a, b) => {
-                if (a.kelas === 'guest' && b.kelas !== 'guest') return 1;
-                if (a.kelas !== 'guest' && b.kelas === 'guest') return -1;
-                if (a.kelas === 'guru' && b.kelas !== 'guru') return 1;
-                if (a.kelas !== 'guru' && b.kelas === 'guru') return -1;
-                if (a.kelas !== b.kelas) return a.kelas.localeCompare(b.kelas);
-                return a.name.localeCompare(b.name);
-            }).forEach(user => {
-                const isGuest = user.kelas === 'guest';
-                const kelasClass = isGuest ? 'kelas-guest' : (user.kelas === 'guru' ? 'kelas-guru' : `kelas-${user.kelas}`);
-                const kelasText = isGuest ? 'Tamu' : (user.kelas === 'guru' ? 'Guru' : `Kelas ${user.kelas}`);
-                
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                if (isGuest) div.style.background = '#fff7ed';
-                
-                div.innerHTML = `
-                    <div><strong>${user.name}</strong></div>
-                    <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                    <div><span class="pin-display">${user.pin}</span></div>
-                    <div style="font-weight: 700; color: var(--success);">${formatRupiah(user.saldo)}</div>
-                    <div style="font-size: 12px; color: var(--gray);">${user.created}</div>
-                    <div style="font-size: 12px; color: ${isGuest ? '#ea580c' : 'var(--success)'};">${isGuest ? 'Tamu (+10%)' : 'Aktif'}</div>
-                    <div class="action-btns">
-                        <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-                list.appendChild(div);
-            });
         }
 
-        function topupSaldo() {
+        async function updateTopupSelect() {
+            try {
+                const users  = await getUsers();
+                const select = document.getElementById('topupUserSelect');
+                select.innerHTML = '<option value="">-- Pilih Pengguna --</option>';
+                users.sort((a, b) => a.name.localeCompare(b.name)).forEach(user => {
+                    const id         = user._id || user.id;
+                    const kelasLabel = user.kelas === 'guest' ? '[Tamu]' : (user.kelas === 'guru' ? '[Guru]' : '[Kelas ' + user.kelas + ']');
+                    const option     = document.createElement('option');
+                    option.value     = id;
+                    option.textContent = `${kelasLabel} ${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
+                    select.appendChild(option);
+                });
+            } catch (err) {
+                console.error('updateTopupSelect error:', err);
+            }
+        }
+
+        async function loadUsersList() {
+            try {
+                const users = await getUsers();
+                const list  = document.getElementById('usersList');
+                list.innerHTML = '';
+
+                if (users.length === 0) {
+                    list.innerHTML = `<div class="empty-state" style="padding:40px;"><i class="fas fa-users"></i><p>Belum ada pengguna terdaftar</p></div>`;
+                    return;
+                }
+
+                users.sort((a, b) => {
+                    const order = v => v === 'guest' ? 3 : v === 'guru' ? 2 : 0;
+                    if (order(a.kelas) !== order(b.kelas)) return order(a.kelas) - order(b.kelas);
+                    if (a.kelas !== b.kelas) return a.kelas.localeCompare(b.kelas);
+                    return a.name.localeCompare(b.name);
+                }).forEach(user => {
+                    const id         = user._id || user.id;
+                    const guest      = user.kelas === 'guest';
+                    const kelasClass = guest ? 'kelas-guest' : (user.kelas === 'guru' ? 'kelas-guru' : `kelas-${user.kelas}`);
+                    const kelasText  = guest ? 'Tamu' : (user.kelas === 'guru' ? 'Guru' : `Kelas ${user.kelas}`);
+                    const div        = document.createElement('div');
+                    div.className    = 'list-item';
+                    if (guest) div.style.background = '#fff7ed';
+                    div.innerHTML = `
+                        <div><strong>${user.name}</strong></div>
+                        <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
+                        <div><span class="pin-display">${user.pin}</span></div>
+                        <div style="font-weight:700;color:var(--success);">${formatRupiah(user.saldo)}</div>
+                        <div style="font-size:12px;color:var(--gray);">${user.created || '-'}</div>
+                        <div style="font-size:12px;color:${guest ? '#ea580c' : 'var(--success)'};">${guest ? 'Tamu (+10%)' : 'Aktif'}</div>
+                        <div class="action-btns">
+                            <button class="btn-icon btn-delete" onclick="deleteUser('${id}')" title="Hapus"><i class="fas fa-trash"></i></button>
+                        </div>`;
+                    list.appendChild(div);
+                });
+            } catch (err) {
+                console.error('loadUsersList error:', err);
+            }
+        }
+
+        async function topupSaldo() {
             const userId = document.getElementById('topupUserSelect').value;
             const amount = parseInt(document.getElementById('topupAmount').value);
-            
+
             if (!userId || !amount || amount <= 0) {
                 showToast('Mohon pilih pengguna dan masukkan jumlah!', 'error');
                 return;
             }
-            
-            await apiCall('users', 'POST', {
-    action: 'topup',
-    userId: userId,
-    amount: amount,
-    adminName: 'Admin'
-});
-            saveTopups(topups);
-            
-            document.getElementById('topupUserSelect').value = '';
-            document.getElementById('topupAmount').value = '';
-            
-            loadUsersList();
-            updateTopupSelect();
-            loadRiwayat();
-            updateAdminStats();
-            showToast(`Top-up berhasil! Saldo ${users[userIndex].name}: ${formatRupiah(users[userIndex].saldo)}`);
-        }
 
-        function loadRiwayat() {
-            loadPembelianList();
-            loadTopupList();
-        }
+            try {
+                const result = await apiCall('users', 'POST', {
+                    action:    'topup',
+                    userId:    String(userId),
+                    amount,
+                    adminName: 'Admin'
+                });
 
-        function loadPembelianList() {
-            const transactions = getTransactions();
-            const list = document.getElementById('pembelianList');
-            list.innerHTML = '';
-            
-            if (transactions.length === 0) {
-                list.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>Belum ada riwayat pembelian</p></div>`;
-                return;
+                document.getElementById('topupUserSelect').value = '';
+                document.getElementById('topupAmount').value     = '';
+
+                await loadUsersList();
+                await updateTopupSelect();
+                await loadRiwayat();
+                await updateAdminStats();
+
+                const newSaldo = result.newSaldo !== undefined ? formatRupiah(result.newSaldo) : '';
+                showToast(`Top-up berhasil!${newSaldo ? ' Saldo baru: ' + newSaldo : ''}`);
+            } catch (err) {
+                showToast('Gagal melakukan top-up!', 'error');
             }
-            
-            transactions.forEach(t => {
-                const isGuest = t.kelas === 'guest';
-                const kelasClass = isGuest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
-                const kelasText = isGuest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
-                const itemNames = t.items.map(i => `${i.name} (${i.qty})`).join(', ');
-                
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                if (isGuest) div.style.background = '#fff7ed';
-                
-                                div.innerHTML = `
-                    <div><strong>${t.user}</strong> ${isGuest ? '<span style="color: #ea580c; font-size: 11px;">(+10%)</span>' : ''}</div>
-                    <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                    <div style="font-size: 12px; color: var(--gray);">${itemNames}</div>
-                    <div style="font-weight: 700;">
-                        ${formatRupiah(t.total)}
-                        ${t.tax ? `<div style="font-size: 10px; color: #ea580c;">+pajak ${formatRupiah(t.tax)}</div>` : ''}
-                    </div>
-                    <div style="font-size: 14px; color: var(--gray);">${t.date}</div>
-                    <div><span class="transaction-type type-buy">BELI</span></div>
-                `;
-                list.appendChild(div);
-            });
         }
 
-        function loadTopupList() {
-            const topups = getTopups();
-            const list = document.getElementById('topupList');
-            list.innerHTML = '';
-            
-            if (topups.length === 0) {
-                list.innerHTML = `<div class="empty-state"><i class="fas fa-coins"></i><p>Belum ada riwayat top-up</p></div>`;
-                return;
+        async function loadRiwayat() {
+            await Promise.all([loadPembelianList(), loadTopupList()]);
+        }
+
+        async function loadPembelianList() {
+            try {
+                const transactions = await getTransactions();
+                const list = document.getElementById('pembelianList');
+                list.innerHTML = '';
+
+                if (transactions.length === 0) {
+                    list.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>Belum ada riwayat pembelian</p></div>`;
+                    return;
+                }
+
+                transactions.forEach(t => {
+                    const guest      = t.kelas === 'guest';
+                    const kelasClass = guest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
+                    const kelasText  = guest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
+                    const itemNames  = (t.items || []).map(i => `${i.name} (${i.qty})`).join(', ');
+                    const div        = document.createElement('div');
+                    div.className    = 'list-item';
+                    if (guest) div.style.background = '#fff7ed';
+                    div.innerHTML = `
+                        <div><strong>${t.userName || t.user || '-'}</strong> ${guest ? '<span style="color:#ea580c;font-size:11px;">(+10%)</span>' : ''}</div>
+                        <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
+                        <div style="font-size:12px;color:var(--gray);">${itemNames}</div>
+                        <div style="font-weight:700;">
+                            ${formatRupiah(t.total)}
+                            ${t.tax ? `<div style="font-size:10px;color:#ea580c;">+pajak ${formatRupiah(t.tax)}</div>` : ''}
+                        </div>
+                        <div style="font-size:14px;color:var(--gray);">${t.date ? new Date(t.date).toLocaleString('id-ID') : '-'}</div>
+                        <div><span class="transaction-type type-buy">BELI</span></div>`;
+                    list.appendChild(div);
+                });
+            } catch (err) {
+                console.error('loadPembelianList error:', err);
             }
-            
-            topups.forEach(t => {
-                const isGuest = t.kelas === 'guest';
-                const kelasClass = isGuest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
-                const kelasText = isGuest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
-                
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                if (isGuest) div.style.background = '#fff7ed';
-                
-                div.innerHTML = `
-                    <div><strong>${t.user}</strong> ${isGuest ? '<span style="color: #ea580c; font-size: 11px;">(Tamu)</span>' : ''}</div>
-                    <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                    <div style="font-weight: 700; color: var(--success);">${formatRupiah(t.amount)}</div>
-                    <div style="font-weight: 600;">${formatRupiah(t.saldoAkhir || t.amount)}</div>
-                    <div style="font-size: 14px; color: var(--gray);">${t.date}</div>
-                    <div><span class="transaction-type type-topup">TOPUP</span></div>
-                `;
-                list.appendChild(div);
-            });
         }
 
-        // Export/Import Functions
-        function exportAllData() {
-            const data = {
-                users: getUsers(),
-                menu: getMenu(),
-                transactions: getTransactions(),
-                topups: getTopups(),
-                exportDate: new Date().toISOString(),
-                version: '1.0'
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `kantin_backup_${new Date().toISOString().slice(0,10)}.json`;
+        async function loadTopupList() {
+            try {
+                const topups = await getTopups();
+                const list   = document.getElementById('topupList');
+                list.innerHTML = '';
+
+                if (topups.length === 0) {
+                    list.innerHTML = `<div class="empty-state"><i class="fas fa-coins"></i><p>Belum ada riwayat top-up</p></div>`;
+                    return;
+                }
+
+                topups.forEach(t => {
+                    const guest      = t.kelas === 'guest';
+                    const kelasClass = guest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
+                    const kelasText  = guest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
+                    const div        = document.createElement('div');
+                    div.className    = 'list-item';
+                    if (guest) div.style.background = '#fff7ed';
+                    div.innerHTML = `
+                        <div><strong>${t.userName || t.user || '-'}</strong> ${guest ? '<span style="color:#ea580c;font-size:11px;">(Tamu)</span>' : ''}</div>
+                        <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
+                        <div style="font-weight:700;color:var(--success);">${formatRupiah(t.amount)}</div>
+                        <div style="font-weight:600;">${formatRupiah(t.saldoAkhir || t.amount)}</div>
+                        <div style="font-size:14px;color:var(--gray);">${t.date ? new Date(t.date).toLocaleString('id-ID') : '-'}</div>
+                        <div><span class="transaction-type type-topup">TOPUP</span></div>`;
+                    list.appendChild(div);
+                });
+            } catch (err) {
+                console.error('loadTopupList error:', err);
+            }
+        }
+
+        // ─── Export / Import ──────────────────────────────────────────────────────
+        function downloadJSON(data, filename) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
-            showToast('Semua data berhasil di-export!');
         }
 
-        function exportUsers() {
-            const users = getUsers();
-            const dataStr = JSON.stringify(users, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `kantin_users_${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('Data pengguna berhasil di-export!');
+        async function exportAllData() {
+            try {
+                const [users, menu, transactions, topups] = await Promise.all([getUsers(), getMenu(), getTransactions(), getTopups()]);
+                downloadJSON({ users, menu, transactions, topups, exportDate: new Date().toISOString(), version: '1.0' },
+                    `kantin_backup_${new Date().toISOString().slice(0,10)}.json`);
+                showToast('Semua data berhasil di-export!');
+            } catch { showToast('Gagal export data!', 'error'); }
         }
 
-        function exportTransactions() {
-            const data = {
-                pembelian: getTransactions(),
-                topup: getTopups(),
-                exportDate: new Date().toISOString()
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `kantin_riwayat_${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('Riwayat transaksi berhasil di-export!');
+        async function exportUsers() {
+            try {
+                downloadJSON(await getUsers(), `kantin_users_${new Date().toISOString().slice(0,10)}.json`);
+                showToast('Data pengguna berhasil di-export!');
+            } catch { showToast('Gagal export users!', 'error'); }
+        }
+
+        async function exportTransactions() {
+            try {
+                const [pembelian, topup] = await Promise.all([getTransactions(), getTopups()]);
+                downloadJSON({ pembelian, topup, exportDate: new Date().toISOString() },
+                    `kantin_riwayat_${new Date().toISOString().slice(0,10)}.json`);
+                showToast('Riwayat transaksi berhasil di-export!');
+            } catch { showToast('Gagal export transaksi!', 'error'); }
         }
 
         function importData(input) {
             const file = input.files[0];
             if (!file) return;
-            
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    
-                    if (data.users) saveUsers(data.users);
-                    if (data.menu) saveMenu(data.menu);
-                    if (data.transactions) saveTransactions(data.transactions);
-                    if (data.topups) saveTopups(data.topups);
-                    
-                    if (Array.isArray(data) && data.length > 0 && data[0].name && data[0].pin) {
-                        saveUsers(data);
-                    }
-                    
-                    if (data.pembelian && data.topup) {
-                        saveTransactions(data.pembelian);
-                        saveTopups(data.topup);
-                    }
-                    
-                    loadAdminData();
+                    if (data.menu)         await saveMenu(data.menu);
+                    if (data.transactions) await apiCall('transactions', 'POST', { action: 'bulkImport', data: data.transactions });
+                    if (data.topups)       await apiCall('topups',       'POST', { action: 'bulkImport', data: data.topups });
+                    if (data.users)        for (const u of data.users) await apiCall('auth', 'POST', { action: 'register', ...u });
+                    if (data.pembelian)    await apiCall('transactions', 'POST', { action: 'bulkImport', data: data.pembelian });
+                    if (data.topup)        await apiCall('topups',       'POST', { action: 'bulkImport', data: data.topup });
+
+                    await loadAdminData();
                     showToast('Data berhasil di-import!');
                 } catch (error) {
                     showToast('Gagal import data! Format tidak valid.', 'error');
@@ -1325,6 +1220,7 @@ await saveTransaction({
             input.value = '';
         }
 
+        // ─── Modal ────────────────────────────────────────────────────────────────
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
         }
@@ -1333,7 +1229,7 @@ await saveTransaction({
             if (e.target === this) closeModal();
         });
 
-        // Initialize on load
+        // ─── Boot ─────────────────────────────────────────────────────────────────
         window.onload = function() {
             initializeData();
         };
