@@ -1,6 +1,10 @@
 const { connectToDatabase } = require('./helpers/db');
 const { ObjectId } = require('mongodb');
 
+export const config = {
+  api: { bodyParser: true }
+};
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -54,6 +58,15 @@ export default async function handler(req, res) {
         }
       }
 
+      return res.status(200).json({ success: true });
+    }
+
+    // DELETE - remove single menu item
+    if (req.method === 'DELETE') {
+      const { id } = req.body;
+      const isMongoId = id && /^[a-f\d]{24}$/i.test(String(id));
+      if (!isMongoId) return res.status(400).json({ error: 'Invalid ID' });
+      await menu.deleteOne({ _id: new ObjectId(id) });
       return res.status(200).json({ success: true });
     }
 
