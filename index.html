@@ -188,7 +188,7 @@
         <div class="login-card">
             <div class="logo"><i class="fas fa-utensils"></i></div>
             <h1>Kantin Sekolah</h1>
-            <p>Sistem Kantin Digital</p>
+            <p>Sistem pembayaran digital tanpa uang kembalian</p>
             
             <div class="role-selector">
                 <button class="role-btn active" onclick="selectRole('customer', event)">
@@ -906,6 +906,7 @@
             if (!name || !price || !category) { showToast('Mohon isi semua field!', 'error'); return; }
 
             try {
+                const icons = ['🍳','🍜','🧃','🍞','☕','🍌','🍔','🍕','🥗','🥤'];
                 const menu  = await getMenu();
                 menu.push({ id: Date.now(), name, price, category, stock, icon: icons[Math.floor(Math.random() * icons.length)] });
                 await saveMenu(menu);
