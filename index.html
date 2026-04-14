@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kantin Sekolah - Smart Canteen</title>
+    <title>Kantin Sekolah - SMTK Pelangi Kristus</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -188,7 +188,7 @@
         <div class="login-card">
             <div class="logo"><i class="fas fa-utensils"></i></div>
             <h1>Kantin Sekolah</h1>
-            <p>Sistem pembayaran digital tanpa uang kembalian</p>
+            <p>Sistem Kantin Sekolah Digital</p>
             
             <div class="role-selector">
                 <button class="role-btn active" onclick="selectRole('customer', event)">
@@ -201,7 +201,7 @@
 
             <div id="customerLogin">
                 <div class="input-group">
-                    <label>Nama Lengkap</label>
+                    <label>Nama</label>
                     <input type="text" id="customerName" placeholder="Masukkan nama">
                 </div>
                 <div class="input-group">
@@ -521,7 +521,7 @@
             if (currentRole === 'admin') {
                 const user = document.getElementById('adminUser').value;
                 const pass = document.getElementById('adminPass').value;
-                if (user === 'admin' && pass === 'supersecretpasswordaerow') {
+                if (user === 'admin' && pass === '015389') {
                     currentUser = { name: 'Admin', role: 'admin' };
                     await enterApp();
                 } else {
