@@ -1,1238 +1,1959 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kantin Sekolah - SMTK Pelangi Kristus</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --warning: #f97316;
-            --info: #3b82f6;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kantin Sekolah - SMTK Pelangi Kristus</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root {
+  --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #f59e0b;
+  --success: #10b981; --danger: #ef4444; --dark: #1e293b; --light: #f8fafc;
+  --gray: #64748b; --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+  --warning: #f97316; --info: #3b82f6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: var(--dark); }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.login-card { background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; box-shadow: var(--shadow-lg); text-align: center; animation: slideUp 0.5s ease; }
+.logo { width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 32px; }
+.login-card h1 { font-size: 24px; margin-bottom: 8px; color: var(--dark); }
+.login-card p { color: var(--gray); margin-bottom: 30px; }
+.role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.role-btn { padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: white; cursor: pointer; transition: all 0.3s; font-family: inherit; font-weight: 600; }
+.role-btn:hover, .role-btn.active { border-color: var(--primary); background: #eef2ff; color: var(--primary); }
+.role-btn i { display: block; font-size: 24px; margin-bottom: 8px; }
+.input-group { margin-bottom: 16px; text-align: left; }
+.input-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: var(--dark); }
+.input-group input, .input-group select { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; transition: border-color 0.3s; }
+.input-group input:focus, .input-group select:focus { outline: none; border-color: var(--primary); }
+.btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(99,102,241,0.3); }
+.btn-secondary { background: var(--secondary); }
+.btn-success { background: var(--success); }
+.btn-danger { background: var(--danger); }
+.btn-warning { background: var(--warning); }
+.btn-info { background: var(--info); }
+.btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+.btn-outline:hover { background: var(--primary); color: white; }
+.app { display: none; animation: fadeIn 0.5s ease; }
+.header { background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-info h2 { font-size: 20px; margin-bottom: 4px; }
+.header-info p { color: var(--gray); font-size: 14px; }
+.saldo-badge { background: linear-gradient(135deg, var(--success), #059669); color: white; padding: 12px 20px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(16,185,129,0.2); }
+.kelas-badge { background: linear-gradient(135deg, var(--info), #1d4ed8); color: white; padding: 8px 16px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.guest-badge { background: linear-gradient(135deg, var(--warning), #c2410c); color: white; padding: 8px 16px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.logout-btn { background: #fee2e2; color: var(--danger); border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+.logout-btn:hover { background: #fecaca; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
+.card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.3s, box-shadow 0.3s; }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.card.out-of-stock { opacity: 0.7; }
+.card-image { height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; position: relative; }
+.card-image.out-of-stock { background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%); }
+.card-badge { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; color: var(--dark); }
+.stock-badge { position: absolute; bottom: 12px; left: 12px; background: var(--success); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.stock-badge.empty { background: var(--danger); }
+.card-content { padding: 20px; }
+.card-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.card-price { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 12px; }
+.card-actions { display: flex; gap: 8px; }
+.btn-small { flex: 1; padding: 10px; border: none; border-radius: 8px; font-family: inherit; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+.btn-small:hover { opacity: 0.9; }
+.btn-small:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
+.cart-section { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
+.section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+.cart-item-info h4 { font-size: 16px; margin-bottom: 4px; }
+.cart-item-info p { color: var(--gray); font-size: 14px; }
+.cart-item-actions { display: flex; align-items: center; gap: 12px; }
+.qty-btn { width: 32px; height: 32px; border: 2px solid #e2e8f0; background: white; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
+.qty-btn:hover { border-color: var(--primary); color: var(--primary); }
+.cart-total { margin-top: 20px; padding-top: 20px; border-top: 2px solid #e2e8f0; }
+.cart-summary { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 16px; }
+.summary-row.total { font-size: 20px; font-weight: 800; color: var(--primary); border-top: 2px solid #e2e8f0; padding-top: 8px; margin-top: 8px; }
+.tax-row { color: var(--warning); font-weight: 600; }
+.checkout-btn { width: 100%; padding: 16px; font-size: 18px; }
+.guest-notice { background: #fff7ed; border: 2px solid var(--warning); border-radius: 12px; padding: 16px; margin-bottom: 20px; color: #9a3412; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+.admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: white; padding: 24px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; }
+.stat-value { font-size: 36px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+.stat-label { color: var(--gray); font-weight: 600; }
+.tabs { display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; }
+.tab { padding: 12px 24px; background: white; border: none; border-radius: 12px; font-family: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.3s; box-shadow: var(--shadow); }
+.tab.active { background: var(--primary); color: white; }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.user-list, .transaction-list { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+.list-header { background: #f8fafc; padding: 16px 20px; font-weight: 700; border-bottom: 1px solid #e2e8f0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px; gap: 16px; }
+.list-item { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px; gap: 16px; align-items: center; }
+.list-item:hover { background: #f8fafc; }
+.action-btns { display: flex; gap: 8px; }
+.btn-icon { width: 36px; height: 36px; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.btn-edit { background: #dbeafe; color: #2563eb; }
+.btn-edit:hover { background: #2563eb; color: white; }
+.btn-delete { background: #fee2e2; color: var(--danger); }
+.btn-delete:hover { background: var(--danger); color: white; }
+.kelas-badge-small { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.kelas-10 { background: #dbeafe; color: #1e40af; }
+.kelas-11 { background: #dcfce7; color: #166534; }
+.kelas-12 { background: #f3e8ff; color: #6b21a8; }
+.kelas-guru { background: #ffedd5; color: #9a3412; }
+.kelas-guest { background: #fed7aa; color: #9a3412; }
+.transaction-type { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.type-buy { background: #dbeafe; color: #1e40af; }
+.type-topup { background: #dcfce7; color: #166534; }
+.backup-section { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
+.backup-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+.backup-btn { padding: 12px 24px; border-radius: 12px; font-family: inherit; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; color: white; }
+.file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+.file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
+.file-input-label { padding: 12px 24px; background: var(--secondary); color: white; border-radius: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.riwayat-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.riwayat-tab { padding: 10px 20px; background: #f1f5f9; border: none; border-radius: 8px; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+.riwayat-tab.active { background: var(--primary); color: white; }
+.riwayat-content { display: none; }
+.riwayat-content.active { display: block; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal.active { display: flex; animation: fadeIn 0.3s ease; }
+.modal-content { background: white; border-radius: 24px; padding: 32px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.close-btn:hover { background: #f1f5f9; }
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 16px 24px; border-radius: 12px; box-shadow: var(--shadow-lg); display: none; align-items: center; gap: 12px; z-index: 2000; animation: slideInRight 0.3s ease; }
+.toast.show { display: flex; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+.toast.warning { background: var(--warning); }
+.pin-display { font-family: monospace; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: 700; letter-spacing: 2px; }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--gray); }
+.empty-state i { font-size: 64px; margin-bottom: 16px; opacity: 0.3; display: block; }
+.hidden { display: none !important; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: var(--dark); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+/* ── QRIS Modal Styles ── */
+.payment-method-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.payment-method-btn { padding: 20px; border: 3px solid #e2e8f0; border-radius: 16px; background: white; cursor: pointer; transition: all 0.3s; font-family: inherit; text-align: center; }
+.payment-method-btn:hover { border-color: var(--primary); background: #eef2ff; }
+.payment-method-btn.selected { border-color: var(--primary); background: #eef2ff; }
+.payment-method-btn i { display: block; font-size: 32px; margin-bottom: 8px; }
+.payment-method-btn .method-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+.payment-method-btn .method-desc { font-size: 12px; color: var(--gray); }
+.qris-container { text-align: center; padding: 20px; }
+.qris-container #qrcode { display: inline-block; padding: 16px; background: white; border-radius: 16px; box-shadow: var(--shadow); border: 3px solid var(--primary); margin-bottom: 16px; }
+.qris-amount { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+.qris-instruction { color: var(--gray); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+.qris-merchant { background: #f8fafc; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; font-size: 14px; color: var(--gray); }
+.qris-merchant strong { color: var(--dark); }
+.qris-confirm-btn { width: 100%; padding: 16px; font-size: 18px; background: var(--success); }
+.saldo-payment-info { background: #f0fdf4; border: 2px solid var(--success); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+.saldo-payment-info .saldo-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px; }
+.saldo-payment-info .saldo-row:last-child { margin-bottom: 0; font-weight: 700; font-size: 18px; color: var(--success); }
+.saldo-insufficient { background: #fef2f2; border: 2px solid var(--danger); border-radius: 12px; padding: 16px; margin-bottom: 20px; color: var(--danger); font-weight: 600; text-align: center; }
+.qris-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #e11d48, #be123c); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
+.back-to-method-btn { background: none; border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px 20px; font-family: inherit; font-weight: 600; cursor: pointer; color: var(--gray); margin-bottom: 16px; transition: all 0.2s; }
+.back-to-method-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-        .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        .login-card { background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; box-shadow: var(--shadow-lg); text-align: center; animation: slideUp 0.5s ease; }
-        .logo { width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 32px; }
-        .login-card h1 { font-size: 24px; margin-bottom: 8px; color: var(--dark); }
-        .login-card p { color: var(--gray); margin-bottom: 30px; }
+/* ── Admin QRIS Settings ── */
+.qris-settings-box { background: #f0f4ff; border: 2px solid var(--primary); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+.qris-settings-box h4 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
-        .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-        .role-btn { padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: white; cursor: pointer; transition: all 0.3s; font-family: inherit; font-weight: 600; }
-        .role-btn:hover, .role-btn.active { border-color: var(--primary); background: #eef2ff; color: var(--primary); }
-        .role-btn i { display: block; font-size: 24px; margin-bottom: 8px; }
+/* ── Audit Stok ── */
+.audit-hero { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; padding: 28px; margin-bottom: 24px; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.audit-hero h2 { font-size: 22px; margin-bottom: 6px; }
+.audit-hero p { color: #94a3b8; font-size: 14px; }
+.audit-hero-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.audit-hero-stat { text-align: center; background: rgba(255,255,255,0.08); padding: 14px 20px; border-radius: 14px; min-width: 100px; }
+.audit-hero-stat .val { font-size: 28px; font-weight: 800; }
+.audit-hero-stat .lbl { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+.audit-controls { background: white; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 24px; display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+.audit-controls .input-group { margin-bottom: 0; flex: 1; min-width: 160px; }
+.audit-date-badge { background: #f1f5f9; border-radius: 10px; padding: 8px 14px; font-size: 13px; color: var(--gray); font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.audit-table-wrap { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 24px; }
+.audit-table-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr; gap: 0; background: #f8fafc; border-bottom: 2px solid #e2e8f0; }
+.audit-table-head > div { padding: 14px 16px; font-weight: 700; font-size: 13px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+.audit-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr; gap: 0; border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
+.audit-row:hover { background: #f8fafc; }
+.audit-row > div { padding: 14px 16px; display: flex; align-items: center; font-size: 14px; }
+.audit-row.status-ok { border-left: 4px solid var(--success); }
+.audit-row.status-warn { border-left: 4px solid var(--warning); }
+.audit-row.status-danger { border-left: 4px solid var(--danger); background: #fff5f5; }
+.audit-row.status-ok:hover { background: #f0fdf4; }
+.audit-row.status-warn:hover { background: #fffbeb; }
+.audit-row.status-danger:hover { background: #fef2f2; }
+.audit-item-name { display: flex; align-items: center; gap: 10px; }
+.audit-item-icon { font-size: 28px; }
+.audit-item-text strong { display: block; font-size: 15px; font-weight: 700; }
+.audit-item-text span { font-size: 12px; color: var(--gray); }
+.audit-num { font-weight: 700; font-size: 16px; }
+.audit-num.sold { color: var(--info); }
+.audit-num.actual { color: var(--dark); }
+.audit-num.diff-ok { color: var(--success); }
+.audit-num.diff-warn { color: var(--warning); }
+.audit-num.diff-danger { color: var(--danger); }
+.audit-status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.pill-ok { background: #dcfce7; color: #166534; }
+.pill-warn { background: #fef9c3; color: #854d0e; }
+.pill-danger { background: #fee2e2; color: #991b1b; }
+.audit-input-stok { width: 80px; padding: 8px 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 15px; text-align: center; transition: border-color 0.2s; }
+.audit-input-stok:focus { outline: none; border-color: var(--primary); }
+.audit-input-stok.changed { border-color: var(--warning); background: #fffbeb; }
+.audit-summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.audit-sum-card { padding: 20px; border-radius: 16px; text-align: center; box-shadow: var(--shadow); }
+.audit-sum-card .num { font-size: 32px; font-weight: 800; margin-bottom: 4px; }
+.audit-sum-card .lbl { font-size: 13px; font-weight: 600; }
+.audit-sum-card.ok { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+.audit-sum-card.ok .num { color: var(--success); }
+.audit-sum-card.warn { background: linear-gradient(135deg, #fffbeb, #fef9c3); }
+.audit-sum-card.warn .num { color: var(--warning); }
+.audit-sum-card.danger { background: linear-gradient(135deg, #fff5f5, #fee2e2); }
+.audit-sum-card.danger .num { color: var(--danger); }
+.audit-sum-card.info { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+.audit-sum-card.info .num { color: var(--info); }
+.audit-note-box { background: #fef9c3; border: 2px solid var(--secondary); border-radius: 14px; padding: 18px; margin-bottom: 24px; }
+.audit-note-box h4 { color: #92400e; font-size: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.audit-note-box p { font-size: 13px; color: #78350f; line-height: 1.6; }
+.audit-action-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.audit-save-btn { padding: 12px 28px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+.detail-toggle { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 6px; }
+.detail-toggle:hover { background: #eef2ff; }
+.audit-detail-row { grid-column: 1 / -1; background: #f8fafc; border-top: 1px dashed #e2e8f0; padding: 12px 16px; display: none; }
+.audit-detail-row.open { display: block; }
+.audit-detail-tx { font-size: 13px; color: var(--gray); margin-bottom: 4px; }
+.audit-detail-tx span { font-weight: 600; color: var(--dark); }
+.audit-log { background: white; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
+.audit-log h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.audit-log-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+.audit-log-item:last-child { border-bottom: none; }
+.audit-log-item .log-time { color: var(--gray); font-size: 12px; }
+.audit-log-item .log-diff { font-weight: 700; }
+.audit-log-item .log-diff.neg { color: var(--danger); }
+.audit-log-item .log-diff.zero { color: var(--success); }
+@media (max-width: 768px) {
+  .audit-table-head, .audit-row { grid-template-columns: 1fr; }
+  .audit-table-head { display: none; }
+  .audit-row > div { padding: 8px 16px; }
+  .audit-row > div:first-child { padding-top: 14px; }
+  .audit-row > div:last-child { padding-bottom: 14px; }
+  .audit-hero { flex-direction: column; }
+}
 
-        .input-group { margin-bottom: 16px; text-align: left; }
-        .input-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: var(--dark); }
-        .input-group input, .input-group select { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; transition: border-color 0.3s; }
-        .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--primary); }
-
-        .btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.3); }
-        .btn-secondary { background: var(--secondary); }
-        .btn-success { background: var(--success); }
-        .btn-danger { background: var(--danger); }
-        .btn-warning { background: var(--warning); }
-        .btn-info { background: var(--info); }
-        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-        .btn-outline:hover { background: var(--primary); color: white; }
-
-        .app { display: none; animation: fadeIn 0.5s ease; }
-        .header { background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-        .header-left { display: flex; align-items: center; gap: 16px; }
-        .header-info h2 { font-size: 20px; margin-bottom: 4px; }
-        .header-info p { color: var(--gray); font-size: 14px; }
-
-        .saldo-badge { background: linear-gradient(135deg, var(--success), #059669); color: white; padding: 12px 20px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2); }
-        .kelas-badge { background: linear-gradient(135deg, var(--info), #1d4ed8); color: white; padding: 8px 16px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 14px; }
-        .guest-badge { background: linear-gradient(135deg, var(--warning), #c2410c); color: white; padding: 8px 16px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 14px; }
-        .logout-btn { background: #fee2e2; color: var(--danger); border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
-        .logout-btn:hover { background: #fecaca; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
-        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.3s, box-shadow 0.3s; }
-        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-        .card.out-of-stock { opacity: 0.7; }
-        .card-image { height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; position: relative; }
-        .card-image.out-of-stock { background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%); }
-        .card-badge { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; color: var(--dark); }
-        .stock-badge { position: absolute; bottom: 12px; left: 12px; background: var(--success); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
-        .stock-badge.empty { background: var(--danger); }
-        .card-content { padding: 20px; }
-        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-        .card-price { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 12px; }
-        .card-actions { display: flex; gap: 8px; }
-
-        .btn-small { flex: 1; padding: 10px; border: none; border-radius: 8px; font-family: inherit; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .btn-small:hover { opacity: 0.9; }
-        .btn-small:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
-
-        .cart-section { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
-        .section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
-        .cart-item-info h4 { font-size: 16px; margin-bottom: 4px; }
-        .cart-item-info p { color: var(--gray); font-size: 14px; }
-        .cart-item-actions { display: flex; align-items: center; gap: 12px; }
-        .qty-btn { width: 32px; height: 32px; border: 2px solid #e2e8f0; background: white; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
-        .qty-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .cart-total { margin-top: 20px; padding-top: 20px; border-top: 2px solid #e2e8f0; }
-        .cart-summary { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-        .summary-row { display: flex; justify-content: space-between; font-size: 16px; }
-        .summary-row.total { font-size: 20px; font-weight: 800; color: var(--primary); border-top: 2px solid #e2e8f0; padding-top: 8px; margin-top: 8px; }
-        .tax-row { color: var(--warning); font-weight: 600; }
-        .checkout-btn { width: 100%; padding: 16px; font-size: 18px; }
-
-        .guest-notice { background: #fff7ed; border: 2px solid var(--warning); border-radius: 12px; padding: 16px; margin-bottom: 20px; color: #9a3412; font-weight: 600; display: flex; align-items: center; gap: 12px; }
-
-        .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-        .stat-card { background: white; padding: 24px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; }
-        .stat-value { font-size: 36px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
-        .stat-label { color: var(--gray); font-weight: 600; }
-
-        .tabs { display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; }
-        .tab { padding: 12px 24px; background: white; border: none; border-radius: 12px; font-family: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.3s; box-shadow: var(--shadow); }
-        .tab.active { background: var(--primary); color: white; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
-        .user-list, .transaction-list { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
-        .list-header { background: #f8fafc; padding: 16px 20px; font-weight: 700; border-bottom: 1px solid #e2e8f0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px; gap: 16px; }
-        .list-item { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px; gap: 16px; align-items: center; }
-        .list-item:hover { background: #f8fafc; }
-
-        .action-btns { display: flex; gap: 8px; }
-        .btn-icon { width: 36px; height: 36px; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .btn-edit { background: #dbeafe; color: #2563eb; }
-        .btn-edit:hover { background: #2563eb; color: white; }
-        .btn-delete { background: #fee2e2; color: var(--danger); }
-        .btn-delete:hover { background: var(--danger); color: white; }
-
-        .kelas-badge-small { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
-        .kelas-10 { background: #dbeafe; color: #1e40af; }
-        .kelas-11 { background: #dcfce7; color: #166534; }
-        .kelas-12 { background: #f3e8ff; color: #6b21a8; }
-        .kelas-guru { background: #ffedd5; color: #9a3412; }
-        .kelas-guest { background: #fed7aa; color: #9a3412; }
-
-        .transaction-type { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
-        .type-buy { background: #dbeafe; color: #1e40af; }
-        .type-topup { background: #dcfce7; color: #166534; }
-
-        .backup-section { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
-        .backup-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-        .backup-btn { padding: 12px 24px; border-radius: 12px; font-family: inherit; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; color: white; }
-        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
-        .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
-        .file-input-label { padding: 12px 24px; background: var(--secondary); color: white; border-radius: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-
-        .riwayat-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-        .riwayat-tab { padding: 10px 20px; background: #f1f5f9; border: none; border-radius: 8px; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .riwayat-tab.active { background: var(--primary); color: white; }
-        .riwayat-content { display: none; }
-        .riwayat-content.active { display: block; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal.active { display: flex; animation: fadeIn 0.3s ease; }
-        .modal-content { background: white; border-radius: 24px; padding: 32px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-        .close-btn:hover { background: #f1f5f9; }
-
-        .toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 16px 24px; border-radius: 12px; box-shadow: var(--shadow-lg); display: none; align-items: center; gap: 12px; z-index: 2000; animation: slideInRight 0.3s ease; }
-        .toast.show { display: flex; }
-        .toast.success { background: var(--success); }
-        .toast.error { background: var(--danger); }
-        .toast.warning { background: var(--warning); }
-
-        .pin-display { font-family: monospace; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: 700; letter-spacing: 2px; }
-
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--gray); }
-        .empty-state i { font-size: 64px; margin-bottom: 16px; opacity: 0.3; display: block; }
-
-        .hidden { display: none !important; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
-
-        @media (max-width: 768px) {
-            .header { flex-direction: column; text-align: center; }
-            .role-selector { grid-template-columns: 1fr; }
-            .list-header, .list-item { grid-template-columns: 1fr; gap: 8px; }
-            .list-header { display: none; }
-            .list-item { padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 12px; border-radius: 12px; }
-        }
-    </style>
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+@media (max-width: 768px) {
+  .header { flex-direction: column; text-align: center; }
+  .role-selector { grid-template-columns: 1fr; }
+  .list-header, .list-item { grid-template-columns: 1fr; gap: 8px; }
+  .list-header { display: none; }
+  .list-item { padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 12px; border-radius: 12px; }
+  .payment-method-selector { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 
-    <!-- Login Screen -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-card">
-            <div class="logo"><i class="fas fa-utensils"></i></div>
-            <h1>Kantin Sekolah</h1>
-            <p>Sistem Kantin Sekolah Digital</p>
-            
-            <div class="role-selector">
-                <button class="role-btn active" onclick="selectRole('customer', event)">
-                    <i class="fas fa-user"></i>Siswa/Guru
-                </button>
-                <button class="role-btn" onclick="selectRole('admin', event)">
-                    <i class="fas fa-cog"></i>Admin
-                </button>
-            </div>
+<!-- Login Screen -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="logo"><i class="fas fa-utensils"></i></div>
+    <h1>Kantin Sekolah</h1>
+    <p>Sistem Kantin Sekolah Digital</p>
+    <div class="role-selector">
+      <button class="role-btn active" onclick="selectRole('customer', event)">
+        <i class="fas fa-user"></i>Siswa/Guru
+      </button>
+      <button class="role-btn" onclick="selectRole('admin', event)">
+        <i class="fas fa-cog"></i>Admin
+      </button>
+    </div>
+    <div id="customerLogin">
+      <div class="input-group">
+        <label>Nama</label>
+        <input type="text" id="customerName" placeholder="Masukkan nama">
+      </div>
+      <div class="input-group">
+        <label>PIN (6 digit)</label>
+        <input type="password" id="customerPin" placeholder="123456" maxlength="6">
+      </div>
+    </div>
+    <div id="adminLogin" class="hidden">
+      <div class="input-group">
+        <label>Username Admin</label>
+        <input type="text" id="adminUser" placeholder="admin">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="adminPass" placeholder="••••••">
+      </div>
+    </div>
+    <button class="btn" onclick="login()">Masuk</button>
+  </div>
+</div>
 
-            <div id="customerLogin">
-                <div class="input-group">
-                    <label>Nama</label>
-                    <input type="text" id="customerName" placeholder="Masukkan nama">
-                </div>
-                <div class="input-group">
-                    <label>PIN (6 digit)</label>
-                    <input type="password" id="customerPin" placeholder="123456" maxlength="6">
-                </div>
-            </div>
-
-            <div id="adminLogin" class="hidden">
-                <div class="input-group">
-                    <label>Username Admin</label>
-                    <input type="text" id="adminUser" placeholder="admin">
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="adminPass" placeholder="••••••">
-                </div>
-            </div>
-
-            <button class="btn" onclick="login()">Masuk</button>
+<!-- Main Application -->
+<div class="app" id="mainApp">
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <div class="logo" style="margin:0;"><i class="fas fa-utensils"></i></div>
+        <div class="header-info">
+          <h2 id="welcomeText">Selamat Datang!</h2>
+          <p id="subText">Kantin Digital</p>
         </div>
-    </div>
-
-    <!-- Main Application -->
-    <div class="app" id="mainApp">
-        <div class="container">
-            <!-- Header -->
-            <div class="header">
-                <div class="header-left">
-                    <div class="logo" style="margin: 0;"><i class="fas fa-utensils"></i></div>
-                    <div class="header-info">
-                        <h2 id="welcomeText">Selamat Datang!</h2>
-                        <p id="subText">Kantin Digital</p>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                    <div class="kelas-badge" id="kelasDisplay" style="display: none;">
-                        <i class="fas fa-graduation-cap"></i><span id="kelasText">Kelas</span>
-                    </div>
-                    <div class="guest-badge" id="guestDisplay" style="display: none;">
-                        <i class="fas fa-user-clock"></i><span>Tamu (+10%)</span>
-                    </div>
-                    <div class="saldo-badge" id="saldoDisplay" style="display: none;">
-                        <i class="fas fa-wallet"></i><span id="saldoAmount">Rp 0</span>
-                    </div>
-                    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-                </div>
-            </div>
-
-            <!-- Customer View -->
-            <div id="customerView">
-                <div class="grid" id="menuGrid"></div>
-
-                <div class="cart-section" id="cartSection" style="display: none;">
-                    <h3 class="section-title"><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h3>
-                    <div id="cartItems"></div>
-                    <div class="cart-total">
-                        <div class="cart-summary" id="cartSummary">
-                            <div class="summary-row"><span>Subtotal</span><span id="cartSubtotal">Rp 0</span></div>
-                            <div class="summary-row total"><span>Total Bayar</span><span id="cartTotal">Rp 0</span></div>
-                        </div>
-                        <button class="btn btn-success checkout-btn" onclick="checkout()"><i class="fas fa-check"></i> Bayar Sekarang</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Admin View -->
-            <div id="adminView" class="hidden">
-                <div class="backup-section">
-                    <h3 class="section-title"><i class="fas fa-database"></i> Backup & Restore Data</h3>
-                    <div class="backup-buttons">
-                        <button class="backup-btn btn-success" onclick="exportAllData()"><i class="fas fa-download"></i> Export Semua Data</button>
-                        <button class="backup-btn btn-info" onclick="exportUsers()"><i class="fas fa-users"></i> Export Users</button>
-                        <button class="backup-btn btn-secondary" onclick="exportTransactions()"><i class="fas fa-receipt"></i> Export Transaksi</button>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="importFile" accept=".json" onchange="importData(this)">
-                            <label for="importFile" class="file-input-label"><i class="fas fa-upload"></i> Import Data</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="admin-stats">
-                    <div class="stat-card"><div class="stat-value" id="totalUsers">0</div><div class="stat-label">Total Pengguna</div></div>
-                    <div class="stat-card"><div class="stat-value" id="totalSales">0</div><div class="stat-label">Transaksi Hari Ini</div></div>
-                    <div class="stat-card"><div class="stat-value" id="totalRevenue">Rp 0</div><div class="stat-label">Pendapatan</div></div>
-                    <div class="stat-card"><div class="stat-value" id="totalTopup">Rp 0</div><div class="stat-label">Total Top-up</div></div>
-                    <div class="stat-card" id="guestStats" style="background: linear-gradient(135deg, #fff7ed, #ffedd5); display: none;">
-                        <div class="stat-value" style="color: #ea580c;" id="guestCount">0</div>
-                        <div class="stat-label">Transaksi Tamu Hari Ini</div>
-                        <div style="font-size: 12px; color: #9a3412; margin-top: 4px;">Pajak: <span id="guestTax">Rp 0</span></div>
-                    </div>
-                </div>
-
-                <div class="tabs">
-                    <button class="tab active" onclick="switchTab('menu', event)">Kelola Menu</button>
-                    <button class="tab" onclick="switchTab('users', event)">Kelola Pengguna</button>
-                    <button class="tab" onclick="switchTab('riwayat', event)">Riwayat Transaksi</button>
-                </div>
-
-                <div class="tab-content active" id="menuTab">
-                    <div class="cart-section">
-                        <h3 class="section-title">Tambah Menu Baru</h3>
-                        <div class="form-grid">
-                            <div class="input-group"><label>Nama Item</label><input type="text" id="newItemName" placeholder="Nama makanan/minuman"></div>
-                            <div class="input-group"><label>Harga (Rp)</label><input type="number" id="newItemPrice" placeholder="10000"></div>
-                            <div class="input-group"><label>Kategori</label><input type="text" id="newItemCategory" placeholder="Makanan/Minuman"></div>
-                            <div class="input-group"><label>Stok Awal</label><input type="number" id="newItemStock" placeholder="10" value="10"></div>
-                        </div>
-                        <button class="btn" onclick="addMenuItem()" style="width: auto;"><i class="fas fa-plus"></i> Tambah Menu</button>
-                    </div>
-                    <div class="grid" id="adminMenuGrid"></div>
-                </div>
-
-                <div class="tab-content" id="usersTab">
-                    <div class="cart-section">
-                        <h3 class="section-title">Tambah Pengguna Baru</h3>
-                        <div class="form-grid">
-                            <div class="input-group"><label>Nama Lengkap</label><input type="text" id="newUserName" placeholder="Nama pengguna"></div>
-                            <div class="input-group">
-                                <label>Kelas / Tipe</label>
-                                <select id="newUserKelas">
-                                    <option value="10">Kelas 10</option>
-                                    <option value="11">Kelas 11</option>
-                                    <option value="12">Kelas 12</option>
-                                    <option value="guru">Guru</option>
-                                    <option value="guest">Tamu (Guest)</option>
-                                </select>
-                            </div>
-                            <div class="input-group"><label>PIN (6 digit)</label><input type="password" id="newUserPin" placeholder="123456" maxlength="6"></div>
-                            <div class="input-group"><label>Saldo Awal (Rp)</label><input type="number" id="newUserSaldo" placeholder="0" value="0"></div>
-                        </div>
-                        <button class="btn btn-success" onclick="addUser()" style="width: auto;"><i class="fas fa-user-plus"></i> Tambah Pengguna</button>
-                    </div>
-
-                    <div class="cart-section" style="margin-top: 24px;">
-                        <h3 class="section-title">Top-up Saldo</h3>
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label>Pilih Pengguna</label>
-                                <select id="topupUserSelect" style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px;">
-                                    <option value="">-- Pilih Pengguna --</option>
-                                </select>
-                            </div>
-                            <div class="input-group"><label>Jumlah Top-up (Rp)</label><input type="number" id="topupAmount" placeholder="50000"></div>
-                        </div>
-                        <button class="btn btn-secondary" onclick="topupSaldo()" style="width: auto;"><i class="fas fa-plus-circle"></i> Top-up Sekarang</button>
-                    </div>
-
-                    <div class="user-list" style="margin-top: 24px;">
-                        <div class="list-header">
-                            <div>Nama</div><div>Kelas/Tipe</div><div>PIN</div><div>Saldo</div><div>Dibuat</div><div>Status</div><div>Aksi</div>
-                        </div>
-                        <div id="usersList"></div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="riwayatTab">
-                    <div class="riwayat-tabs">
-                        <button class="riwayat-tab active" onclick="switchRiwayatTab('pembelian', event)"><i class="fas fa-shopping-bag"></i> Riwayat Pembelian</button>
-                        <button class="riwayat-tab" onclick="switchRiwayatTab('topup', event)"><i class="fas fa-coins"></i> Riwayat Top-up</button>
-                    </div>
-
-                    <div class="riwayat-content active" id="riwayatPembelian">
-                        <div class="transaction-list">
-                            <div class="list-header"><div>Pengguna</div><div>Kelas/Tipe</div><div>Item</div><div>Total</div><div>Waktu</div><div>Status</div></div>
-                            <div id="pembelianList"></div>
-                        </div>
-                    </div>
-
-                    <div class="riwayat-content" id="riwayatTopup">
-                        <div class="transaction-list">
-                            <div class="list-header"><div>Pengguna</div><div>Kelas/Tipe</div><div>Jumlah</div><div>Saldo Akhir</div><div>Waktu</div><div>Admin</div></div>
-                            <div id="topupList"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div class="kelas-badge" id="kelasDisplay" style="display:none;">
+          <i class="fas fa-graduation-cap"></i><span id="kelasText">Kelas</span>
         </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Title</h3>
-                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="modalBody"></div>
+        <div class="guest-badge" id="guestDisplay" style="display:none;">
+          <i class="fas fa-user-clock"></i><span>Tamu (+10%)</span>
         </div>
+        <div class="saldo-badge" id="saldoDisplay" style="display:none;">
+          <i class="fas fa-wallet"></i><span id="saldoAmount">Rp 0</span>
+        </div>
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+      </div>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Message</span>
+    <!-- Customer View -->
+    <div id="customerView">
+      <div class="grid" id="menuGrid"></div>
+      <div class="cart-section" id="cartSection" style="display:none;">
+        <h3 class="section-title"><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h3>
+        <div id="cartItems"></div>
+        <div class="cart-total">
+          <div class="cart-summary" id="cartSummary"></div>
+          <button class="btn btn-success checkout-btn" onclick="openCheckoutModal()">
+            <i class="fas fa-credit-card"></i> Pilih Pembayaran
+          </button>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // ─── State ────────────────────────────────────────────────────────────────
-        let currentUser = null;
-        let currentRole = 'customer';
-        let cart = [];
-        const GUEST_TAX_RATE = 0.10;
-
-        // ─── Default seed data ────────────────────────────────────────────────────
-        const DEFAULT_USERS = [
-            { id: 1,  name: 'Axcel',      pin: '482719', saldo: 0,     kelas: '10',   created: '2024-03-01' },
-            { id: 2,  name: 'Chavon',     pin: '193650', saldo: 500,   kelas: '10',   created: '2024-03-01' },
-            { id: 3,  name: 'Eivory',     pin: '740285', saldo: 0,     kelas: '10',   created: '2024-03-01' },
-            { id: 4,  name: 'Jeremy',     pin: '561904', saldo: 0,     kelas: '10',   created: '2024-03-01' },
-            { id: 5,  name: 'Raphael',    pin: '836127', saldo: 50000, kelas: '10',   created: '2024-03-01' },
-            { id: 6,  name: 'Reynard',    pin: '205973', saldo: 0,     kelas: '10',   created: '2024-03-01' },
-            { id: 7,  name: 'Sharon',     pin: '694318', saldo: 0,     kelas: '10',   created: '2024-03-01' },
-            { id: 8,  name: 'Victoria',   pin: '127540', saldo: 0,     kelas: '10',   created: '2024-03-01' },
-            { id: 9,  name: 'Yungci',     pin: '358261', saldo: 0,     kelas: '10',   created: '2024-03-01' },
-            { id: 10, name: 'Cayla',      pin: '904176', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 11, name: 'Sema',       pin: '271639', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 12, name: 'Kenneth',    pin: '583024', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 13, name: 'Loisa',      pin: '746192', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 14, name: 'Marvelle',   pin: '315870', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 15, name: 'Matthew',    pin: '690452', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 16, name: 'Samuel',     pin: '148903', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 17, name: 'Stephanie',  pin: '527641', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 18, name: 'Yehonadav',  pin: '802316', saldo: 0,     kelas: '11',   created: '2024-03-01' },
-            { id: 19, name: 'Briana',     pin: '471590', saldo: 0,     kelas: '12',   created: '2024-03-01' },
-            { id: 20, name: 'Fidelia',    pin: '239864', saldo: 0,     kelas: '12',   created: '2024-03-01' },
-            { id: 21, name: 'Jonathan',   pin: '658107', saldo: 0,     kelas: '12',   created: '2024-03-01' },
-            { id: 22, name: 'Kezia',      pin: '914275', saldo: 0,     kelas: '12',   created: '2024-03-01' },
-            { id: 23, name: 'Meliana',    pin: '360918', saldo: 0,     kelas: 'guru', created: '2024-03-01' },
-            { id: 24, name: 'Theresia',   pin: '742561', saldo: 0,     kelas: 'guru', created: '2024-03-01' },
-            { id: 25, name: 'Luyse',      pin: '195480', saldo: 5500,  kelas: 'guru', created: '2024-03-01' },
-            { id: 26, name: 'Zefanya',    pin: '823604', saldo: 0,     kelas: 'guru', created: '2024-03-01' }
-        ];
-
-        const DEFAULT_MENU = [
-            { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan',  icon: '🍳', stock: 10 },
-            { id: 2, name: 'Mie Ayam Bakso',      price: 12000, category: 'Makanan',  icon: '🍜', stock: 15 },
-            { id: 3, name: 'Es Teh Manis',         price: 5000,  category: 'Minuman',  icon: '🧃', stock: 20 },
-            { id: 4, name: 'Roti Bakar',           price: 10000, category: 'Makanan',  icon: '🍞', stock: 8  },
-            { id: 5, name: 'Kopi Susu',            price: 8000,  category: 'Minuman',  icon: '☕', stock: 12 },
-            { id: 6, name: 'Pisang Goreng',        price: 7000,  category: 'Makanan',  icon: '🍌', stock: 5  }
-        ];
-
-        // ─── API config ───────────────────────────────────────────────────────────
-        // Vercel API routes live at /api/*
-        const API_BASE = window.location.hostname === 'localhost'
-            ? 'http://localhost:3000/api'
-            : '/api';
-
-        async function apiCall(endpoint, method = 'GET', body = null) {
-            try {
-                const options = { method, headers: { 'Content-Type': 'application/json' } };
-                if (body) options.body = JSON.stringify(body);
-                const res  = await fetch(`${API_BASE}/${endpoint}`, options);
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-                return data;
-            } catch (err) {
-                console.error(`API Error (${endpoint}):`, err);
-                throw err;
-            }
-        }
-
-        // ─── Data helpers (all async, all await apiCall) ───────────────────────────
-        async function getUsers()               { return await apiCall('users'); }
-        async function getMenu()                { return await apiCall('menu'); }
-        async function saveMenu(menu)           { return await apiCall('menu', 'POST', menu); }
-        async function getTransactions()        { return await apiCall('transactions'); }
-        async function saveTransaction(t)       { return await apiCall('transactions', 'POST', t); }
-        async function getTopups()              { return await apiCall('topups'); }
-        // Note: Vercel file is api/topups.js → endpoint is /api/topups
-
-        // ─── Initialise ───────────────────────────────────────────────────────────
-        async function initializeData() {
-            try {
-                const [users, menu] = await Promise.all([getUsers(), getMenu()]);
-
-                if (users.length === 0) {
-                    for (const user of DEFAULT_USERS) {
-                        await apiCall('auth', 'POST', { action: 'register', ...user });
-                    }
-                }
-                if (menu.length === 0) {
-                    await saveMenu(DEFAULT_MENU);
-                }
-            } catch (err) {
-                console.error('Init error:', err);
-            }
-        }
-
-        // ─── Utilities ────────────────────────────────────────────────────────────
-        function formatRupiah(angka) {
-            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.className = 'toast show ' + type;
-            document.getElementById('toastMessage').textContent = message;
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function isGuest(user) {
-            return user && user.kelas === 'guest';
-        }
-
-        // ─── Login ────────────────────────────────────────────────────────────────
-        function selectRole(role, event) {
-            currentRole = role;
-            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-            event.target.closest('.role-btn').classList.add('active');
-            document.getElementById('customerLogin').classList.toggle('hidden', role !== 'customer');
-            document.getElementById('adminLogin').classList.toggle('hidden', role !== 'admin');
-        }
-
-        async function login() {
-            if (currentRole === 'admin') {
-                const user = document.getElementById('adminUser').value;
-                const pass = document.getElementById('adminPass').value;
-                if (user === 'admin' && pass === '015389') {
-                    currentUser = { name: 'Admin', role: 'admin' };
-                    await enterApp();
-                } else {
-                    showToast('Username atau password salah!', 'error');
-                }
-                return;
-            }
-
-            // Customer login
-            const name = document.getElementById('customerName').value.trim();
-            const pin  = document.getElementById('customerPin').value;
-            if (!name || !pin || pin.length !== 6) {
-                showToast('Mohon isi nama dan PIN 6 digit!', 'error');
-                return;
-            }
-            try {
-                const result = await apiCall('auth', 'POST', { action: 'login', name, pin });
-                if (!result.success) {
-                    showToast(result.error || 'Login gagal!', 'error');
-                    return;
-                }
-                currentUser = {
-                    id:    result.user.id || result.user._id,
-                    name:  result.user.name,
-                    kelas: result.user.kelas,
-                    saldo: result.user.saldo,
-                    role:  'customer'
-                };
-                await enterApp();
-            } catch (err) {
-                showToast('Gagal terhubung ke server!', 'error');
-            }
-        }
-
-        async function enterApp() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display   = 'block';
-
-            if (currentUser.role === 'admin') {
-                document.getElementById('customerView').classList.add('hidden');
-                document.getElementById('adminView').classList.remove('hidden');
-                document.getElementById('saldoDisplay').style.display = 'none';
-                document.getElementById('kelasDisplay').style.display = 'none';
-                document.getElementById('guestDisplay').style.display = 'none';
-                document.getElementById('welcomeText').textContent = 'Dashboard Admin';
-                document.getElementById('subText').textContent     = 'Kelola kantin dengan mudah';
-                await loadAdminData();
-            } else {
-                document.getElementById('customerView').classList.remove('hidden');
-                document.getElementById('adminView').classList.add('hidden');
-
-                const userIsGuest = isGuest(currentUser);
-                if (userIsGuest) {
-                    document.getElementById('saldoDisplay').style.display = 'flex';
-                    document.getElementById('kelasDisplay').style.display = 'none';
-                    document.getElementById('guestDisplay').style.display = 'flex';
-                    document.getElementById('welcomeText').textContent    = `Halo, ${currentUser.name}!`;
-                    document.getElementById('subText').textContent        = 'Tamu - Hubungi admin untuk jadi member';
-
-                    const customerView = document.getElementById('customerView');
-                    let notice = document.getElementById('guestNotice');
-                    if (!notice) {
-                        notice = document.createElement('div');
-                        notice.id        = 'guestNotice';
-                        notice.className = 'guest-notice';
-                        notice.innerHTML = `
-                            <i class="fas fa-exclamation-triangle" style="font-size: 20px;"></i>
-                            <div>
-                                <strong>Perhatian:</strong> Anda dikenakan biaya tambahan 10% sebagai tamu.
-                                Total pembayaran akan ditambah pajak 10%. Hubungi admin untuk mendaftar sebagai member reguler!
-                            </div>`;
-                        customerView.insertBefore(notice, document.getElementById('menuGrid'));
-                    }
-                } else {
-                    document.getElementById('saldoDisplay').style.display = 'flex';
-                    document.getElementById('kelasDisplay').style.display = 'flex';
-                    document.getElementById('guestDisplay').style.display = 'none';
-                    const notice = document.getElementById('guestNotice');
-                    if (notice) notice.remove();
-                    const kelasText = currentUser.kelas === 'guru' ? 'Guru' : `Kelas ${currentUser.kelas}`;
-                    document.getElementById('kelasText').textContent    = kelasText;
-                    document.getElementById('welcomeText').textContent  = `Halo, ${currentUser.name}!`;
-                    document.getElementById('subText').textContent      = kelasText;
-                }
-                await updateSaldoDisplay();
-                await loadMenu();
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            cart = [];
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('mainApp').style.display     = 'none';
-            const notice = document.getElementById('guestNotice');
-            if (notice) notice.remove();
-            document.getElementById('customerName').value = '';
-            document.getElementById('customerPin').value  = '';
-            document.getElementById('adminUser').value    = '';
-            document.getElementById('adminPass').value    = '';
-        }
-
-        // ─── Customer ─────────────────────────────────────────────────────────────
-        async function updateSaldoDisplay() {
-            try {
-                const users = await getUsers();
-                const user  = users.find(u => String(u._id || u.id) === String(currentUser.id));
-                if (user) {
-                    document.getElementById('saldoAmount').textContent = formatRupiah(user.saldo);
-                    currentUser.saldo = user.saldo;
-                }
-            } catch (err) {
-                console.error('updateSaldoDisplay error:', err);
-            }
-        }
-
-        async function loadMenu() {
-            try {
-                const menu = await getMenu();
-                const grid = document.getElementById('menuGrid');
-                grid.innerHTML = '';
-                menu.forEach(item => {
-                    const oos  = item.stock <= 0;
-                    const card = document.createElement('div');
-                    card.className = 'card' + (oos ? ' out-of-stock' : '');
-                    card.innerHTML = `
-                        <div class="card-image ${oos ? 'out-of-stock' : ''}">
-                            <div style="font-size: 64px;">${item.icon}</div>
-                            <div class="card-badge">${item.category}</div>
-                            <div class="stock-badge ${oos ? 'empty' : ''}">Stok: ${item.stock}</div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">${item.name}</div>
-                            <div class="card-price">${formatRupiah(item.price)}</div>
-                            <div class="card-actions">
-                                <button class="btn-small btn-secondary" onclick="addToCart('${item._id || item.id}')" ${oos ? 'disabled' : ''}>
-                                    ${oos ? '<i class="fas fa-times"></i> Habis' : '<i class="fas fa-plus"></i> Tambah'}
-                                </button>
-                            </div>
-                        </div>`;
-                    grid.appendChild(card);
-                });
-            } catch (err) {
-                console.error('loadMenu error:', err);
-            }
-        }
-
-        // We keep a local copy of the menu after loading to avoid repeated API calls
-        // while managing cart interactions.
-        let _cachedMenu = null;
-
-        async function getMenuCached() {
-            if (!_cachedMenu) _cachedMenu = await getMenu();
-            return _cachedMenu;
-        }
-
-        async function addToCart(itemId) {
-            try {
-                const menu = await getMenu();
-                const item = menu.find(m => String(m._id || m.id) === String(itemId));
-                if (!item || item.stock <= 0) { showToast('Maaf, stok habis!', 'error'); return; }
-
-                const existing = cart.find(c => String(c.id) === String(itemId));
-                if (existing) {
-                    if (existing.qty >= item.stock) { showToast('Stok tidak cukup!', 'error'); return; }
-                    existing.qty++;
-                } else {
-                    cart.push({ id: String(item._id || item.id), name: item.name, price: item.price, icon: item.icon, qty: 1 });
-                }
-                await updateCart();
-                showToast(`${item.name} ditambahkan ke keranjang`);
-            } catch (err) {
-                showToast('Gagal menambahkan item!', 'error');
-            }
-        }
-
-        async function updateCart() {
-            const cartSection = document.getElementById('cartSection');
-            const cartItems   = document.getElementById('cartItems');
-
-            if (cart.length === 0) { cartSection.style.display = 'none'; return; }
-            cartSection.style.display = 'block';
-            cartItems.innerHTML = '';
-
-            let subtotal = 0;
-            let menu;
-            try { menu = await getMenu(); } catch { menu = []; }
-            const menuMap = new Map(menu.map(m => [String(m._id || m.id), m]));
-
-            cart.forEach((item, index) => {
-                subtotal += item.price * item.qty;
-                const maxStock = menuMap.get(String(item.id))?.stock ?? 0;
-                const div = document.createElement('div');
-                div.className = 'cart-item';
-                div.innerHTML = `
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <p>${formatRupiah(item.price)} x ${item.qty}</p>
-                    </div>
-                    <div class="cart-item-actions">
-                        <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
-                        <span style="font-weight:700;min-width:30px;text-align:center;">${item.qty}</span>
-                        <button class="qty-btn" onclick="updateQty(${index}, 1)" ${item.qty >= maxStock ? 'disabled' : ''}>+</button>
-                        <span style="font-weight:700;color:var(--primary);min-width:100px;text-align:right;">${formatRupiah(item.price * item.qty)}</span>
-                    </div>`;
-                cartItems.appendChild(div);
-            });
-
-            const userIsGuest = isGuest(currentUser);
-            const tax   = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
-            const total = subtotal + tax;
-
-            const cartSummary = document.getElementById('cartSummary');
-            let summaryHTML = `<div class="summary-row"><span>Subtotal</span><span>${formatRupiah(subtotal)}</span></div>`;
-            if (tax > 0) summaryHTML += `<div class="summary-row tax-row"><span>Pajak Tamu (10%)</span><span>${formatRupiah(tax)}</span></div>`;
-            summaryHTML += `<div class="summary-row total"><span>Total Bayar</span><span>${formatRupiah(total)}</span></div>`;
-            cartSummary.innerHTML = summaryHTML;
-
-            const checkoutBtn = document.querySelector('.checkout-btn');
-            checkoutBtn.innerHTML = userIsGuest
-                ? `<i class="fas fa-check"></i> Bayar ${formatRupiah(total)} (Termasuk Pajak)`
-                : `<i class="fas fa-check"></i> Bayar Sekarang`;
-        }
-
-        async function updateQty(index, change) {
-            let menu;
-            try { menu = await getMenu(); } catch { menu = []; }
-            const cartItem = cart[index];
-            const menuItem = menu.find(m => String(m._id || m.id) === String(cartItem.id));
-            if (!menuItem) return;
-
-            const newQty = cartItem.qty + change;
-            if (newQty <= 0) {
-                cart.splice(index, 1);
-            } else if (newQty > menuItem.stock) {
-                showToast('Stok tidak cukup!', 'error'); return;
-            } else {
-                cartItem.qty = newQty;
-            }
-            await updateCart();
-        }
-
-        async function checkout() {
-            try {
-                const menu     = await getMenu();
-                let subtotal   = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-                const userIsGuest = isGuest(currentUser);
-                const tax      = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
-                const total    = subtotal + tax;
-
-                // Validate stock
-                for (const cartItem of cart) {
-                    const menuItem = menu.find(m => String(m._id || m.id) === String(cartItem.id));
-                    if (!menuItem || cartItem.qty > menuItem.stock) {
-                        showToast(`Stok ${menuItem ? menuItem.name : 'item'} tidak cukup!`, 'error');
-                        return;
-                    }
-                }
-
-                // Validate saldo
-                if (currentUser.saldo < total) {
-                    showToast('Saldo tidak cukup! Silakan hubungi admin untuk top-up.', 'error');
-                    return;
-                }
-
-                // Save transaction
-                await saveTransaction({
-                    userId:   currentUser.id,
-                    userName: currentUser.name,
-                    kelas:    currentUser.kelas,
-                    items: cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
-                    subtotal, tax, total,
-                    type: 'buy',
-                    date: new Date().toISOString()
-                });
-
-                cart = [];
-                await updateCart();
-                await loadMenu();
-                await updateSaldoDisplay();
-
-                showToast(userIsGuest
-                    ? `Pembayaran berhasil! Total: ${formatRupiah(total)} (Pajak: ${formatRupiah(tax)})`
-                    : 'Pembayaran berhasil! Terima kasih.');
-            } catch (err) {
-                showToast('Gagal melakukan pembayaran!', 'error');
-                console.error('checkout error:', err);
-            }
-        }
-
-        // ─── Admin ────────────────────────────────────────────────────────────────
-        async function loadAdminData() {
-            await Promise.all([
-                updateAdminStats(),
-                loadAdminMenu(),
-                loadUsersList(),
-                loadRiwayat(),
-                updateTopupSelect()
-            ]);
-        }
-
-        async function updateAdminStats() {
-            try {
-                const [users, transactions, topups] = await Promise.all([getUsers(), getTransactions(), getTopups()]);
-                const today = new Date().toLocaleDateString('id-ID');
-                const todayTx  = transactions.filter(t => t.date && t.date.includes(today));
-                const revenue  = todayTx.reduce((s, t) => s + t.total, 0);
-                const totalTopupSum = topups.reduce((s, t) => s + t.amount, 0);
-                const guestTx  = todayTx.filter(t => t.kelas === 'guest');
-                const guestTax = guestTx.reduce((s, t) => s + (t.tax || 0), 0);
-
-                document.getElementById('totalUsers').textContent   = users.length;
-                document.getElementById('totalSales').textContent   = todayTx.length;
-                document.getElementById('totalRevenue').textContent = formatRupiah(revenue);
-                document.getElementById('totalTopup').textContent   = formatRupiah(totalTopupSum);
-
-                const guestStats = document.getElementById('guestStats');
-                if (guestTx.length > 0) {
-                    document.getElementById('guestCount').textContent = guestTx.length;
-                    document.getElementById('guestTax').textContent   = formatRupiah(guestTax);
-                    guestStats.style.display = 'block';
-                } else {
-                    guestStats.style.display = 'none';
-                }
-            } catch (err) {
-                console.error('updateAdminStats error:', err);
-            }
-        }
-
-        function switchTab(tab, event) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(tab + 'Tab').classList.add('active');
-            if (tab === 'users')    { loadUsersList(); updateTopupSelect(); }
-            if (tab === 'riwayat') loadRiwayat();
-        }
-
-        function switchRiwayatTab(type, event) {
-            document.querySelectorAll('.riwayat-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.riwayat-content').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('riwayat' + (type === 'pembelian' ? 'Pembelian' : 'Topup')).classList.add('active');
-        }
-
-        async function loadAdminMenu() {
-            try {
-                const menu = await getMenu();
-                const grid = document.getElementById('adminMenuGrid');
-                grid.innerHTML = '';
-                menu.forEach(item => {
-                    const oos  = item.stock <= 0;
-                    const id   = item._id || item.id;
-                    const card = document.createElement('div');
-                    card.className = 'card' + (oos ? ' out-of-stock' : '');
-                    card.innerHTML = `
-                        <div class="card-image ${oos ? 'out-of-stock' : ''}" style="height:120px;font-size:48px;">
-                            ${item.icon}
-                            <div class="stock-badge ${oos ? 'empty' : ''}" style="font-size:10px;">Stok: ${item.stock}</div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">${item.name}</div>
-                            <div class="card-price">${formatRupiah(item.price)}</div>
-                            <div class="card-actions">
-                                <button class="btn-small btn-secondary" onclick="editStock('${id}')"><i class="fas fa-edit"></i> Stok</button>
-                                <button class="btn-small btn-danger"    onclick="deleteMenuItem('${id}')"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>`;
-                    grid.appendChild(card);
-                });
-            } catch (err) {
-                console.error('loadAdminMenu error:', err);
-            }
-        }
-
-        async function addMenuItem() {
-            const name     = document.getElementById('newItemName').value.trim();
-            const price    = parseInt(document.getElementById('newItemPrice').value);
-            const category = document.getElementById('newItemCategory').value.trim();
-            const stock    = parseInt(document.getElementById('newItemStock').value) || 0;
-
-            if (!name || !price || !category) { showToast('Mohon isi semua field!', 'error'); return; }
-
-            try {
-                const icons = ['🍳','🍜','🧃','🍞','☕','🍌','🍔','🍕','🥗','🥤'];
-                const menu  = await getMenu();
-                menu.push({ id: Date.now(), name, price, category, stock, icon: icons[Math.floor(Math.random() * icons.length)] });
-                await saveMenu(menu);
-
-                document.getElementById('newItemName').value    = '';
-                document.getElementById('newItemPrice').value   = '';
-                document.getElementById('newItemCategory').value = '';
-                document.getElementById('newItemStock').value   = '10';
-
-                await loadAdminMenu();
-                showToast('Menu berhasil ditambahkan!');
-            } catch (err) {
-                showToast('Gagal menambahkan menu!', 'error');
-            }
-        }
-
-        async function editStock(itemId) {
-            try {
-                const menu = await getMenu();
-                const item = menu.find(m => String(m._id || m.id) === String(itemId));
-                if (!item) return;
-                const newStock = prompt(`Edit stok untuk ${item.name}:`, item.stock);
-                if (newStock !== null && !isNaN(newStock) && newStock !== '') {
-                    item.stock = parseInt(newStock);
-                    await saveMenu(menu);
-                    await loadAdminMenu();
-                    showToast(`Stok ${item.name} diupdate: ${item.stock}`);
-                }
-            } catch (err) {
-                showToast('Gagal mengupdate stok!', 'error');
-            }
-        }
-
-        async function deleteMenuItem(itemId) {
-            if (!confirm('Yakin ingin menghapus menu ini?')) return;
-            try {
-                await apiCall('menu', 'DELETE', { id: String(itemId) });
-                await loadAdminMenu();
-                showToast('Menu dihapus');
-            } catch (err) {
-                showToast('Gagal menghapus menu!', 'error');
-            }
-        }
-
-        async function addUser() {
-            const name  = document.getElementById('newUserName').value.trim();
-            const pin   = document.getElementById('newUserPin').value;
-            const kelas = document.getElementById('newUserKelas').value;
-            const saldo = parseInt(document.getElementById('newUserSaldo').value) || 0;
-
-            if (!name || !pin || pin.length !== 6) {
-                showToast('Mohon isi nama dan PIN 6 digit!', 'error');
-                return;
-            }
-
-            try {
-                await apiCall('auth', 'POST', { action: 'register', name, pin, kelas, saldo });
-
-                document.getElementById('newUserName').value  = '';
-                document.getElementById('newUserPin').value   = '';
-                document.getElementById('newUserSaldo').value = '0';
-                document.getElementById('newUserKelas').value = '10';
-
-                await loadUsersList();
-                await updateTopupSelect();
-                await updateAdminStats();
-
-                const kelasLabel = kelas === 'guest' ? 'Tamu' : (kelas === 'guru' ? 'Guru' : 'Kelas ' + kelas);
-                showToast(`${kelasLabel} ${name} berhasil ditambahkan!`);
-            } catch (err) {
-                showToast('Gagal menambahkan pengguna!', 'error');
-            }
-        }
-
-        async function deleteUser(userId) {
-            if (!confirm('Yakin ingin menghapus pengguna ini?')) return;
-            try {
-                await apiCall('users', 'POST', { action: 'delete', userId: String(userId) });
-                await loadUsersList();
-                await updateTopupSelect();
-                await updateAdminStats();
-                showToast('Pengguna dihapus');
-            } catch (err) {
-                showToast('Gagal menghapus pengguna!', 'error');
-            }
-        }
-
-        async function updateTopupSelect() {
-            try {
-                const users  = await getUsers();
-                const select = document.getElementById('topupUserSelect');
-                select.innerHTML = '<option value="">-- Pilih Pengguna --</option>';
-                users.sort((a, b) => a.name.localeCompare(b.name)).forEach(user => {
-                    const id         = user._id || user.id;
-                    const kelasLabel = user.kelas === 'guest' ? '[Tamu]' : (user.kelas === 'guru' ? '[Guru]' : '[Kelas ' + user.kelas + ']');
-                    const option     = document.createElement('option');
-                    option.value     = id;
-                    option.textContent = `${kelasLabel} ${user.name} (Saldo: ${formatRupiah(user.saldo)})`;
-                    select.appendChild(option);
-                });
-            } catch (err) {
-                console.error('updateTopupSelect error:', err);
-            }
-        }
-
-        async function loadUsersList() {
-            try {
-                const users = await getUsers();
-                const list  = document.getElementById('usersList');
-                list.innerHTML = '';
-
-                if (users.length === 0) {
-                    list.innerHTML = `<div class="empty-state" style="padding:40px;"><i class="fas fa-users"></i><p>Belum ada pengguna terdaftar</p></div>`;
-                    return;
-                }
-
-                users.sort((a, b) => {
-                    const order = v => v === 'guest' ? 3 : v === 'guru' ? 2 : 0;
-                    if (order(a.kelas) !== order(b.kelas)) return order(a.kelas) - order(b.kelas);
-                    if (a.kelas !== b.kelas) return a.kelas.localeCompare(b.kelas);
-                    return a.name.localeCompare(b.name);
-                }).forEach(user => {
-                    const id         = user._id || user.id;
-                    const guest      = user.kelas === 'guest';
-                    const kelasClass = guest ? 'kelas-guest' : (user.kelas === 'guru' ? 'kelas-guru' : `kelas-${user.kelas}`);
-                    const kelasText  = guest ? 'Tamu' : (user.kelas === 'guru' ? 'Guru' : `Kelas ${user.kelas}`);
-                    const div        = document.createElement('div');
-                    div.className    = 'list-item';
-                    if (guest) div.style.background = '#fff7ed';
-                    div.innerHTML = `
-                        <div><strong>${user.name}</strong></div>
-                        <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                        <div><span class="pin-display">${user.pin}</span></div>
-                        <div style="font-weight:700;color:var(--success);">${formatRupiah(user.saldo)}</div>
-                        <div style="font-size:12px;color:var(--gray);">${user.created || '-'}</div>
-                        <div style="font-size:12px;color:${guest ? '#ea580c' : 'var(--success)'};">${guest ? 'Tamu (+10%)' : 'Aktif'}</div>
-                        <div class="action-btns">
-                            <button class="btn-icon btn-delete" onclick="deleteUser('${id}')" title="Hapus"><i class="fas fa-trash"></i></button>
-                        </div>`;
-                    list.appendChild(div);
-                });
-            } catch (err) {
-                console.error('loadUsersList error:', err);
-            }
-        }
-
-        async function topupSaldo() {
-            const userId = document.getElementById('topupUserSelect').value;
-            const amount = parseInt(document.getElementById('topupAmount').value);
-
-            if (!userId || !amount || amount <= 0) {
-                showToast('Mohon pilih pengguna dan masukkan jumlah!', 'error');
-                return;
-            }
-
-            try {
-                const result = await apiCall('users', 'POST', {
-                    action:    'topup',
-                    userId:    String(userId),
-                    amount,
-                    adminName: 'Admin'
-                });
-
-                document.getElementById('topupUserSelect').value = '';
-                document.getElementById('topupAmount').value     = '';
-
-                await loadUsersList();
-                await updateTopupSelect();
-                await loadRiwayat();
-                await updateAdminStats();
-
-                const newSaldo = result.newSaldo !== undefined ? formatRupiah(result.newSaldo) : '';
-                showToast(`Top-up berhasil!${newSaldo ? ' Saldo baru: ' + newSaldo : ''}`);
-            } catch (err) {
-                showToast('Gagal melakukan top-up!', 'error');
-            }
-        }
-
-        async function loadRiwayat() {
-            await Promise.all([loadPembelianList(), loadTopupList()]);
-        }
-
-        async function loadPembelianList() {
-            try {
-                const transactions = await getTransactions();
-                const list = document.getElementById('pembelianList');
-                list.innerHTML = '';
-
-                if (transactions.length === 0) {
-                    list.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><p>Belum ada riwayat pembelian</p></div>`;
-                    return;
-                }
-
-                transactions.forEach(t => {
-                    const guest      = t.kelas === 'guest';
-                    const kelasClass = guest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
-                    const kelasText  = guest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
-                    const itemNames  = (t.items || []).map(i => `${i.name} (${i.qty})`).join(', ');
-                    const div        = document.createElement('div');
-                    div.className    = 'list-item';
-                    if (guest) div.style.background = '#fff7ed';
-                    div.innerHTML = `
-                        <div><strong>${t.userName || t.user || '-'}</strong> ${guest ? '<span style="color:#ea580c;font-size:11px;">(+10%)</span>' : ''}</div>
-                        <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                        <div style="font-size:12px;color:var(--gray);">${itemNames}</div>
-                        <div style="font-weight:700;">
-                            ${formatRupiah(t.total)}
-                            ${t.tax ? `<div style="font-size:10px;color:#ea580c;">+pajak ${formatRupiah(t.tax)}</div>` : ''}
-                        </div>
-                        <div style="font-size:14px;color:var(--gray);">${t.date || '-'}</div>
-                        <div><span class="transaction-type type-buy">BELI</span></div>`;
-                    list.appendChild(div);
-                });
-            } catch (err) {
-                console.error('loadPembelianList error:', err);
-            }
-        }
-
-        async function loadTopupList() {
-            try {
-                const topups = await getTopups();
-                const list   = document.getElementById('topupList');
-                list.innerHTML = '';
-
-                if (topups.length === 0) {
-                    list.innerHTML = `<div class="empty-state"><i class="fas fa-coins"></i><p>Belum ada riwayat top-up</p></div>`;
-                    return;
-                }
-
-                topups.forEach(t => {
-                    const guest      = t.kelas === 'guest';
-                    const kelasClass = guest ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
-                    const kelasText  = guest ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : `Kelas ${t.kelas}`);
-                    const div        = document.createElement('div');
-                    div.className    = 'list-item';
-                    if (guest) div.style.background = '#fff7ed';
-                    div.innerHTML = `
-                        <div><strong>${t.userName || t.user || '-'}</strong> ${guest ? '<span style="color:#ea580c;font-size:11px;">(Tamu)</span>' : ''}</div>
-                        <div><span class="kelas-badge-small ${kelasClass}">${kelasText}</span></div>
-                        <div style="font-weight:700;color:var(--success);">${formatRupiah(t.amount)}</div>
-                        <div style="font-weight:600;">${formatRupiah(t.saldoAkhir || t.amount)}</div>
-                        <div style="font-size:14px;color:var(--gray);">${t.date || '-'}</div>
-                        <div><span class="transaction-type type-topup">TOPUP</span></div>`;
-                    list.appendChild(div);
-                });
-            } catch (err) {
-                console.error('loadTopupList error:', err);
-            }
-        }
-
-        // ─── Export / Import ──────────────────────────────────────────────────────
-        function downloadJSON(data, filename) {
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url  = URL.createObjectURL(blob);
-            const a    = document.createElement('a');
-            a.href     = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        async function exportAllData() {
-            try {
-                const [users, menu, transactions, topups] = await Promise.all([getUsers(), getMenu(), getTransactions(), getTopups()]);
-                downloadJSON({ users, menu, transactions, topups, exportDate: new Date().toISOString(), version: '1.0' },
-                    `kantin_backup_${new Date().toISOString().slice(0,10)}.json`);
-                showToast('Semua data berhasil di-export!');
-            } catch { showToast('Gagal export data!', 'error'); }
-        }
-
-        async function exportUsers() {
-            try {
-                downloadJSON(await getUsers(), `kantin_users_${new Date().toISOString().slice(0,10)}.json`);
-                showToast('Data pengguna berhasil di-export!');
-            } catch { showToast('Gagal export users!', 'error'); }
-        }
-
-        async function exportTransactions() {
-            try {
-                const [pembelian, topup] = await Promise.all([getTransactions(), getTopups()]);
-                downloadJSON({ pembelian, topup, exportDate: new Date().toISOString() },
-                    `kantin_riwayat_${new Date().toISOString().slice(0,10)}.json`);
-                showToast('Riwayat transaksi berhasil di-export!');
-            } catch { showToast('Gagal export transaksi!', 'error'); }
-        }
-
-        function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.menu)         await saveMenu(data.menu);
-                    if (data.transactions) await apiCall('transactions', 'POST', { action: 'bulkImport', data: data.transactions });
-                    if (data.topups)       await apiCall('topups',       'POST', { action: 'bulkImport', data: data.topups });
-                    if (data.users)        for (const u of data.users) await apiCall('auth', 'POST', { action: 'register', ...u });
-                    if (data.pembelian)    await apiCall('transactions', 'POST', { action: 'bulkImport', data: data.pembelian });
-                    if (data.topup)        await apiCall('topups',       'POST', { action: 'bulkImport', data: data.topup });
-
-                    await loadAdminData();
-                    showToast('Data berhasil di-import!');
-                } catch (error) {
-                    showToast('Gagal import data! Format tidak valid.', 'error');
-                    console.error(error);
-                }
-            };
-            reader.readAsText(file);
-            input.value = '';
-        }
-
-        // ─── Modal ────────────────────────────────────────────────────────────────
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+    <!-- Admin View -->
+    <div id="adminView" class="hidden">
+      <div class="backup-section">
+        <h3 class="section-title"><i class="fas fa-database"></i> Backup & Restore Data</h3>
+        <div class="backup-buttons">
+          <button class="backup-btn btn-success" onclick="exportAllData()"><i class="fas fa-download"></i> Export Semua Data</button>
+          <button class="backup-btn btn-info" onclick="exportUsers()"><i class="fas fa-users"></i> Export Users</button>
+          <button class="backup-btn btn-secondary" onclick="exportTransactions()"><i class="fas fa-receipt"></i> Export Transaksi</button>
+          <div class="file-input-wrapper">
+            <input type="file" id="importFile" accept=".json" onchange="importData(this)">
+            <label for="importFile" class="file-input-label"><i class="fas fa-upload"></i> Import Data</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-stats">
+        <div class="stat-card"><div class="stat-value" id="totalUsers">0</div><div class="stat-label">Total Pengguna</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalSales">0</div><div class="stat-label">Transaksi Hari Ini</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalRevenue">Rp 0</div><div class="stat-label">Pendapatan</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalTopup">Rp 0</div><div class="stat-label">Total Top-up</div></div>
+        <div class="stat-card" id="guestStats" style="background:linear-gradient(135deg,#fff7ed,#ffedd5);display:none;">
+          <div class="stat-value" style="color:#ea580c;" id="guestCount">0</div>
+          <div class="stat-label">Transaksi Tamu Hari Ini</div>
+          <div style="font-size:12px;color:#9a3412;margin-top:4px;">Pajak: <span id="guestTax">Rp 0</span></div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('menu', event)">Kelola Menu</button>
+        <button class="tab" onclick="switchTab('users', event)">Kelola Pengguna</button>
+        <button class="tab" onclick="switchTab('riwayat', event)">Riwayat Transaksi</button>
+        <button class="tab" onclick="switchTab('qrisSettings', event)">⚙️ QRIS Settings</button>
+        <button class="tab" onclick="switchTab('auditStok', event)">🔍 Audit Stok</button>
+      </div>
+
+      <div class="tab-content active" id="menuTab">
+        <div class="cart-section">
+          <h3 class="section-title">Tambah Menu Baru</h3>
+          <div class="form-grid">
+            <div class="input-group"><label>Nama Item</label><input type="text" id="newItemName" placeholder="Nama makanan/minuman"></div>
+            <div class="input-group"><label>Harga (Rp)</label><input type="number" id="newItemPrice" placeholder="10000"></div>
+            <div class="input-group"><label>Kategori</label><input type="text" id="newItemCategory" placeholder="Makanan/Minuman"></div>
+            <div class="input-group"><label>Stok Awal</label><input type="number" id="newItemStock" placeholder="10" value="10"></div>
+          </div>
+          <button class="btn" onclick="addMenuItem()" style="width:auto;"><i class="fas fa-plus"></i> Tambah Menu</button>
+        </div>
+        <div class="grid" id="adminMenuGrid"></div>
+      </div>
+
+      <div class="tab-content" id="usersTab">
+        <div class="cart-section">
+          <h3 class="section-title">Tambah Pengguna Baru</h3>
+          <div class="form-grid">
+            <div class="input-group"><label>Nama Lengkap</label><input type="text" id="newUserName" placeholder="Nama pengguna"></div>
+            <div class="input-group">
+              <label>Kelas / Tipe</label>
+              <select id="newUserKelas">
+                <option value="10">Kelas 10</option>
+                <option value="11">Kelas 11</option>
+                <option value="12">Kelas 12</option>
+                <option value="guru">Guru</option>
+                <option value="guest">Tamu (Guest)</option>
+              </select>
+            </div>
+            <div class="input-group"><label>PIN (6 digit)</label><input type="password" id="newUserPin" placeholder="123456" maxlength="6"></div>
+            <div class="input-group"><label>Saldo Awal (Rp)</label><input type="number" id="newUserSaldo" placeholder="0" value="0"></div>
+          </div>
+          <button class="btn btn-success" onclick="addUser()" style="width:auto;"><i class="fas fa-user-plus"></i> Tambah Pengguna</button>
+        </div>
+        <div class="cart-section" style="margin-top:24px;">
+          <h3 class="section-title">Top-up Saldo</h3>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>Pilih Pengguna</label>
+              <select id="topupUserSelect" style="width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:12px;font-family:inherit;font-size:16px;">
+                <option value="">-- Pilih Pengguna --</option>
+              </select>
+            </div>
+            <div class="input-group"><label>Jumlah Top-up (Rp)</label><input type="number" id="topupAmount" placeholder="50000"></div>
+          </div>
+          <button class="btn btn-secondary" onclick="topupSaldo()" style="width:auto;"><i class="fas fa-plus-circle"></i> Top-up Sekarang</button>
+        </div>
+        <div class="user-list" style="margin-top:24px;">
+          <div class="list-header">
+            <div>Nama</div><div>Kelas/Tipe</div><div>PIN</div><div>Saldo</div><div>Dibuat</div><div>Status</div><div>Aksi</div>
+          </div>
+          <div id="usersList"></div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="riwayatTab">
+        <div class="riwayat-tabs">
+          <button class="riwayat-tab active" onclick="switchRiwayatTab('pembelian', event)"><i class="fas fa-shopping-bag"></i> Riwayat Pembelian</button>
+          <button class="riwayat-tab" onclick="switchRiwayatTab('topup', event)"><i class="fas fa-coins"></i> Riwayat Top-up</button>
+        </div>
+        <div class="riwayat-content active" id="riwayatPembelian">
+          <div class="transaction-list">
+            <div class="list-header"><div>Pengguna</div><div>Kelas/Tipe</div><div>Item</div><div>Total</div><div>Waktu</div><div>Status</div></div>
+            <div id="pembelianList"></div>
+          </div>
+        </div>
+        <div class="riwayat-content" id="riwayatTopup">
+          <div class="transaction-list">
+            <div class="list-header"><div>Pengguna</div><div>Kelas/Tipe</div><div>Jumlah</div><div>Saldo Akhir</div><div>Waktu</div><div>Admin</div></div>
+            <div id="topupList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audit Stok Tab -->
+      <div class="tab-content" id="auditStokTab">
+
+        <!-- Hero bar -->
+        <div class="audit-hero">
+          <div>
+            <h2>🔍 Audit Stok Harian</h2>
+            <p>Bandingkan stok sistem vs stok fisik yang kamu hitung — deteksi barang hilang atau dicuri</p>
+          </div>
+          <div class="audit-hero-stats">
+            <div class="audit-hero-stat">
+              <div class="val" id="auditHeroTerjual">0</div>
+              <div class="lbl">Terjual Hari Ini</div>
+            </div>
+            <div class="audit-hero-stat">
+              <div class="val" id="auditHeroMissing" style="color:#f87171;">0</div>
+              <div class="lbl">Item Hilang</div>
+            </div>
+            <div class="audit-hero-stat">
+              <div class="val" id="auditHeroRugi" style="color:#fb923c;">Rp 0</div>
+              <div class="lbl">Estimasi Kerugian</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="audit-controls">
+          <div class="input-group">
+            <label>Tanggal Audit</label>
+            <input type="date" id="auditDate">
+          </div>
+          <button class="btn btn-info" onclick="loadAuditData()" style="width:auto;padding:12px 24px;">
+            <i class="fas fa-sync-alt"></i> Muat Data
+          </button>
+          <div class="audit-date-badge"><i class="fas fa-clock"></i> <span id="auditLastUpdated">Belum dimuat</span></div>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="audit-summary-cards" id="auditSummaryCards" style="display:none;"></div>
+
+        <!-- Info box -->
+        <div class="audit-note-box" id="auditNoteBox" style="display:none;">
+          <h4><i class="fas fa-lightbulb"></i> Cara Pakai</h4>
+          <p>
+            Kolom <strong>"Stok Sistem"</strong> = stok yang tercatat di database setelah penjualan hari ini.<br>
+            Kolom <strong>"Terjual Hari Ini"</strong> = total item yang terbeli via transaksi digital.<br>
+            Kolom <strong>"Stok Fisik"</strong> = jumlah barang yang kamu hitung secara manual sore ini.<br>
+            Kolom <strong>"Selisih"</strong> = Stok Sistem − Stok Fisik. Kalau <span style="color:#ef4444;font-weight:700;">merah/minus</span>, ada barang yang hilang atau dicuri.
+          </p>
+        </div>
+
+        <!-- Action bar -->
+        <div class="audit-action-bar" id="auditActionBar" style="display:none;">
+          <button class="audit-save-btn btn-success" style="color:white;background:var(--success);" onclick="saveAuditResult()">
+            <i class="fas fa-save"></i> Simpan Hasil Audit
+          </button>
+          <button class="audit-save-btn" style="color:var(--dark);background:#f1f5f9;" onclick="exportAuditReport()">
+            <i class="fas fa-file-export"></i> Export Laporan
+          </button>
+          <button class="audit-save-btn" style="color:white;background:var(--primary);" onclick="autoFillFromSystem()">
+            <i class="fas fa-magic"></i> Isi Otomatis dari Sistem
+          </button>
+        </div>
+
+        <!-- Main audit table -->
+        <div class="audit-table-wrap" id="auditTableWrap" style="display:none;">
+          <div class="audit-table-head">
+            <div>Item Menu</div>
+            <div>Stok Awal Hari Ini</div>
+            <div>Terjual (Transaksi)</div>
+            <div>Stok Sistem</div>
+            <div>Stok Fisik (Input)</div>
+            <div>Selisih & Status</div>
+          </div>
+          <div id="auditTableBody"></div>
+        </div>
+
+        <!-- Audit Log -->
+        <div class="audit-log" id="auditLogSection" style="display:none;">
+          <h3><i class="fas fa-history"></i> Riwayat Audit Tersimpan</h3>
+          <div id="auditLogList"></div>
+        </div>
+
+      </div>
+
+      <!-- QRIS Settings Tab -->
+      <div class="tab-content" id="qrisSettingsTab">
+        <div class="cart-section">
+          <h3 class="section-title"><i class="fas fa-qrcode"></i> Pengaturan QRIS</h3>
+          <div class="qris-settings-box">
+            <h4><i class="fas fa-info-circle"></i> Cara Kerja QRIS di Kantin</h4>
+            <p style="font-size:14px;color:var(--gray);line-height:1.6;">
+              Saat siswa/guru checkout, mereka bisa memilih bayar dengan <strong>Saldo</strong> atau <strong>QRIS</strong>.
+              Jika pilih QRIS, sistem otomatis generate QR Code dengan nominal yang sudah sesuai belanjaan — siswa tinggal scan, tidak bisa ubah nominal.
+            </p>
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>Nama Merchant / Kantin</label>
+              <input type="text" id="qrisMerchantName" placeholder="Kantin SMTK Pelangi Kristus">
+            </div>
+            <div class="input-group">
+              <label>QRIS Merchant ID (dari penyedia QRIS)</label>
+              <input type="text" id="qrisMerchantId" placeholder="ID dari bank/e-wallet penyedia QRIS">
+            </div>
+            <div class="input-group">
+              <label>Nomor Rekening / NPWP (opsional)</label>
+              <input type="text" id="qrisAccountNo" placeholder="Untuk identifikasi di laporan">
+            </div>
+          </div>
+          <div style="background:#fffbeb;border:2px solid var(--secondary);border-radius:12px;padding:16px;margin-bottom:20px;">
+            <p style="font-weight:700;color:#92400e;margin-bottom:8px;"><i class="fas fa-exclamation-triangle"></i> Catatan Penting</p>
+            <p style="font-size:14px;color:#78350f;line-height:1.6;">
+              QRIS yang di-generate adalah <strong>QRIS statis dengan amount dinamis</strong> menggunakan format EMV QRIS Indonesia (sesuai standar Bank Indonesia).
+              Untuk implementasi production, kamu perlu mendaftar ke penyedia QRIS resmi (BCA, Mandiri, GoPay, OVO, DANA, dll) dan dapatkan Merchant ID resmi.
+              QR yang di-generate sudah include nominal otomatis sehingga user tidak bisa ubah jumlah bayar.
+            </p>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn-success" onclick="saveQrisSettings()" style="width:auto;"><i class="fas fa-save"></i> Simpan Pengaturan</button>
+            <button class="btn btn-outline" onclick="testQrisPreview()" style="width:auto;"><i class="fas fa-eye"></i> Preview QRIS Test</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Checkout Payment Modal -->
+<div class="modal" id="checkoutModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="checkoutModalTitle">Pilih Metode Pembayaran</h3>
+      <button class="close-btn" onclick="closeCheckoutModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="checkoutModalBody"></div>
+  </div>
+</div>
+
+<!-- Generic Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">Title</h3>
+      <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle"></i>
+  <span id="toastMessage">Message</span>
+</div>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────
+let currentUser = null;
+let currentRole = 'customer';
+let cart = [];
+let _menuCache = null;        // ← Performance: local cache, no more repeated API calls
+let _menuStockMap = new Map(); // ← Fast stock lookup by id
+const GUEST_TAX_RATE = 0.10;
+
+// ─── Default seed data ────────────────────────────────────────────────────
+const DEFAULT_USERS = [
+  { id: 1, name: 'Axcel', pin: '482719', saldo: 0, kelas: '10', created: '2024-03-01' },
+  { id: 2, name: 'Chavon', pin: '193650', saldo: 500, kelas: '10', created: '2024-03-01' },
+  { id: 3, name: 'Eivory', pin: '740285', saldo: 0, kelas: '10', created: '2024-03-01' },
+  { id: 4, name: 'Jeremy', pin: '561904', saldo: 0, kelas: '10', created: '2024-03-01' },
+  { id: 5, name: 'Raphael', pin: '836127', saldo: 50000, kelas: '10', created: '2024-03-01' },
+  { id: 6, name: 'Reynard', pin: '205973', saldo: 0, kelas: '10', created: '2024-03-01' },
+  { id: 7, name: 'Sharon', pin: '694318', saldo: 0, kelas: '10', created: '2024-03-01' },
+  { id: 8, name: 'Victoria', pin: '127540', saldo: 0, kelas: '10', created: '2024-03-01' },
+  { id: 9, name: 'Yungci', pin: '358261', saldo: 0, kelas: '10', created: '2024-03-01' },
+  { id: 10, name: 'Cayla', pin: '904176', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 11, name: 'Sema', pin: '271639', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 12, name: 'Kenneth', pin: '583024', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 13, name: 'Loisa', pin: '746192', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 14, name: 'Marvelle', pin: '315870', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 15, name: 'Matthew', pin: '690452', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 16, name: 'Samuel', pin: '148903', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 17, name: 'Stephanie', pin: '527641', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 18, name: 'Yehonadav', pin: '802316', saldo: 0, kelas: '11', created: '2024-03-01' },
+  { id: 19, name: 'Briana', pin: '471590', saldo: 0, kelas: '12', created: '2024-03-01' },
+  { id: 20, name: 'Fidelia', pin: '239864', saldo: 0, kelas: '12', created: '2024-03-01' },
+  { id: 21, name: 'Jonathan', pin: '658107', saldo: 0, kelas: '12', created: '2024-03-01' },
+  { id: 22, name: 'Kezia', pin: '914275', saldo: 0, kelas: '12', created: '2024-03-01' },
+  { id: 23, name: 'Meliana', pin: '360918', saldo: 0, kelas: 'guru', created: '2024-03-01' },
+  { id: 24, name: 'Theresia', pin: '742561', saldo: 0, kelas: 'guru', created: '2024-03-01' },
+  { id: 25, name: 'Luyse', pin: '195480', saldo: 5500, kelas: 'guru', created: '2024-03-01' },
+  { id: 26, name: 'Zefanya', pin: '823604', saldo: 0, kelas: 'guru', created: '2024-03-01' }
+];
+
+const DEFAULT_MENU = [
+  { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'Makanan', icon: '🍳', stock: 10 },
+  { id: 2, name: 'Mie Ayam Bakso', price: 12000, category: 'Makanan', icon: '🍜', stock: 15 },
+  { id: 3, name: 'Es Teh Manis', price: 5000, category: 'Minuman', icon: '🧃', stock: 20 },
+  { id: 4, name: 'Roti Bakar', price: 10000, category: 'Makanan', icon: '🍞', stock: 8 },
+  { id: 5, name: 'Kopi Susu', price: 8000, category: 'Minuman', icon: '☕', stock: 12 },
+  { id: 6, name: 'Pisang Goreng', price: 7000, category: 'Makanan', icon: '🍌', stock: 5 }
+];
+
+// ─── API config ───────────────────────────────────────────────────────────
+const API_BASE = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000/api'
+  : '/api';
+
+async function apiCall(endpoint, method = 'GET', body = null) {
+  try {
+    const options = { method, headers: { 'Content-Type': 'application/json' } };
+    if (body) options.body = JSON.stringify(body);
+    const res = await fetch(`${API_BASE}/${endpoint}`, options);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    return data;
+  } catch (err) {
+    console.error(`API Error (${endpoint}):`, err);
+    throw err;
+  }
+}
+
+// ─── Data helpers ─────────────────────────────────────────────────────────
+async function getUsers() { return await apiCall('users'); }
+async function getMenu() { return await apiCall('menu'); }
+async function saveMenu(menu) { _invalidateMenuCache(); return await apiCall('menu', 'POST', menu); }
+async function getTransactions() { return await apiCall('transactions'); }
+async function saveTransaction(t) { return await apiCall('transactions', 'POST', t); }
+async function getTopups() { return await apiCall('topups'); }
+
+// ─── PERFORMANCE: Menu Cache ──────────────────────────────────────────────
+// Instead of hitting the API on every cart interaction, we cache the menu
+// locally and only re-fetch when the menu actually changes.
+function _invalidateMenuCache() {
+  _menuCache = null;
+  _menuStockMap.clear();
+}
+
+async function getMenuCached() {
+  if (_menuCache) return _menuCache;
+  _menuCache = await getMenu();
+  _menuStockMap = new Map(_menuCache.map(m => [String(m._id || m.id), m]));
+  return _menuCache;
+}
+
+function getMenuItemFromCache(itemId) {
+  return _menuStockMap.get(String(itemId));
+}
+
+function updateCacheStock(itemId, delta) {
+  const item = _menuStockMap.get(String(itemId));
+  if (item) item.stock += delta;
+}
+
+// ─── QRIS Settings ────────────────────────────────────────────────────────
+function getQrisSettings() {
+  try {
+    return JSON.parse(localStorage.getItem('qrisSettings') || '{}');
+  } catch { return {}; }
+}
+
+function saveQrisSettings() {
+  const settings = {
+    merchantName: document.getElementById('qrisMerchantName').value.trim() || 'Kantin Sekolah',
+    merchantId: document.getElementById('qrisMerchantId').value.trim(),
+    accountNo: document.getElementById('qrisAccountNo').value.trim()
+  };
+  localStorage.setItem('qrisSettings', JSON.stringify(settings));
+  showToast('Pengaturan QRIS berhasil disimpan!');
+}
+
+function loadQrisSettingsForm() {
+  const s = getQrisSettings();
+  if (document.getElementById('qrisMerchantName'))
+    document.getElementById('qrisMerchantName').value = s.merchantName || '';
+  if (document.getElementById('qrisMerchantId'))
+    document.getElementById('qrisMerchantId').value = s.merchantId || '';
+  if (document.getElementById('qrisAccountNo'))
+    document.getElementById('qrisAccountNo').value = s.accountNo || '';
+}
+
+function testQrisPreview() {
+  showQrisPayment(15000);
+}
+
+// ─── QRIS Generation (EMV QRIS Indonesia format) ──────────────────────────
+// Format sesuai standar Bank Indonesia (QRIS) - TLV encoding
+function buildQrisString(amount) {
+  const settings = getQrisSettings();
+  // Jika tidak ada merchant ID, pakai format demo/test
+  const merchantId = settings.merchantId || '9360041';
+  const merchantName = (settings.merchantName || 'Kantin Sekolah').substring(0, 25);
+
+  function tlv(tag, value) {
+    const len = String(value.length).padStart(2, '0');
+    return `${tag}${len}${value}`;
+  }
+
+  function crc16(str) {
+    let crc = 0xFFFF;
+    for (let i = 0; i < str.length; i++) {
+      crc ^= str.charCodeAt(i) << 8;
+      for (let j = 0; j < 8; j++) {
+        if (crc & 0x8000) crc = (crc << 1) ^ 0x1021;
+        else crc <<= 1;
+        crc &= 0xFFFF;
+      }
+    }
+    return crc.toString(16).toUpperCase().padStart(4, '0');
+  }
+
+  // Merchant Account Info (QRIS)
+  const merchantAccountInfo = tlv('00', 'COM.TELKOM.WWW') +
+    tlv('01', merchantId) +
+    tlv('02', '93600001');
+  const mai = tlv('26', merchantAccountInfo);
+
+  let qris = tlv('00', '01');               // Payload Format Indicator
+  qris += tlv('01', '12');                   // Point of Initiation (12=dynamic)
+  qris += mai;                               // Merchant Account Info
+  qris += tlv('52', '5812');                 // Merchant Category Code (eating places)
+  qris += tlv('53', '360');                  // Transaction Currency (IDR)
+  if (amount > 0) {
+    qris += tlv('54', String(amount));       // Transaction Amount — LOCKED
+  }
+  qris += tlv('58', 'ID');                   // Country Code
+  qris += tlv('59', merchantName);           // Merchant Name
+  qris += tlv('60', 'Surabaya');            // Merchant City
+  qris += tlv('62', tlv('05', 'KANTIN'));    // Additional Data Field
+  qris += '6304';                            // CRC placeholder
+  qris += crc16(qris);
+
+  return qris;
+}
+
+function showQrisPayment(amount) {
+  const modal = document.getElementById('checkoutModal');
+  const body = document.getElementById('checkoutModalBody');
+  document.getElementById('checkoutModalTitle').textContent = 'Scan QRIS untuk Bayar';
+
+  const settings = getQrisSettings();
+  const merchantName = settings.merchantName || 'Kantin Sekolah';
+  const qrisString = buildQrisString(amount);
+
+  body.innerHTML = `
+    <button class="back-to-method-btn" onclick="openCheckoutModal()">
+      <i class="fas fa-arrow-left"></i> Kembali
+    </button>
+    <div class="qris-container">
+      <div class="qris-badge"><i class="fas fa-qrcode"></i> QRIS Indonesia</div>
+      <div id="qrcode"></div>
+      <div class="qris-amount">${formatRupiah(amount)}</div>
+      <div class="qris-merchant">
+        <strong>${merchantName}</strong><br>
+        <span style="font-size:12px;">Nominal sudah terkunci otomatis — tidak dapat diubah</span>
+      </div>
+      <div class="qris-instruction">
+        1. Buka aplikasi dompet digital atau m-banking kamu<br>
+        2. Pilih "Scan QR" atau "QRIS"<br>
+        3. Arahkan kamera ke QR Code di atas<br>
+        4. Nominal <strong>${formatRupiah(amount)}</strong> sudah otomatis terisi<br>
+        5. Konfirmasi pembayaran
+      </div>
+      <button class="btn qris-confirm-btn" onclick="confirmQrisPayment()">
+        <i class="fas fa-check-circle"></i> Saya Sudah Bayar
+      </button>
+    </div>`;
+
+  modal.classList.add('active');
+
+  // Generate QR after DOM is ready
+  setTimeout(() => {
+    try {
+      new QRCode(document.getElementById('qrcode'), {
+        text: qrisString,
+        width: 220,
+        height: 220,
+        colorDark: '#1e293b',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch (e) {
+      document.getElementById('qrcode').innerHTML =
+        `<div style="padding:20px;background:#f1f5f9;border-radius:12px;font-size:12px;word-break:break-all;max-width:220px;color:var(--gray);">
+          <i class="fas fa-qrcode" style="font-size:48px;display:block;margin-bottom:8px;color:var(--primary)"></i>
+          QR Code siap.<br>QRIS: ${qrisString.substring(0, 40)}...
+        </div>`;
+    }
+  }, 50);
+}
+
+async function confirmQrisPayment() {
+  await processCheckout('qris');
+}
+
+// ─── Checkout Modal ───────────────────────────────────────────────────────
+function openCheckoutModal() {
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const userIsGuest = isGuest(currentUser);
+  const tax = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
+  const total = subtotal + tax;
+
+  const modal = document.getElementById('checkoutModal');
+  const body = document.getElementById('checkoutModalBody');
+  document.getElementById('checkoutModalTitle').textContent = 'Pilih Metode Pembayaran';
+
+  const saldoOk = currentUser.saldo >= total;
+
+  body.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:14px;color:var(--gray);margin-bottom:4px;">Total Pembayaran</div>
+      <div style="font-size:32px;font-weight:800;color:var(--primary);">${formatRupiah(total)}</div>
+      ${tax > 0 ? `<div style="font-size:13px;color:var(--warning);">Termasuk pajak tamu ${formatRupiah(tax)}</div>` : ''}
+    </div>
+    <div class="payment-method-selector">
+      <button class="payment-method-btn ${saldoOk ? '' : 'opacity-50'}" onclick="selectPaymentMethod('saldo')" ${!saldoOk ? 'title="Saldo tidak cukup"' : ''}>
+        <i class="fas fa-wallet" style="color:var(--success);"></i>
+        <div class="method-name">Bayar Saldo</div>
+        <div class="method-desc">Saldo: ${formatRupiah(currentUser.saldo)}</div>
+        ${!saldoOk ? '<div style="color:var(--danger);font-size:11px;margin-top:4px;">⚠ Saldo tidak cukup</div>' : ''}
+      </button>
+      <button class="payment-method-btn" onclick="selectPaymentMethod('qris')">
+        <i class="fas fa-qrcode" style="color:#e11d48;"></i>
+        <div class="method-name">Bayar QRIS</div>
+        <div class="method-desc">GoPay, OVO, Dana, Bank</div>
+      </button>
+    </div>
+    <button class="btn btn-outline" onclick="closeCheckoutModal()" style="width:100%;margin-top:8px;">
+      Batal
+    </button>`;
+
+  modal.classList.add('active');
+}
+
+function selectPaymentMethod(method) {
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const userIsGuest = isGuest(currentUser);
+  const tax = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
+  const total = subtotal + tax;
+
+  if (method === 'qris') {
+    showQrisPayment(total);
+    return;
+  }
+
+  // Saldo payment
+  const modal = document.getElementById('checkoutModal');
+  const body = document.getElementById('checkoutModalBody');
+  document.getElementById('checkoutModalTitle').textContent = 'Konfirmasi Pembayaran Saldo';
+
+  const saldoOk = currentUser.saldo >= total;
+  const sisaSaldo = currentUser.saldo - total;
+
+  body.innerHTML = `
+    <button class="back-to-method-btn" onclick="openCheckoutModal()">
+      <i class="fas fa-arrow-left"></i> Kembali
+    </button>
+    ${saldoOk
+      ? `<div class="saldo-payment-info">
+          <div class="saldo-row"><span>Saldo Sekarang</span><span>${formatRupiah(currentUser.saldo)}</span></div>
+          ${tax > 0 ? `<div class="saldo-row" style="color:var(--warning);"><span>Pajak Tamu (10%)</span><span>${formatRupiah(tax)}</span></div>` : ''}
+          <div class="saldo-row"><span>Total Bayar</span><span>${formatRupiah(total)}</span></div>
+          <div class="saldo-row"><span>Saldo Sisa</span><span style="color:var(--success);">${formatRupiah(sisaSaldo)}</span></div>
+        </div>
+        <button class="btn btn-success" onclick="processCheckout('saldo')" style="width:100%;padding:16px;font-size:18px;">
+          <i class="fas fa-check"></i> Konfirmasi Bayar ${formatRupiah(total)}
+        </button>`
+      : `<div class="saldo-insufficient">
+          <i class="fas fa-exclamation-circle" style="font-size:32px;margin-bottom:8px;display:block;"></i>
+          Saldo tidak cukup!<br>
+          <span style="font-size:14px;font-weight:normal;">Saldo: ${formatRupiah(currentUser.saldo)} | Butuh: ${formatRupiah(total)}</span>
+        </div>
+        <p style="text-align:center;color:var(--gray);margin-bottom:16px;">Hubungi admin untuk top-up saldo, atau bayar dengan QRIS.</p>
+        <button class="btn" onclick="selectPaymentMethod('qris')" style="width:100%;margin-bottom:12px;">
+          <i class="fas fa-qrcode"></i> Bayar dengan QRIS
+        </button>`
+    }
+    <button class="btn btn-outline" onclick="closeCheckoutModal()" style="width:100%;margin-top:8px;">
+      Batal
+    </button>`;
+}
+
+function closeCheckoutModal() {
+  document.getElementById('checkoutModal').classList.remove('active');
+}
+
+async function processCheckout(method) {
+  try {
+    const menu = await getMenuCached();
+    const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const userIsGuest = isGuest(currentUser);
+    const tax = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
+    const total = subtotal + tax;
+
+    // Validate stock via cache (no extra API call)
+    for (const cartItem of cart) {
+      const menuItem = getMenuItemFromCache(cartItem.id);
+      if (!menuItem || cartItem.qty > menuItem.stock) {
+        showToast(`Stok ${menuItem ? menuItem.name : 'item'} tidak cukup!`, 'error');
+        closeCheckoutModal();
+        return;
+      }
+    }
+
+    // Validate saldo only if paying with saldo
+    if (method === 'saldo' && currentUser.saldo < total) {
+      showToast('Saldo tidak cukup!', 'error');
+      return;
+    }
+
+    // Save transaction
+    await saveTransaction({
+      userId: currentUser.id,
+      userName: currentUser.name,
+      kelas: currentUser.kelas,
+      items: cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
+      subtotal, tax, total,
+      paymentMethod: method,
+      type: 'buy',
+      date: new Date().toISOString()
+    });
+
+    // Invalidate cache so next loadMenu() gets fresh stock
+    _invalidateMenuCache();
+
+    cart = [];
+    closeCheckoutModal();
+    updateCartUI(); // sync UI immediately without API call
+    await loadMenu();
+    await updateSaldoDisplay();
+
+    const msg = method === 'qris'
+      ? `Pembayaran QRIS berhasil! Total: ${formatRupiah(total)}`
+      : (userIsGuest
+        ? `Pembayaran berhasil! Total: ${formatRupiah(total)} (Pajak: ${formatRupiah(tax)})`
+        : 'Pembayaran berhasil! Terima kasih.');
+    showToast(msg);
+  } catch (err) {
+    showToast('Gagal melakukan pembayaran!', 'error');
+    console.error('checkout error:', err);
+  }
+}
+
+// ─── Initialise ───────────────────────────────────────────────────────────
+async function initializeData() {
+  try {
+    const [users, menu] = await Promise.all([getUsers(), getMenu()]);
+    if (users.length === 0) {
+      for (const user of DEFAULT_USERS) {
+        await apiCall('auth', 'POST', { action: 'register', ...user });
+      }
+    }
+    if (menu.length === 0) {
+      await saveMenu(DEFAULT_MENU);
+    }
+  } catch (err) {
+    console.error('Init error:', err);
+  }
+}
+
+// ─── Utilities ────────────────────────────────────────────────────────────
+function formatRupiah(angka) {
+  return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  toast.className = 'toast show ' + type;
+  document.getElementById('toastMessage').textContent = message;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+function isGuest(user) { return user && user.kelas === 'guest'; }
+
+// ─── Login ────────────────────────────────────────────────────────────────
+function selectRole(role, event) {
+  currentRole = role;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  event.target.closest('.role-btn').classList.add('active');
+  document.getElementById('customerLogin').classList.toggle('hidden', role !== 'customer');
+  document.getElementById('adminLogin').classList.toggle('hidden', role !== 'admin');
+}
+
+async function login() {
+  if (currentRole === 'admin') {
+    const user = document.getElementById('adminUser').value;
+    const pass = document.getElementById('adminPass').value;
+    if (user === 'admin' && pass === '015389') {
+      currentUser = { name: 'Admin', role: 'admin' };
+      await enterApp();
+    } else {
+      showToast('Username atau password salah!', 'error');
+    }
+    return;
+  }
+
+  const name = document.getElementById('customerName').value.trim();
+  const pin = document.getElementById('customerPin').value;
+  if (!name || !pin || pin.length !== 6) {
+    showToast('Mohon isi nama dan PIN 6 digit!', 'error');
+    return;
+  }
+  try {
+    const result = await apiCall('auth', 'POST', { action: 'login', name, pin });
+    if (!result.success) { showToast(result.error || 'Login gagal!', 'error'); return; }
+    currentUser = {
+      id: result.user.id || result.user._id,
+      name: result.user.name,
+      kelas: result.user.kelas,
+      saldo: result.user.saldo,
+      role: 'customer'
+    };
+    await enterApp();
+  } catch (err) {
+    showToast('Gagal terhubung ke server!', 'error');
+  }
+}
+
+async function enterApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+
+  if (currentUser.role === 'admin') {
+    document.getElementById('customerView').classList.add('hidden');
+    document.getElementById('adminView').classList.remove('hidden');
+    document.getElementById('saldoDisplay').style.display = 'none';
+    document.getElementById('kelasDisplay').style.display = 'none';
+    document.getElementById('guestDisplay').style.display = 'none';
+    document.getElementById('welcomeText').textContent = 'Dashboard Admin';
+    document.getElementById('subText').textContent = 'Kelola kantin dengan mudah';
+    await loadAdminData();
+  } else {
+    document.getElementById('customerView').classList.remove('hidden');
+    document.getElementById('adminView').classList.add('hidden');
+    const userIsGuest = isGuest(currentUser);
+
+    if (userIsGuest) {
+      document.getElementById('saldoDisplay').style.display = 'flex';
+      document.getElementById('kelasDisplay').style.display = 'none';
+      document.getElementById('guestDisplay').style.display = 'flex';
+      document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
+      document.getElementById('subText').textContent = 'Tamu - Hubungi admin untuk jadi member';
+      const customerView = document.getElementById('customerView');
+      let notice = document.getElementById('guestNotice');
+      if (!notice) {
+        notice = document.createElement('div');
+        notice.id = 'guestNotice';
+        notice.className = 'guest-notice';
+        notice.innerHTML = `
+          <i class="fas fa-exclamation-triangle" style="font-size:20px;"></i>
+          <div><strong>Perhatian:</strong> Anda dikenakan biaya tambahan 10% sebagai tamu.
+          Hubungi admin untuk mendaftar sebagai member reguler!</div>`;
+        customerView.insertBefore(notice, document.getElementById('menuGrid'));
+      }
+    } else {
+      document.getElementById('saldoDisplay').style.display = 'flex';
+      document.getElementById('kelasDisplay').style.display = 'flex';
+      document.getElementById('guestDisplay').style.display = 'none';
+      const notice = document.getElementById('guestNotice');
+      if (notice) notice.remove();
+      const kelasText = currentUser.kelas === 'guru' ? 'Guru' : `Kelas ${currentUser.kelas}`;
+      document.getElementById('kelasText').textContent = kelasText;
+      document.getElementById('welcomeText').textContent = `Halo, ${currentUser.name}!`;
+      document.getElementById('subText').textContent = kelasText;
+    }
+    await updateSaldoDisplay();
+    await loadMenu();
+  }
+}
+
+function logout() {
+  currentUser = null;
+  cart = [];
+  _invalidateMenuCache();
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('mainApp').style.display = 'none';
+  const notice = document.getElementById('guestNotice');
+  if (notice) notice.remove();
+  document.getElementById('customerName').value = '';
+  document.getElementById('customerPin').value = '';
+  document.getElementById('adminUser').value = '';
+  document.getElementById('adminPass').value = '';
+}
+
+// ─── Customer ─────────────────────────────────────────────────────────────
+async function updateSaldoDisplay() {
+  try {
+    const users = await getUsers();
+    const user = users.find(u => String(u._id || u.id) === String(currentUser.id));
+    if (user) {
+      document.getElementById('saldoAmount').textContent = formatRupiah(user.saldo);
+      currentUser.saldo = user.saldo;
+    }
+  } catch (err) {
+    console.error('updateSaldoDisplay error:', err);
+  }
+}
+
+async function loadMenu() {
+  try {
+    // Always fetch fresh from API, then populate cache
+    _invalidateMenuCache();
+    const menu = await getMenuCached();
+    const grid = document.getElementById('menuGrid');
+    grid.innerHTML = '';
+    menu.forEach(item => {
+      const oos = item.stock <= 0;
+      const card = document.createElement('div');
+      card.className = 'card' + (oos ? ' out-of-stock' : '');
+      card.innerHTML = `
+        <div class="card-image ${oos ? 'out-of-stock' : ''}">
+          <div style="font-size:64px;">${item.icon}</div>
+          <div class="card-badge">${item.category}</div>
+          <div class="stock-badge ${oos ? 'empty' : ''}">Stok: ${item.stock}</div>
+        </div>
+        <div class="card-content">
+          <div class="card-title">${item.name}</div>
+          <div class="card-price">${formatRupiah(item.price)}</div>
+          <div class="card-actions">
+            <button class="btn-small btn-secondary" onclick="addToCart('${item._id || item.id}')" ${oos ? 'disabled' : ''}>
+              ${oos ? '<i class="fas fa-times"></i> Habis' : '<i class="fas fa-plus"></i> Tambah'}
+            </button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  } catch (err) {
+    console.error('loadMenu error:', err);
+  }
+}
+
+// ─── PERFORMANCE: addToCart uses cache, zero extra API calls ──────────────
+function addToCart(itemId) {
+  // Synchronous — uses cache only, no await needed
+  const item = getMenuItemFromCache(itemId);
+  if (!item || item.stock <= 0) { showToast('Maaf, stok habis!', 'error'); return; }
+
+  const existing = cart.find(c => String(c.id) === String(itemId));
+  if (existing) {
+    if (existing.qty >= item.stock) { showToast('Stok tidak cukup!', 'error'); return; }
+    existing.qty++;
+  } else {
+    cart.push({ id: String(item._id || item.id), name: item.name, price: item.price, icon: item.icon, qty: 1 });
+  }
+
+  updateCartUI(); // also synchronous, no API calls
+  showToast(`${item.name} ditambahkan ke keranjang`);
+}
+
+// ─── PERFORMANCE: updateCartUI is now fully synchronous (no API calls) ────
+function updateCartUI() {
+  const cartSection = document.getElementById('cartSection');
+  const cartItems = document.getElementById('cartItems');
+  if (cart.length === 0) { cartSection.style.display = 'none'; return; }
+
+  cartSection.style.display = 'block';
+  cartItems.innerHTML = '';
+  let subtotal = 0;
+
+  cart.forEach((item, index) => {
+    subtotal += item.price * item.qty;
+    const menuItem = getMenuItemFromCache(item.id);
+    const maxStock = menuItem ? menuItem.stock : 99;
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <div class="cart-item-info">
+        <h4>${item.name}</h4>
+        <p>${formatRupiah(item.price)} x ${item.qty}</p>
+      </div>
+      <div class="cart-item-actions">
+        <button class="qty-btn" onclick="updateQtySync(${index}, -1)">-</button>
+        <span style="font-weight:700;min-width:30px;text-align:center;">${item.qty}</span>
+        <button class="qty-btn" onclick="updateQtySync(${index}, 1)" ${item.qty >= maxStock ? 'disabled' : ''}>+</button>
+        <span style="font-weight:700;color:var(--primary);min-width:100px;text-align:right;">${formatRupiah(item.price * item.qty)}</span>
+      </div>`;
+    cartItems.appendChild(div);
+  });
+
+  const userIsGuest = isGuest(currentUser);
+  const tax = userIsGuest ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
+  const total = subtotal + tax;
+
+  const cartSummary = document.getElementById('cartSummary');
+  let summaryHTML = `<div class="summary-row"><span>Subtotal</span><span>${formatRupiah(subtotal)}</span></div>`;
+  if (tax > 0) summaryHTML += `<div class="summary-row tax-row"><span>Pajak Tamu (10%)</span><span>${formatRupiah(tax)}</span></div>`;
+  summaryHTML += `<div class="summary-row total"><span>Total Bayar</span><span>${formatRupiah(total)}</span></div>`;
+  cartSummary.innerHTML = summaryHTML;
+}
+
+// Keep async wrapper for backwards compat
+async function updateCart() { updateCartUI(); }
+
+// ─── PERFORMANCE: updateQty is now synchronous ───────────────────────────
+function updateQtySync(index, change) {
+  const cartItem = cart[index];
+  const menuItem = getMenuItemFromCache(cartItem.id);
+  const maxStock = menuItem ? menuItem.stock : 99;
+  const newQty = cartItem.qty + change;
+
+  if (newQty <= 0) {
+    cart.splice(index, 1);
+  } else if (newQty > maxStock) {
+    showToast('Stok tidak cukup!', 'error'); return;
+  } else {
+    cartItem.qty = newQty;
+  }
+  updateCartUI();
+}
+async function updateQty(index, change) { updateQtySync(index, change); }
+
+// ─── Admin ────────────────────────────────────────────────────────────────
+async function loadAdminData() {
+  await Promise.all([
+    updateAdminStats(),
+    loadAdminMenu(),
+    loadUsersList(),
+    loadRiwayat(),
+    updateTopupSelect()
+  ]);
+}
+
+async function updateAdminStats() {
+  try {
+    const [users, transactions, topups] = await Promise.all([getUsers(), getTransactions(), getTopups()]);
+    const today = new Date().toLocaleDateString('id-ID');
+    const todayTx = transactions.filter(t => t.date && t.date.includes(today));
+    const revenue = todayTx.reduce((s, t) => s + t.total, 0);
+    const totalTopupSum = topups.reduce((s, t) => s + t.amount, 0);
+    const guestTx = todayTx.filter(t => t.kelas === 'guest');
+    const guestTax = guestTx.reduce((s, t) => s + (t.tax || 0), 0);
+
+    document.getElementById('totalUsers').textContent = users.length;
+    document.getElementById('totalSales').textContent = todayTx.length;
+    document.getElementById('totalRevenue').textContent = formatRupiah(revenue);
+    document.getElementById('totalTopup').textContent = formatRupiah(totalTopupSum);
+
+    const guestStats = document.getElementById('guestStats');
+    if (guestTx.length > 0) {
+      document.getElementById('guestCount').textContent = guestTx.length;
+      document.getElementById('guestTax').textContent = formatRupiah(guestTax);
+      guestStats.style.display = 'block';
+    } else {
+      guestStats.style.display = 'none';
+    }
+  } catch (err) {
+    console.error('updateAdminStats error:', err);
+  }
+}
+
+function switchTab(tab, event) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(tab + 'Tab').classList.add('active');
+  if (tab === 'users') { loadUsersList(); updateTopupSelect(); }
+  if (tab === 'riwayat') loadRiwayat();
+  if (tab === 'qrisSettings') loadQrisSettingsForm();
+  if (tab === 'auditStok') initAuditTab();
+}
+
+function switchRiwayatTab(type, event) {
+  document.querySelectorAll('.riwayat-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.riwayat-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('riwayat' + (type === 'pembelian' ? 'Pembelian' : 'Topup')).classList.add('active');
+}
+
+async function loadAdminMenu() {
+  try {
+    const menu = await getMenu();
+    const grid = document.getElementById('adminMenuGrid');
+    grid.innerHTML = '';
+    menu.forEach(item => {
+      const oos = item.stock <= 0;
+      const id = item._id || item.id;
+      const card = document.createElement('div');
+      card.className = 'card' + (oos ? ' out-of-stock' : '');
+      card.innerHTML = `
+        <div class="card-image ${oos ? 'out-of-stock' : ''}" style="height:120px;font-size:48px;">
+          ${item.icon}
+          <div class="stock-badge ${oos ? 'empty' : ''}" style="font-size:10px;">Stok: ${item.stock}</div>
+        </div>
+        <div class="card-content">
+          <div class="card-title">${item.name}</div>
+          <div class="card-price">${formatRupiah(item.price)}</div>
+          <div class="card-actions">
+            <button class="btn-small btn-secondary" onclick="editStock('${id}')"><i class="fas fa-edit"></i> Stok</button>
+            <button class="btn-small btn-danger" onclick="deleteMenuItem('${id}')"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  } catch (err) {
+    console.error('loadAdminMenu error:', err);
+  }
+}
+
+async function addMenuItem() {
+  const name = document.getElementById('newItemName').value.trim();
+  const price = parseInt(document.getElementById('newItemPrice').value);
+  const category = document.getElementById('newItemCategory').value.trim();
+  const stock = parseInt(document.getElementById('newItemStock').value) || 0;
+  if (!name || !price || !category) { showToast('Mohon isi semua field!', 'error'); return; }
+  try {
+    const icons = ['🍳','🍜','🧃','🍞','☕','🍌','🍔','🍕','🥗','🥤'];
+    const menu = await getMenu();
+    menu.push({ id: Date.now(), name, price, category, stock, icon: icons[Math.floor(Math.random() * icons.length)] });
+    await saveMenu(menu);
+    document.getElementById('newItemName').value = '';
+    document.getElementById('newItemPrice').value = '';
+    document.getElementById('newItemCategory').value = '';
+    document.getElementById('newItemStock').value = '10';
+    await loadAdminMenu();
+    showToast('Menu berhasil ditambahkan!');
+  } catch (err) {
+    showToast('Gagal menambahkan menu!', 'error');
+  }
+}
+
+async function editStock(itemId) {
+  try {
+    const menu = await getMenu();
+    const item = menu.find(m => String(m._id || m.id) === String(itemId));
+    if (!item) return;
+    const newStock = prompt(`Edit stok untuk ${item.name}:`, item.stock);
+    if (newStock !== null && !isNaN(newStock) && newStock !== '') {
+      item.stock = parseInt(newStock);
+      await saveMenu(menu);
+      _invalidateMenuCache();
+      await loadAdminMenu();
+      showToast(`Stok ${item.name} diupdate: ${item.stock}`);
+    }
+  } catch (err) {
+    showToast('Gagal mengupdate stok!', 'error');
+  }
+}
+
+async function deleteMenuItem(itemId) {
+  if (!confirm('Yakin ingin menghapus menu ini?')) return;
+  try {
+    await apiCall('menu', 'DELETE', { id: String(itemId) });
+    _invalidateMenuCache();
+    await loadAdminMenu();
+    showToast('Menu dihapus');
+  } catch (err) {
+    showToast('Gagal menghapus menu!', 'error');
+  }
+}
+
+async function addUser() {
+  const name = document.getElementById('newUserName').value.trim();
+  const pin = document.getElementById('newUserPin').value;
+  const kelas = document.getElementById('newUserKelas').value;
+  const saldo = parseInt(document.getElementById('newUserSaldo').value) || 0;
+  if (!name || !pin || pin.length !== 6) { showToast('Mohon isi nama dan PIN 6 digit!', 'error'); return; }
+  try {
+    await apiCall('auth', 'POST', { action: 'register', name, pin, kelas, saldo });
+    document.getElementById('newUserName').value = '';
+    document.getElementById('newUserPin').value = '';
+    document.getElementById('newUserSaldo').value = '0';
+    document.getElementById('newUserKelas').value = '10';
+    await loadUsersList();
+    await updateTopupSelect();
+    await updateAdminStats();
+    const kelasLabel = kelas === 'guest' ? 'Tamu' : (kelas === 'guru' ? 'Guru' : 'Kelas ' + kelas);
+    showToast(`${kelasLabel} ${name} berhasil ditambahkan!`);
+  } catch (err) {
+    showToast('Gagal menambahkan pengguna!', 'error');
+  }
+}
+
+async function deleteUser(userId) {
+  if (!confirm('Yakin ingin menghapus pengguna ini?')) return;
+  try {
+    await apiCall('users', 'POST', { action: 'delete', userId: String(userId) });
+    await loadUsersList();
+    await updateTopupSelect();
+    await updateAdminStats();
+    showToast('Pengguna dihapus');
+  } catch (err) {
+    showToast('Gagal menghapus pengguna!', 'error');
+  }
+}
+
+async function updateTopupSelect() {
+  try {
+    const users = await getUsers();
+    const select = document.getElementById('topupUserSelect');
+    const current = select.value;
+    select.innerHTML = '<option value="">-- Pilih Pengguna --</option>';
+    users.forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u._id || u.id;
+      const kelasLabel = u.kelas === 'guest' ? 'Tamu' : (u.kelas === 'guru' ? 'Guru' : 'Kelas ' + u.kelas);
+      opt.textContent = `${u.name} (${kelasLabel}) - ${formatRupiah(u.saldo)}`;
+      select.appendChild(opt);
+    });
+    if (current) select.value = current;
+  } catch (err) {
+    console.error('updateTopupSelect error:', err);
+  }
+}
+
+async function topupSaldo() {
+  const userId = document.getElementById('topupUserSelect').value;
+  const amount = parseInt(document.getElementById('topupAmount').value);
+  if (!userId || !amount || amount <= 0) { showToast('Pilih pengguna dan masukkan jumlah!', 'error'); return; }
+  try {
+    await apiCall('topups', 'POST', { userId, amount, adminName: 'Admin', date: new Date().toISOString() });
+    document.getElementById('topupAmount').value = '';
+    await updateTopupSelect();
+    await updateAdminStats();
+    showToast(`Top-up ${formatRupiah(amount)} berhasil!`);
+  } catch (err) {
+    showToast('Gagal melakukan top-up!', 'error');
+  }
+}
+
+async function loadUsersList() {
+  try {
+    const users = await getUsers();
+    const list = document.getElementById('usersList');
+    list.innerHTML = '';
+    users.forEach(u => {
+      const kelasLabel = u.kelas === 'guest' ? 'Tamu' : (u.kelas === 'guru' ? 'Guru' : 'Kelas ' + u.kelas);
+      const kelasClass = u.kelas === 'guest' ? 'kelas-guest' : (u.kelas === 'guru' ? 'kelas-guru' : `kelas-${u.kelas}`);
+      const id = u._id || u.id;
+      const row = document.createElement('div');
+      row.className = 'list-item';
+      row.innerHTML = `
+        <div><strong>${u.name}</strong></div>
+        <div><span class="kelas-badge-small ${kelasClass}">${kelasLabel}</span></div>
+        <div><span class="pin-display">${u.pin}</span></div>
+        <div>${formatRupiah(u.saldo)}</div>
+        <div style="font-size:13px;">${u.created || '-'}</div>
+        <div><span style="color:var(--success);font-weight:600;">Aktif</span></div>
+        <div class="action-btns">
+          <button class="btn-icon btn-delete" onclick="deleteUser('${id}')" title="Hapus">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>`;
+      list.appendChild(row);
+    });
+    if (users.length === 0) {
+      list.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>Belum ada pengguna</p></div>';
+    }
+  } catch (err) {
+    console.error('loadUsersList error:', err);
+  }
+}
+
+async function loadRiwayat() {
+  try {
+    const [transactions, topups] = await Promise.all([getTransactions(), getTopups()]);
+
+    const pembelianList = document.getElementById('pembelianList');
+    pembelianList.innerHTML = '';
+    const buys = [...transactions].reverse();
+    buys.forEach(t => {
+      const kLabel = t.kelas === 'guest' ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : 'Kelas ' + t.kelas);
+      const kClass = t.kelas === 'guest' ? 'kelas-guest' : (t.kelas === 'guru' ? 'kelas-guru' : `kelas-${t.kelas}`);
+      const itemsText = t.items ? t.items.map(i => `${i.name} x${i.qty}`).join(', ') : '-';
+      const dt = t.date ? new Date(t.date).toLocaleString('id-ID') : '-';
+      const pm = t.paymentMethod === 'qris'
+        ? '<span style="background:#fce7f3;color:#be185d;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">QRIS</span>'
+        : '<span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">Saldo</span>';
+      const row = document.createElement('div');
+      row.className = 'list-item';
+      row.innerHTML = `
+        <div><strong>${t.userName}</strong></div>
+        <div><span class="kelas-badge-small ${kClass}">${kLabel}</span></div>
+        <div style="font-size:13px;">${itemsText}</div>
+        <div style="font-weight:700;">${formatRupiah(t.total)}</div>
+        <div style="font-size:13px;">${dt}</div>
+        <div>${pm}</div>`;
+      pembelianList.appendChild(row);
+    });
+    if (buys.length === 0) pembelianList.innerHTML = '<div class="empty-state"><i class="fas fa-receipt"></i><p>Belum ada transaksi</p></div>';
+
+    const topupList = document.getElementById('topupList');
+    topupList.innerHTML = '';
+    const topupsSorted = [...topups].reverse();
+    topupsSorted.forEach(t => {
+      const kLabel = t.kelas === 'guest' ? 'Tamu' : (t.kelas === 'guru' ? 'Guru' : t.kelas ? 'Kelas ' + t.kelas : '-');
+      const dt = t.date ? new Date(t.date).toLocaleString('id-ID') : '-';
+      const row = document.createElement('div');
+      row.className = 'list-item';
+      row.innerHTML = `
+        <div><strong>${t.userName || t.userId}</strong></div>
+        <div>${kLabel}</div>
+        <div style="font-weight:700;color:var(--success);">+${formatRupiah(t.amount)}</div>
+        <div>${t.saldoAfter ? formatRupiah(t.saldoAfter) : '-'}</div>
+        <div style="font-size:13px;">${dt}</div>
+        <div>${t.adminName || 'Admin'}</div>`;
+      topupList.appendChild(row);
+    });
+    if (topupsSorted.length === 0) topupList.innerHTML = '<div class="empty-state"><i class="fas fa-coins"></i><p>Belum ada top-up</p></div>';
+  } catch (err) {
+    console.error('loadRiwayat error:', err);
+  }
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+// ─── Export / Import ─────────────────────────────────────────────────────
+async function exportAllData() {
+  try {
+    const [users, menu, transactions, topups] = await Promise.all([getUsers(), getMenu(), getTransactions(), getTopups()]);
+    downloadJSON({ users, menu, transactions, topups, exportedAt: new Date().toISOString() }, 'kantin-backup-full.json');
+    showToast('Export berhasil!');
+  } catch { showToast('Gagal export!', 'error'); }
+}
+async function exportUsers() {
+  try {
+    const users = await getUsers();
+    downloadJSON(users, 'kantin-users.json');
+    showToast('Export users berhasil!');
+  } catch { showToast('Gagal export!', 'error'); }
+}
+async function exportTransactions() {
+  try {
+    const transactions = await getTransactions();
+    downloadJSON(transactions, 'kantin-transactions.json');
+    showToast('Export transaksi berhasil!');
+  } catch { showToast('Gagal export!', 'error'); }
+}
+function downloadJSON(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      showToast('Import berhasil! Refresh untuk melihat data.', 'warning');
+    } catch {
+      showToast('File tidak valid!', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// AUDIT STOK — Stock discrepancy detection system
+// ═══════════════════════════════════════════════════════════════════
+
+// In-memory state for current audit session
+let _auditData = []; // { menuItem, stockOpen, soldToday, stockSystem, stockPhysical, diff, txList }
+
+function getAuditLogs() {
+  try { return JSON.parse(localStorage.getItem('auditLogs') || '[]'); }
+  catch { return []; }
+}
+function saveAuditLog(log) {
+  const logs = getAuditLogs();
+  logs.unshift(log); // newest first
+  if (logs.length > 60) logs.pop(); // keep max 60 entries
+  localStorage.setItem('auditLogs', JSON.stringify(logs));
+}
+
+// Called when tab is opened
+function initAuditTab() {
+  const dateInput = document.getElementById('auditDate');
+  if (!dateInput.value) {
+    dateInput.value = new Date().toISOString().slice(0, 10);
+  }
+  loadAuditLogSection();
+}
+
+async function loadAuditData() {
+  const dateStr = document.getElementById('auditDate').value;
+  if (!dateStr) { showToast('Pilih tanggal dulu!', 'error'); return; }
+
+  document.getElementById('auditLastUpdated').textContent = 'Memuat...';
+
+  try {
+    const [menu, transactions] = await Promise.all([getMenu(), getTransactions()]);
+
+    // Filter transactions for selected date
+    const dayTx = transactions.filter(t => {
+      if (!t.date) return false;
+      const txDate = new Date(t.date).toISOString().slice(0, 10);
+      return txDate === dateStr;
+    });
+
+    // Build sold-per-item map for selected date
+    const soldMap = {}; // itemId → { qty, txRefs }
+    const txRefs = {}; // itemId → [{ userName, qty, time }]
+    dayTx.forEach(tx => {
+      if (!tx.items) return;
+      tx.items.forEach(item => {
+        const key = String(item.id);
+        soldMap[key] = (soldMap[key] || 0) + item.qty;
+        if (!txRefs[key]) txRefs[key] = [];
+        txRefs[key].push({
+          userName: tx.userName,
+          kelas: tx.kelas,
+          qty: item.qty,
+          time: tx.date,
+          method: tx.paymentMethod || 'saldo'
         });
+      });
+    });
 
-        // ─── Boot ─────────────────────────────────────────────────────────────────
-        window.onload = function() {
-            initializeData();
-        };
-    </script>
+    // Build audit rows
+    _auditData = menu.map(item => {
+      const id = String(item._id || item.id);
+      const soldToday = soldMap[id] || 0;
+      // stockOpen = current stock + what was sold today (reconstruct opening stock)
+      const stockOpen = item.stock + soldToday;
+      const stockSystem = item.stock; // as recorded in DB
+      return {
+        id,
+        item,
+        stockOpen,
+        soldToday,
+        stockSystem,
+        stockPhysical: null, // user fills this
+        txList: txRefs[id] || []
+      };
+    });
+
+    // Render table
+    renderAuditTable();
+    updateAuditHero();
+
+    // Show UI sections
+    document.getElementById('auditTableWrap').style.display = 'block';
+    document.getElementById('auditSummaryCards').style.display = 'grid';
+    document.getElementById('auditNoteBox').style.display = 'block';
+    document.getElementById('auditActionBar').style.display = 'flex';
+
+    const now = new Date().toLocaleTimeString('id-ID');
+    document.getElementById('auditLastUpdated').textContent = `Diperbarui pukul ${now}`;
+    showToast('Data audit berhasil dimuat!');
+  } catch (err) {
+    console.error('loadAuditData error:', err);
+    showToast('Gagal memuat data audit!', 'error');
+    document.getElementById('auditLastUpdated').textContent = 'Gagal memuat';
+  }
+}
+
+function renderAuditTable() {
+  const tbody = document.getElementById('auditTableBody');
+  tbody.innerHTML = '';
+
+  _auditData.forEach((row, idx) => {
+    const diff = row.stockPhysical !== null ? row.stockSystem - row.stockPhysical : null;
+    let statusClass = '';
+    let pillClass = 'pill-ok';
+    let pillText = '✓ OK';
+    let pillIcon = '✅';
+
+    if (diff !== null) {
+      if (diff < 0) {
+        // Physical > System → probably counting error or returned stock
+        statusClass = 'status-warn';
+        pillClass = 'pill-warn';
+        pillText = `+${Math.abs(diff)} Lebih`;
+        pillIcon = '⚠️';
+      } else if (diff > 0) {
+        // Physical < System → items missing/stolen
+        statusClass = 'status-danger';
+        pillClass = 'pill-danger';
+        pillText = `−${diff} HILANG`;
+        pillIcon = '🚨';
+      } else {
+        statusClass = 'status-ok';
+        pillClass = 'pill-ok';
+        pillText = 'OK';
+        pillIcon = '✅';
+      }
+    } else {
+      statusClass = '';
+    }
+
+    const diffDisplay = diff !== null
+      ? `<span class="audit-num ${diff > 0 ? 'diff-danger' : diff < 0 ? 'diff-warn' : 'diff-ok'}">${diff > 0 ? '−' + diff : diff < 0 ? '+' + Math.abs(diff) : '0'}</span>`
+      : '<span style="color:#cbd5e1;">—</span>';
+
+    const estKerugian = diff !== null && diff > 0
+      ? `<br><span style="font-size:11px;color:#ef4444;">≈ ${formatRupiah(diff * row.item.price)}</span>` : '';
+
+    const txHTML = row.txList.length > 0
+      ? row.txList.map(tx => {
+          const t = new Date(tx.time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+          const kl = tx.kelas === 'guest' ? 'Tamu' : (tx.kelas === 'guru' ? 'Guru' : 'Kelas ' + tx.kelas);
+          const pm = tx.method === 'qris'
+            ? '<span style="color:#be185d;font-weight:700;">QRIS</span>'
+            : '<span style="color:#166534;font-weight:700;">Saldo</span>';
+          return `<div class="audit-detail-tx">${t} — <span>${tx.userName}</span> (${kl}) beli <span>${tx.qty} pcs</span> via ${pm}</div>`;
+        }).join('')
+      : '<div class="audit-detail-tx" style="color:#94a3b8;">Tidak ada transaksi hari ini</div>';
+
+    const el = document.createElement('div');
+    el.className = `audit-row ${statusClass}`;
+    el.id = `audit-row-${idx}`;
+    el.innerHTML = `
+      <div>
+        <div class="audit-item-name">
+          <div class="audit-item-icon">${row.item.icon}</div>
+          <div class="audit-item-text">
+            <strong>${row.item.name}</strong>
+            <span>${row.item.category} · ${formatRupiah(row.item.price)}/pcs</span>
+          </div>
+        </div>
+      </div>
+      <div><span class="audit-num">${row.stockOpen}</span><span style="font-size:11px;color:#94a3b8;margin-left:4px;">pcs</span></div>
+      <div>
+        <div>
+          <span class="audit-num sold">${row.soldToday}</span><span style="font-size:11px;color:#94a3b8;margin-left:4px;">pcs</span>
+          ${row.txList.length > 0 ? `<br><button class="detail-toggle" onclick="toggleAuditDetail(${idx})">lihat ${row.txList.length} transaksi ▾</button>` : ''}
+        </div>
+      </div>
+      <div><span class="audit-num actual">${row.stockSystem}</span><span style="font-size:11px;color:#94a3b8;margin-left:4px;">pcs</span></div>
+      <div>
+        <input
+          class="audit-input-stok"
+          type="number"
+          min="0"
+          id="audit-input-${idx}"
+          placeholder="hitung"
+          value="${row.stockPhysical !== null ? row.stockPhysical : ''}"
+          oninput="onAuditInput(${idx}, this.value)"
+        >
+      </div>
+      <div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          ${diffDisplay}
+          ${row.stockPhysical !== null ? `<span class="audit-status-pill ${pillClass}">${pillIcon} ${pillText}</span>${estKerugian}` : '<span style="font-size:12px;color:#94a3b8;">Isi stok fisik dulu</span>'}
+        </div>
+      </div>`;
+
+    // Append detail row (hidden by default)
+    tbody.appendChild(el);
+
+    const detailEl = document.createElement('div');
+    detailEl.className = 'audit-row audit-detail-row';
+    detailEl.id = `audit-detail-${idx}`;
+    detailEl.style.gridColumn = '1 / -1';
+    detailEl.innerHTML = `
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:var(--primary);">📋 Detail Transaksi untuk ${row.item.name}:</div>
+      ${txHTML}`;
+    tbody.appendChild(detailEl);
+  });
+
+  updateAuditSummaryCards();
+}
+
+function toggleAuditDetail(idx) {
+  const el = document.getElementById(`audit-detail-${idx}`);
+  el.classList.toggle('open');
+  const btn = document.querySelector(`#audit-row-${idx} .detail-toggle`);
+  if (btn) btn.textContent = el.classList.contains('open')
+    ? `tutup ▴`
+    : `lihat ${_auditData[idx].txList.length} transaksi ▾`;
+}
+
+function onAuditInput(idx, val) {
+  const num = val === '' ? null : parseInt(val);
+  _auditData[idx].stockPhysical = num;
+  const inputEl = document.getElementById(`audit-input-${idx}`);
+  inputEl.classList.toggle('changed', num !== null && num !== _auditData[idx].stockSystem);
+  // Re-render just this row efficiently
+  renderAuditTable();
+  updateAuditHero();
+  // Restore focus
+  setTimeout(() => {
+    const el = document.getElementById(`audit-input-${idx}`);
+    if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+  }, 10);
+}
+
+function autoFillFromSystem() {
+  _auditData.forEach((row, idx) => {
+    row.stockPhysical = row.stockSystem;
+  });
+  renderAuditTable();
+  updateAuditHero();
+  showToast('Stok fisik diisi sesuai stok sistem (asumsi tidak ada selisih)');
+}
+
+function updateAuditSummaryCards() {
+  const filled = _auditData.filter(r => r.stockPhysical !== null);
+  const missing = filled.filter(r => r.stockSystem - r.stockPhysical > 0);
+  const totalMissing = missing.reduce((s, r) => s + (r.stockSystem - r.stockPhysical), 0);
+  const totalLoss = missing.reduce((s, r) => s + (r.stockSystem - r.stockPhysical) * r.item.price, 0);
+  const totalSold = _auditData.reduce((s, r) => s + r.soldToday, 0);
+
+  const container = document.getElementById('auditSummaryCards');
+  container.innerHTML = `
+    <div class="audit-sum-card info"><div class="num">${totalSold}</div><div class="lbl">Item Terjual Hari Ini</div></div>
+    <div class="audit-sum-card ok"><div class="num">${filled.length - missing.length}</div><div class="lbl">Item Stok Sesuai</div></div>
+    <div class="audit-sum-card danger"><div class="num">${missing.length}</div><div class="lbl">Jenis Item Hilang</div></div>
+    <div class="audit-sum-card warn"><div class="num">${totalMissing}</div><div class="lbl">Total Unit Hilang</div></div>
+    <div class="audit-sum-card danger"><div class="num" style="font-size:20px;">${formatRupiah(totalLoss)}</div><div class="lbl">Estimasi Kerugian</div></div>`;
+}
+
+function updateAuditHero() {
+  const totalSold = _auditData.reduce((s, r) => s + r.soldToday, 0);
+  const filled = _auditData.filter(r => r.stockPhysical !== null);
+  const missing = filled.filter(r => r.stockSystem - r.stockPhysical > 0);
+  const totalMissing = missing.reduce((s, r) => s + (r.stockSystem - r.stockPhysical), 0);
+  const totalLoss = missing.reduce((s, r) => s + (r.stockSystem - r.stockPhysical) * r.item.price, 0);
+
+  document.getElementById('auditHeroTerjual').textContent = totalSold;
+  document.getElementById('auditHeroMissing').textContent = totalMissing;
+  document.getElementById('auditHeroRugi').textContent = formatRupiah(totalLoss);
+}
+
+function saveAuditResult() {
+  const dateStr = document.getElementById('auditDate').value;
+  if (_auditData.length === 0) { showToast('Tidak ada data untuk disimpan!', 'error'); return; }
+
+  const filled = _auditData.filter(r => r.stockPhysical !== null);
+  if (filled.length === 0) { showToast('Isi stok fisik minimal 1 item dulu!', 'error'); return; }
+
+  const log = {
+    date: dateStr,
+    savedAt: new Date().toISOString(),
+    rows: _auditData.map(r => ({
+      name: r.item.name,
+      icon: r.item.icon,
+      price: r.item.price,
+      stockOpen: r.stockOpen,
+      soldToday: r.soldToday,
+      stockSystem: r.stockSystem,
+      stockPhysical: r.stockPhysical,
+      diff: r.stockPhysical !== null ? r.stockSystem - r.stockPhysical : null
+    })),
+    summary: {
+      totalSold: _auditData.reduce((s, r) => s + r.soldToday, 0),
+      missingItems: filled.filter(r => r.stockSystem - r.stockPhysical > 0).length,
+      totalMissing: filled.reduce((s, r) => s + Math.max(0, r.stockSystem - (r.stockPhysical ?? r.stockSystem)), 0),
+      totalLoss: filled.reduce((s, r) => s + Math.max(0, r.stockSystem - (r.stockPhysical ?? r.stockSystem)) * r.item.price, 0)
+    }
+  };
+
+  saveAuditLog(log);
+  loadAuditLogSection();
+  showToast('Hasil audit berhasil disimpan!');
+}
+
+function exportAuditReport() {
+  const dateStr = document.getElementById('auditDate').value;
+  if (_auditData.length === 0) { showToast('Muat data audit dulu!', 'error'); return; }
+
+  let csv = 'Item,Kategori,Harga,Stok Awal,Terjual,Stok Sistem,Stok Fisik,Selisih,Status,Est. Kerugian\n';
+  _auditData.forEach(r => {
+    const diff = r.stockPhysical !== null ? r.stockSystem - r.stockPhysical : '';
+    const status = r.stockPhysical === null ? 'Belum diisi'
+      : diff > 0 ? 'HILANG'
+      : diff < 0 ? 'Lebih'
+      : 'OK';
+    const loss = diff > 0 ? diff * r.item.price : 0;
+    csv += `"${r.item.name}","${r.item.category}",${r.item.price},${r.stockOpen},${r.soldToday},${r.stockSystem},${r.stockPhysical ?? ''},${diff},${status},${loss}\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `audit-stok-${dateStr}.csv`;
+  a.click();
+  showToast('Laporan CSV berhasil didownload!');
+}
+
+function loadAuditLogSection() {
+  const logs = getAuditLogs();
+  const section = document.getElementById('auditLogSection');
+  const list = document.getElementById('auditLogList');
+
+  if (logs.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  list.innerHTML = '';
+
+  logs.slice(0, 10).forEach(log => {
+    const d = new Date(log.savedAt).toLocaleString('id-ID');
+    const hasMissing = log.summary.missingItems > 0;
+    const item = document.createElement('div');
+    item.className = 'audit-log-item';
+    item.innerHTML = `
+      <div>
+        <strong>${log.date}</strong>
+        <span style="font-size:12px;color:var(--gray);margin-left:8px;">Disimpan ${d}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span>Terjual: <strong>${log.summary.totalSold}</strong> pcs</span>
+        <span class="log-diff ${hasMissing ? 'neg' : 'zero'}">
+          ${hasMissing ? `🚨 ${log.summary.missingItems} jenis hilang (${log.summary.totalMissing} pcs · ${formatRupiah(log.summary.totalLoss)})` : '✅ Stok aman'}
+        </span>
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+// ─── Init on load ────────────────────────────────────────────────────────
+initializeData();
+</script>
 </body>
 </html>
