@@ -244,7 +244,40 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient
   .audit-hero { flex-direction: column; }
 }
 
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+/* ── QRIS Toggle Switch ── */
+.qris-toggle-switch { position: relative; display: inline-block; width: 64px; height: 34px; flex-shrink: 0; }
+.qris-toggle-switch input { opacity: 0; width: 0; height: 0; }
+.qris-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #cbd5e1; transition: 0.3s; border-radius: 34px; }
+.qris-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background: white; transition: 0.3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+input:checked + .qris-slider { background: var(--success); }
+input:checked + .qris-slider:before { transform: translateX(30px); }
+
+/* ── QRIS Success Screen ── */
+.qris-success-screen { text-align: center; padding: 20px 10px; }
+.qris-success-icon { width: 90px; height: 90px; background: linear-gradient(135deg, var(--success), #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 44px; color: white; box-shadow: 0 8px 24px rgba(16,185,129,0.35); animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.qris-success-title { font-size: 24px; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
+.qris-success-amount { font-size: 32px; font-weight: 800; color: var(--success); margin-bottom: 6px; }
+.qris-success-sub { font-size: 14px; color: var(--gray); margin-bottom: 24px; }
+.qris-success-detail { background: #f0fdf4; border-radius: 14px; padding: 16px; margin-bottom: 24px; text-align: left; }
+.qris-success-detail-row { display: flex; justify-content: space-between; font-size: 14px; padding: 5px 0; }
+.qris-success-detail-row:not(:last-child) { border-bottom: 1px solid #dcfce7; }
+
+/* ── QRIS Pending screen ── */
+.qris-waiting-anim { display: inline-flex; gap: 6px; margin-bottom: 16px; }
+.qris-waiting-anim span { width: 10px; height: 10px; background: var(--warning); border-radius: 50%; animation: bounce 1.2s infinite; }
+.qris-waiting-anim span:nth-child(2) { animation-delay: 0.2s; }
+.qris-waiting-anim span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100% { transform: scale(0.7); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
+.qris-pending-card { background: white; border-radius: 14px; padding: 16px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); border-left: 4px solid var(--warning); flex-wrap: wrap; gap: 12px; }
+.qris-pending-card .pc-user { font-weight: 700; font-size: 15px; }
+.qris-pending-card .pc-amount { font-weight: 800; color: var(--primary); font-size: 18px; }
+.qris-pending-card .pc-time { font-size: 12px; color: var(--gray); }
+.qris-pending-actions { display: flex; gap: 8px; }
+.qris-approve-btn { padding: 8px 18px; border: none; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; background: var(--success); color: white; transition: opacity 0.2s; }
+.qris-approve-btn:hover { opacity: 0.85; }
+.qris-reject-btn { padding: 8px 18px; border: none; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; background: #fee2e2; color: var(--danger); transition: opacity 0.2s; }
+.qris-reject-btn:hover { opacity: 0.85; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
 @media (max-width: 768px) {
@@ -533,42 +566,114 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient
 
       <!-- QRIS Settings Tab -->
       <div class="tab-content" id="qrisSettingsTab">
+
+        <!-- Master ON/OFF toggle — most prominent element -->
+        <div id="qrisToggleCard" style="background:white;border-radius:20px;padding:24px;box-shadow:var(--shadow);margin-bottom:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+            <div>
+              <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Status QRIS</div>
+              <div id="qrisStatusDesc" style="font-size:14px;color:var(--gray);">Memuat...</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div id="qrisStatusBadge" style="padding:8px 18px;border-radius:20px;font-weight:700;font-size:14px;"></div>
+              <label class="qris-toggle-switch">
+                <input type="checkbox" id="qrisEnabledToggle" onchange="onQrisToggleChange(this.checked)">
+                <span class="qris-slider"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Disabled reason box, shown only when off -->
+          <div id="qrisDisabledReasonBox" style="margin-top:16px;display:none;">
+            <div class="input-group" style="margin-bottom:0;">
+              <label>Alasan dinonaktifkan (opsional, ditampilkan ke pengguna)</label>
+              <input type="text" id="qrisDisabledReason" placeholder="Contoh: QRIS sedang disiapkan, tersedia mulai Agustus 2025">
+            </div>
+          </div>
+        </div>
+
+        <!-- Config fields -->
         <div class="cart-section">
-          <h3 class="section-title"><i class="fas fa-qrcode"></i> Pengaturan QRIS</h3>
+          <h3 class="section-title"><i class="fas fa-qrcode"></i> Konfigurasi QRIS</h3>
+
           <div class="qris-settings-box">
             <h4><i class="fas fa-info-circle"></i> Cara Kerja QRIS di Kantin</h4>
-            <p style="font-size:14px;color:var(--gray);line-height:1.6;">
-              Saat siswa/guru checkout, mereka bisa memilih bayar dengan <strong>Saldo</strong> atau <strong>QRIS</strong>.
-              Jika pilih QRIS, sistem otomatis generate QR Code dengan nominal yang sudah sesuai belanjaan — siswa tinggal scan, tidak bisa ubah nominal.
+            <p style="font-size:14px;color:var(--gray);line-height:1.7;">
+              Saat checkout, siswa/guru bisa pilih bayar <strong>Saldo</strong> atau <strong>QRIS</strong>.
+              Jika pilih QRIS, sistem generate QR dengan nominal terkunci — user tinggal scan, tidak bisa ubah jumlah.
+              <br><br>
+              <strong>Mode saat ini: Konfirmasi Manual.</strong> Artinya setelah user scan &amp; bayar,
+              mereka menekan tombol "Saya Sudah Bayar" dan admin mengonfirmasi via antrian di bawah.
+              Ini cukup untuk kantin sekolah karena admin ada di tempat.
+              <br><br>
+              Kalau suatu saat mau auto-konfirmasi (tanpa tombol manual), kamu perlu daftar ke
+              <strong>Midtrans / Xendit / DOKU</strong> dan masukkan API Key mereka di sini.
             </p>
           </div>
+
           <div class="form-grid">
             <div class="input-group">
               <label>Nama Merchant / Kantin</label>
               <input type="text" id="qrisMerchantName" placeholder="Kantin SMTK Pelangi Kristus">
             </div>
             <div class="input-group">
-              <label>QRIS Merchant ID (dari penyedia QRIS)</label>
-              <input type="text" id="qrisMerchantId" placeholder="ID dari bank/e-wallet penyedia QRIS">
+              <label>QRIS Merchant ID (dari bank/e-wallet)</label>
+              <input type="text" id="qrisMerchantId" placeholder="Kosongkan jika belum punya">
             </div>
             <div class="input-group">
-              <label>Nomor Rekening / NPWP (opsional)</label>
-              <input type="text" id="qrisAccountNo" placeholder="Untuk identifikasi di laporan">
+              <label>Kota Merchant</label>
+              <input type="text" id="qrisMerchantCity" placeholder="Surabaya">
             </div>
           </div>
-          <div style="background:#fffbeb;border:2px solid var(--secondary);border-radius:12px;padding:16px;margin-bottom:20px;">
-            <p style="font-weight:700;color:#92400e;margin-bottom:8px;"><i class="fas fa-exclamation-triangle"></i> Catatan Penting</p>
-            <p style="font-size:14px;color:#78350f;line-height:1.6;">
-              QRIS yang di-generate adalah <strong>QRIS statis dengan amount dinamis</strong> menggunakan format EMV QRIS Indonesia (sesuai standar Bank Indonesia).
-              Untuk implementasi production, kamu perlu mendaftar ke penyedia QRIS resmi (BCA, Mandiri, GoPay, OVO, DANA, dll) dan dapatkan Merchant ID resmi.
-              QR yang di-generate sudah include nominal otomatis sehingga user tidak bisa ubah jumlah bayar.
+
+          <!-- Future API key section -->
+          <div style="background:#f0f9ff;border:2px solid var(--info);border-radius:14px;padding:18px;margin-bottom:20px;">
+            <p style="font-weight:700;color:#075985;margin-bottom:8px;font-size:15px;">
+              🔌 Koneksi Payment Gateway (Opsional — untuk auto-konfirmasi)
             </p>
+            <p style="font-size:13px;color:#0369a1;margin-bottom:14px;line-height:1.6;">
+              Kalau kamu sudah daftar ke Midtrans/Xendit, masukkan API Key di sini.
+              Sistem akan otomatis verifikasi pembayaran dan tampilkan layar sukses tanpa tombol manual.
+              Kalau kosong, sistem pakai mode konfirmasi manual (admin approve).
+            </p>
+            <div class="form-grid" style="margin-bottom:0;">
+              <div class="input-group" style="margin-bottom:0;">
+                <label>Midtrans / Xendit Server Key (opsional)</label>
+                <input type="password" id="qrisApiKey" placeholder="Kosongkan untuk mode manual">
+              </div>
+              <div class="input-group" style="margin-bottom:0;">
+                <label>Provider</label>
+                <select id="qrisApiProvider" style="width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:12px;font-family:inherit;font-size:16px;">
+                  <option value="">-- Belum ada --</option>
+                  <option value="midtrans">Midtrans</option>
+                  <option value="xendit">Xendit</option>
+                  <option value="doku">DOKU</option>
+                </select>
+              </div>
+            </div>
           </div>
+
           <div style="display:flex;gap:12px;flex-wrap:wrap;">
             <button class="btn btn-success" onclick="saveQrisSettings()" style="width:auto;"><i class="fas fa-save"></i> Simpan Pengaturan</button>
             <button class="btn btn-outline" onclick="testQrisPreview()" style="width:auto;"><i class="fas fa-eye"></i> Preview QRIS Test</button>
           </div>
         </div>
+
+        <!-- Pending QRIS approvals queue -->
+        <div class="cart-section" id="qrisPendingSection">
+          <h3 class="section-title"><i class="fas fa-hourglass-half" style="color:var(--warning);"></i> Antrian Konfirmasi QRIS
+            <span id="qrisPendingBadge" style="background:var(--danger);color:white;border-radius:20px;padding:2px 10px;font-size:14px;display:none;"></span>
+          </h3>
+          <p style="color:var(--gray);font-size:14px;margin-bottom:16px;">
+            Siswa yang sudah scan & klik "Saya Sudah Bayar" akan muncul di sini. Admin konfirmasi setelah cek notif dompet digital.
+          </p>
+          <div id="qrisPendingList">
+            <div style="text-align:center;padding:32px;color:var(--gray);">
+              <i class="fas fa-check-circle" style="font-size:40px;margin-bottom:12px;display:block;color:#d1d5db;"></i>
+              Tidak ada antrian saat ini
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -703,48 +808,200 @@ function updateCacheStock(itemId, delta) {
 
 // ─── QRIS Settings ────────────────────────────────────────────────────────
 function getQrisSettings() {
-  try {
-    return JSON.parse(localStorage.getItem('qrisSettings') || '{}');
-  } catch { return {}; }
+  try { return JSON.parse(localStorage.getItem('qrisSettings') || '{}'); }
+  catch { return {}; }
+}
+
+function isQrisEnabled() {
+  const s = getQrisSettings();
+  // Default: disabled until admin explicitly enables
+  return s.enabled === true;
 }
 
 function saveQrisSettings() {
+  const existing = getQrisSettings();
   const settings = {
+    enabled: existing.enabled ?? false, // preserve toggle state
     merchantName: document.getElementById('qrisMerchantName').value.trim() || 'Kantin Sekolah',
     merchantId: document.getElementById('qrisMerchantId').value.trim(),
-    accountNo: document.getElementById('qrisAccountNo').value.trim()
+    merchantCity: document.getElementById('qrisMerchantCity').value.trim() || 'Surabaya',
+    disabledReason: document.getElementById('qrisDisabledReason').value.trim(),
+    apiKey: document.getElementById('qrisApiKey').value.trim(),
+    apiProvider: document.getElementById('qrisApiProvider').value,
   };
   localStorage.setItem('qrisSettings', JSON.stringify(settings));
   showToast('Pengaturan QRIS berhasil disimpan!');
 }
 
+function onQrisToggleChange(enabled) {
+  const s = getQrisSettings();
+  s.enabled = enabled;
+  localStorage.setItem('qrisSettings', JSON.stringify(s));
+  _renderQrisToggleState(enabled);
+  showToast(enabled ? 'QRIS diaktifkan! Pengguna sekarang bisa bayar via QRIS.' : 'QRIS dinonaktifkan. Pengguna hanya bisa bayar dengan saldo.', enabled ? 'success' : 'warning');
+}
+
+function _renderQrisToggleState(enabled) {
+  const badge = document.getElementById('qrisStatusBadge');
+  const desc = document.getElementById('qrisStatusDesc');
+  const reasonBox = document.getElementById('qrisDisabledReasonBox');
+  if (!badge) return;
+  if (enabled) {
+    badge.textContent = '🟢 AKTIF';
+    badge.style.cssText = 'background:#dcfce7;color:#166534;padding:8px 18px;border-radius:20px;font-weight:700;font-size:14px;';
+    desc.textContent = 'Pengguna dapat memilih pembayaran QRIS saat checkout';
+    reasonBox.style.display = 'none';
+  } else {
+    badge.textContent = '🔴 NONAKTIF';
+    badge.style.cssText = 'background:#fee2e2;color:#991b1b;padding:8px 18px;border-radius:20px;font-weight:700;font-size:14px;';
+    desc.textContent = 'QRIS tersembunyi dari halaman checkout pengguna';
+    reasonBox.style.display = 'block';
+  }
+}
+
 function loadQrisSettingsForm() {
   const s = getQrisSettings();
+  const enabled = s.enabled === true;
+
+  // Toggle state
+  const toggle = document.getElementById('qrisEnabledToggle');
+  if (toggle) toggle.checked = enabled;
+  _renderQrisToggleState(enabled);
+
   if (document.getElementById('qrisMerchantName'))
     document.getElementById('qrisMerchantName').value = s.merchantName || '';
   if (document.getElementById('qrisMerchantId'))
     document.getElementById('qrisMerchantId').value = s.merchantId || '';
-  if (document.getElementById('qrisAccountNo'))
-    document.getElementById('qrisAccountNo').value = s.accountNo || '';
+  if (document.getElementById('qrisMerchantCity'))
+    document.getElementById('qrisMerchantCity').value = s.merchantCity || '';
+  if (document.getElementById('qrisDisabledReason'))
+    document.getElementById('qrisDisabledReason').value = s.disabledReason || '';
+  if (document.getElementById('qrisApiKey'))
+    document.getElementById('qrisApiKey').value = s.apiKey || '';
+  if (document.getElementById('qrisApiProvider'))
+    document.getElementById('qrisApiProvider').value = s.apiProvider || '';
+
+  // Load pending approvals
+  renderQrisPendingList();
 }
 
 function testQrisPreview() {
   showQrisPayment(15000);
 }
 
+// ─── QRIS Pending Queue (localStorage) ────────────────────────────────────
+// Each pending entry: { id, userId, userName, kelas, amount, cartSnapshot, submittedAt, status }
+function getQrisPending() {
+  try { return JSON.parse(localStorage.getItem('qrisPending') || '[]'); }
+  catch { return []; }
+}
+function saveQrisPendingList(list) {
+  localStorage.setItem('qrisPending', JSON.stringify(list));
+}
+function addQrisPending(entry) {
+  const list = getQrisPending();
+  list.unshift(entry);
+  saveQrisPendingList(list);
+}
+
+function renderQrisPendingList() {
+  const list = getQrisPending().filter(e => e.status === 'pending');
+  const container = document.getElementById('qrisPendingList');
+  const badge = document.getElementById('qrisPendingBadge');
+  if (!container) return;
+
+  if (badge) {
+    if (list.length > 0) {
+      badge.textContent = list.length;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--gray);">
+      <i class="fas fa-check-circle" style="font-size:40px;margin-bottom:12px;display:block;color:#d1d5db;"></i>
+      Tidak ada antrian saat ini
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  list.forEach(entry => {
+    const t = new Date(entry.submittedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const kl = entry.kelas === 'guest' ? 'Tamu' : entry.kelas === 'guru' ? 'Guru' : 'Kelas ' + entry.kelas;
+    const itemsText = entry.cartSnapshot ? entry.cartSnapshot.map(i => `${i.name} x${i.qty}`).join(', ') : '-';
+    const card = document.createElement('div');
+    card.className = 'qris-pending-card';
+    card.innerHTML = `
+      <div>
+        <div class="pc-user">👤 ${entry.userName} <span style="font-weight:400;font-size:13px;color:var(--gray);">(${kl})</span></div>
+        <div class="pc-time">📦 ${itemsText}</div>
+        <div class="pc-time">⏰ Submit pukul ${t}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pc-amount">${formatRupiah(entry.amount)}</div>
+        <div class="qris-pending-actions" style="margin-top:8px;">
+          <button class="qris-approve-btn" onclick="approveQrisPending('${entry.id}')">✅ Konfirmasi</button>
+          <button class="qris-reject-btn" onclick="rejectQrisPending('${entry.id}')">❌ Tolak</button>
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+async function approveQrisPending(entryId) {
+  const list = getQrisPending();
+  const entry = list.find(e => e.id === entryId);
+  if (!entry) return;
+
+  // Process the actual transaction
+  try {
+    await saveTransaction({
+      userId: entry.userId,
+      userName: entry.userName,
+      kelas: entry.kelas,
+      items: entry.cartSnapshot,
+      subtotal: entry.subtotal,
+      tax: entry.tax,
+      total: entry.amount,
+      paymentMethod: 'qris',
+      type: 'buy',
+      date: new Date().toISOString()
+    });
+    entry.status = 'approved';
+    saveQrisPendingList(list);
+    renderQrisPendingList();
+    showToast(`✅ Pembayaran ${entry.userName} dikonfirmasi! Rp ${entry.amount.toLocaleString('id-ID')}`);
+    // Also refresh admin stats if visible
+    if (document.getElementById('totalSales')) updateAdminStats();
+  } catch (err) {
+    showToast('Gagal konfirmasi!', 'error');
+  }
+}
+
+function rejectQrisPending(entryId) {
+  if (!confirm('Tolak pembayaran ini? Pesanan akan dibatalkan.')) return;
+  const list = getQrisPending();
+  const entry = list.find(e => e.id === entryId);
+  if (entry) entry.status = 'rejected';
+  saveQrisPendingList(list);
+  renderQrisPendingList();
+  showToast('Pembayaran ditolak.', 'warning');
+}
+
 // ─── QRIS Generation (EMV QRIS Indonesia format) ──────────────────────────
-// Format sesuai standar Bank Indonesia (QRIS) - TLV encoding
 function buildQrisString(amount) {
   const settings = getQrisSettings();
-  // Jika tidak ada merchant ID, pakai format demo/test
   const merchantId = settings.merchantId || '9360041';
   const merchantName = (settings.merchantName || 'Kantin Sekolah').substring(0, 25);
+  const merchantCity = (settings.merchantCity || 'Surabaya').substring(0, 15);
 
   function tlv(tag, value) {
     const len = String(value.length).padStart(2, '0');
     return `${tag}${len}${value}`;
   }
-
   function crc16(str) {
     let crc = 0xFFFF;
     for (let i = 0; i < str.length; i++) {
@@ -758,29 +1015,18 @@ function buildQrisString(amount) {
     return crc.toString(16).toUpperCase().padStart(4, '0');
   }
 
-  // Merchant Account Info (QRIS)
-  const merchantAccountInfo = tlv('00', 'COM.TELKOM.WWW') +
-    tlv('01', merchantId) +
-    tlv('02', '93600001');
-  const mai = tlv('26', merchantAccountInfo);
-
-  let qris = tlv('00', '01');               // Payload Format Indicator
-  qris += tlv('01', '12');                   // Point of Initiation (12=dynamic)
-  qris += mai;                               // Merchant Account Info
-  qris += tlv('52', '5812');                 // Merchant Category Code (eating places)
-  qris += tlv('53', '360');                  // Transaction Currency (IDR)
-  if (amount > 0) {
-    qris += tlv('54', String(amount));       // Transaction Amount — LOCKED
-  }
-  qris += tlv('58', 'ID');                   // Country Code
-  qris += tlv('59', merchantName);           // Merchant Name
-  qris += tlv('60', 'Surabaya');            // Merchant City
-  qris += tlv('62', tlv('05', 'KANTIN'));    // Additional Data Field
-  qris += '6304';                            // CRC placeholder
+  const mai = tlv('26', tlv('00', 'COM.TELKOM.WWW') + tlv('01', merchantId) + tlv('02', '93600001'));
+  let qris = tlv('00', '01') + tlv('01', '12') + mai +
+    tlv('52', '5812') + tlv('53', '360');
+  if (amount > 0) qris += tlv('54', String(amount));
+  qris += tlv('58', 'ID') + tlv('59', merchantName) + tlv('60', merchantCity) +
+    tlv('62', tlv('05', 'KANTIN')) + '6304';
   qris += crc16(qris);
-
   return qris;
 }
+
+// ─── QRIS Payment Screens ─────────────────────────────────────────────────
+let _currentQrisCart = null; // snapshot of cart at moment QRIS was opened
 
 function showQrisPayment(amount) {
   const modal = document.getElementById('checkoutModal');
@@ -790,6 +1036,9 @@ function showQrisPayment(amount) {
   const settings = getQrisSettings();
   const merchantName = settings.merchantName || 'Kantin Sekolah';
   const qrisString = buildQrisString(amount);
+
+  // Save cart snapshot for pending queue
+  _currentQrisCart = { amount, cartSnapshot: [...cart] };
 
   body.innerHTML = `
     <button class="back-to-method-btn" onclick="openCheckoutModal()">
@@ -804,38 +1053,143 @@ function showQrisPayment(amount) {
         <span style="font-size:12px;">Nominal sudah terkunci otomatis — tidak dapat diubah</span>
       </div>
       <div class="qris-instruction">
-        1. Buka aplikasi dompet digital atau m-banking kamu<br>
-        2. Pilih "Scan QR" atau "QRIS"<br>
-        3. Arahkan kamera ke QR Code di atas<br>
-        4. Nominal <strong>${formatRupiah(amount)}</strong> sudah otomatis terisi<br>
-        5. Konfirmasi pembayaran
+        1. Buka GoPay / OVO / Dana / m-banking<br>
+        2. Pilih <strong>Scan QR</strong> atau <strong>QRIS</strong><br>
+        3. Arahkan ke QR di atas — nominal <strong>${formatRupiah(amount)}</strong> sudah otomatis terisi<br>
+        4. Konfirmasi di aplikasimu, lalu tekan tombol di bawah
       </div>
-      <button class="btn qris-confirm-btn" onclick="confirmQrisPayment()">
-        <i class="fas fa-check-circle"></i> Saya Sudah Bayar
+      <button class="btn qris-confirm-btn" onclick="submitQrisPending(${amount})" style="background:var(--warning);margin-bottom:8px;">
+        <i class="fas fa-check-circle"></i> Saya Sudah Bayar — Minta Konfirmasi Admin
       </button>
+      <p style="font-size:12px;color:var(--gray);text-align:center;">Admin akan memverifikasi pembayaranmu dari notif dompet digital mereka</p>
     </div>`;
 
   modal.classList.add('active');
-
-  // Generate QR after DOM is ready
   setTimeout(() => {
     try {
       new QRCode(document.getElementById('qrcode'), {
-        text: qrisString,
-        width: 220,
-        height: 220,
-        colorDark: '#1e293b',
-        colorLight: '#ffffff',
+        text: qrisString, width: 220, height: 220,
+        colorDark: '#1e293b', colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.M
       });
     } catch (e) {
       document.getElementById('qrcode').innerHTML =
         `<div style="padding:20px;background:#f1f5f9;border-radius:12px;font-size:12px;word-break:break-all;max-width:220px;color:var(--gray);">
           <i class="fas fa-qrcode" style="font-size:48px;display:block;margin-bottom:8px;color:var(--primary)"></i>
-          QR Code siap.<br>QRIS: ${qrisString.substring(0, 40)}...
+          QR Code siap digunakan
         </div>`;
     }
   }, 50);
+}
+
+function submitQrisPending(amount) {
+  // Add to pending queue
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const tax = isGuest(currentUser) ? Math.round(subtotal * GUEST_TAX_RATE) : 0;
+  const entry = {
+    id: 'qpend_' + Date.now(),
+    userId: currentUser.id,
+    userName: currentUser.name,
+    kelas: currentUser.kelas,
+    amount,
+    subtotal,
+    tax,
+    cartSnapshot: cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
+    submittedAt: new Date().toISOString(),
+    status: 'pending'
+  };
+  addQrisPending(entry);
+
+  // Show waiting screen
+  showQrisWaitingScreen(entry);
+}
+
+function showQrisWaitingScreen(entry) {
+  const body = document.getElementById('checkoutModalBody');
+  document.getElementById('checkoutModalTitle').textContent = 'Menunggu Konfirmasi Admin';
+
+  body.innerHTML = `
+    <div style="text-align:center;padding:24px 12px;">
+      <div class="qris-waiting-anim"><span></span><span></span><span></span></div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px;">Menunggu Verifikasi</div>
+      <div style="font-size:32px;font-weight:800;color:var(--warning);margin-bottom:8px;">${formatRupiah(entry.amount)}</div>
+      <div style="font-size:14px;color:var(--gray);margin-bottom:24px;line-height:1.6;">
+        Permintaanmu sudah dikirim ke admin.<br>
+        Admin akan konfirmasi setelah melihat notif masuk di dompet digital mereka.<br>
+        <strong>Jangan tutup halaman ini.</strong>
+      </div>
+      <div style="background:#fffbeb;border:2px solid var(--secondary);border-radius:12px;padding:14px;margin-bottom:20px;text-align:left;">
+        <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:6px;">🧾 Detail Pesanan:</div>
+        ${entry.cartSnapshot.map(i => `<div style="font-size:13px;color:#78350f;">${i.name} × ${i.qty} = ${formatRupiah(i.price * i.qty)}</div>`).join('')}
+        <div style="margin-top:8px;font-size:14px;font-weight:700;color:#92400e;">Total: ${formatRupiah(entry.amount)}</div>
+      </div>
+      <button class="btn btn-outline" onclick="closeCheckoutModal()" style="width:100%;">Tutup (pesanan tetap dalam antrian)</button>
+    </div>`;
+
+  // Poll every 3 seconds for admin approval
+  _startQrisPoll(entry.id);
+}
+
+let _qrisPollInterval = null;
+function _startQrisPoll(entryId) {
+  if (_qrisPollInterval) clearInterval(_qrisPollInterval);
+  _qrisPollInterval = setInterval(() => {
+    const list = getQrisPending();
+    const entry = list.find(e => e.id === entryId);
+    if (!entry) { clearInterval(_qrisPollInterval); return; }
+    if (entry.status === 'approved') {
+      clearInterval(_qrisPollInterval);
+      showQrisSuccessScreen(entry);
+      // Clear cart
+      cart = [];
+      _invalidateMenuCache();
+      loadMenu();
+      updateSaldoDisplay();
+    } else if (entry.status === 'rejected') {
+      clearInterval(_qrisPollInterval);
+      showQrisRejectedScreen(entry);
+    }
+  }, 2000);
+}
+
+function showQrisSuccessScreen(entry) {
+  const body = document.getElementById('checkoutModalBody');
+  document.getElementById('checkoutModalTitle').textContent = 'Pembayaran Berhasil!';
+  const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+  body.innerHTML = `
+    <div class="qris-success-screen">
+      <div class="qris-success-icon">✓</div>
+      <div class="qris-success-title">Pembayaran Dikonfirmasi!</div>
+      <div class="qris-success-amount">${formatRupiah(entry.amount)}</div>
+      <div class="qris-success-sub">QRIS berhasil diverifikasi admin • ${now}</div>
+      <div class="qris-success-detail">
+        <div class="qris-success-detail-row"><span>👤 Pembeli</span><span><strong>${entry.userName}</strong></span></div>
+        <div class="qris-success-detail-row"><span>💳 Metode</span><span><strong>QRIS</strong></span></div>
+        ${entry.cartSnapshot.map(i =>
+          `<div class="qris-success-detail-row"><span>${i.name} ×${i.qty}</span><span>${formatRupiah(i.price * i.qty)}</span></div>`
+        ).join('')}
+        ${entry.tax > 0 ? `<div class="qris-success-detail-row"><span>Pajak Tamu</span><span>${formatRupiah(entry.tax)}</span></div>` : ''}
+        <div class="qris-success-detail-row" style="margin-top:4px;"><span><strong>Total</strong></span><span><strong style="color:var(--success);">${formatRupiah(entry.amount)}</strong></span></div>
+      </div>
+      <button class="btn btn-success" onclick="closeCheckoutModal()" style="width:100%;padding:16px;font-size:16px;">
+        🎉 Selesai
+      </button>
+    </div>`;
+  updateCartUI();
+}
+
+function showQrisRejectedScreen(entry) {
+  const body = document.getElementById('checkoutModalBody');
+  document.getElementById('checkoutModalTitle').textContent = 'Pembayaran Ditolak';
+  body.innerHTML = `
+    <div style="text-align:center;padding:24px 12px;">
+      <div style="font-size:64px;margin-bottom:16px;">❌</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px;color:var(--danger);">Pembayaran Ditolak</div>
+      <p style="color:var(--gray);margin-bottom:20px;">Admin menolak konfirmasi pembayaran ini. Hubungi admin untuk info lebih lanjut.</p>
+      <button class="btn btn-outline" onclick="openCheckoutModal()" style="width:100%;margin-bottom:8px;">Coba Lagi</button>
+      <button class="btn btn-danger" onclick="closeCheckoutModal()" style="width:100%;">Batal</button>
+    </div>`;
 }
 
 async function confirmQrisPayment() {
@@ -854,6 +1208,21 @@ function openCheckoutModal() {
   document.getElementById('checkoutModalTitle').textContent = 'Pilih Metode Pembayaran';
 
   const saldoOk = currentUser.saldo >= total;
+  const qrisOn = isQrisEnabled();
+  const s = getQrisSettings();
+  const qrisReason = s.disabledReason || 'QRIS belum tersedia saat ini';
+
+  const qrisButtonHTML = qrisOn
+    ? `<button class="payment-method-btn" onclick="selectPaymentMethod('qris')">
+        <i class="fas fa-qrcode" style="color:#e11d48;font-size:32px;margin-bottom:8px;display:block;"></i>
+        <div class="method-name">Bayar QRIS</div>
+        <div class="method-desc">GoPay, OVO, Dana, Bank</div>
+      </button>`
+    : `<div class="payment-method-btn" style="opacity:0.45;cursor:not-allowed;border-style:dashed;" title="${qrisReason}">
+        <i class="fas fa-qrcode" style="color:#9ca3af;font-size:32px;margin-bottom:8px;display:block;"></i>
+        <div class="method-name" style="color:#9ca3af;">QRIS</div>
+        <div class="method-desc" style="color:#ef4444;font-size:11px;">${qrisReason}</div>
+      </div>`;
 
   body.innerHTML = `
     <div style="text-align:center;margin-bottom:20px;">
@@ -862,21 +1231,15 @@ function openCheckoutModal() {
       ${tax > 0 ? `<div style="font-size:13px;color:var(--warning);">Termasuk pajak tamu ${formatRupiah(tax)}</div>` : ''}
     </div>
     <div class="payment-method-selector">
-      <button class="payment-method-btn ${saldoOk ? '' : 'opacity-50'}" onclick="selectPaymentMethod('saldo')" ${!saldoOk ? 'title="Saldo tidak cukup"' : ''}>
-        <i class="fas fa-wallet" style="color:var(--success);"></i>
+      <button class="payment-method-btn ${saldoOk ? '' : ''}" onclick="selectPaymentMethod('saldo')">
+        <i class="fas fa-wallet" style="color:var(--success);font-size:32px;margin-bottom:8px;display:block;"></i>
         <div class="method-name">Bayar Saldo</div>
         <div class="method-desc">Saldo: ${formatRupiah(currentUser.saldo)}</div>
         ${!saldoOk ? '<div style="color:var(--danger);font-size:11px;margin-top:4px;">⚠ Saldo tidak cukup</div>' : ''}
       </button>
-      <button class="payment-method-btn" onclick="selectPaymentMethod('qris')">
-        <i class="fas fa-qrcode" style="color:#e11d48;"></i>
-        <div class="method-name">Bayar QRIS</div>
-        <div class="method-desc">GoPay, OVO, Dana, Bank</div>
-      </button>
+      ${qrisButtonHTML}
     </div>
-    <button class="btn btn-outline" onclick="closeCheckoutModal()" style="width:100%;margin-top:8px;">
-      Batal
-    </button>`;
+    <button class="btn btn-outline" onclick="closeCheckoutModal()" style="width:100%;margin-top:8px;">Batal</button>`;
 
   modal.classList.add('active');
 }
@@ -888,6 +1251,7 @@ function selectPaymentMethod(method) {
   const total = subtotal + tax;
 
   if (method === 'qris') {
+    if (!isQrisEnabled()) { showToast('QRIS belum tersedia saat ini', 'warning'); return; }
     showQrisPayment(total);
     return;
   }
@@ -919,10 +1283,10 @@ function selectPaymentMethod(method) {
           Saldo tidak cukup!<br>
           <span style="font-size:14px;font-weight:normal;">Saldo: ${formatRupiah(currentUser.saldo)} | Butuh: ${formatRupiah(total)}</span>
         </div>
-        <p style="text-align:center;color:var(--gray);margin-bottom:16px;">Hubungi admin untuk top-up saldo, atau bayar dengan QRIS.</p>
-        <button class="btn" onclick="selectPaymentMethod('qris')" style="width:100%;margin-bottom:12px;">
+        <p style="text-align:center;color:var(--gray);margin-bottom:16px;">Hubungi admin untuk top-up saldo${isQrisEnabled() ? ', atau bayar dengan QRIS' : ''}.</p>
+        ${isQrisEnabled() ? `<button class="btn" onclick="selectPaymentMethod('qris')" style="width:100%;margin-bottom:12px;">
           <i class="fas fa-qrcode"></i> Bayar dengan QRIS
-        </button>`
+        </button>` : ''}`
     }
     <button class="btn btn-outline" onclick="closeCheckoutModal()" style="width:100%;margin-top:8px;">
       Batal
