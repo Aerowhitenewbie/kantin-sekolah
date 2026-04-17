@@ -1,4 +1,5 @@
-const { connectToDatabase } = require('./helpers/db');
+// api/topups.js
+import { connectToDatabase } from './helpers/db';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,24 +17,68 @@ export default async function handler(req, res) {
         _id: t._id.toString(),
         userId: t.userId?.toString(),
         userName: t.user_name,
-        user: t.user_name,       // alias for frontend compatibility
+        user: t.user_name,
         kelas: t.kelas,
         amount: t.amount,
-        saldoAkhir: t.saldo_akhir,
+        saldoAfter: t.saldo_akhir,
         type: t.type,
         date: t.date,
-        admin: t.admin
+        adminName: t.admin
       }));
       return res.status(200).json(formatted);
     }
 
-    // POST - bulk import (for importData)
     if (req.method === 'POST') {
-      const { action, data } = req.body;
-      if (action === 'bulkImport' && Array.isArray(data)) {
-        await topups.insertMany(data);
+      const body = req.body;
+
+      // Bulk import
+      if (body.action === 'bulkImport' && Array.isArray(body.data)) {
+        await topups.insertMany(body.data);
         return res.status(200).json({ success: true });
       }
+
+      // ✅ Normal topup — ini yang hilang sebelumnya
+      const { userId, amount, adminName, date } = body;
+      if (!userId || !amount) {
+        return res.status(400).json({ error: 'userId dan amount wajib diisi' });
+      }
+
+      const users = db.collection('users');
+      const { ObjectId } = await import('mongodb');
+
+      // Cari user
+      let user = null;
+      try { user = await users.findOne({ _id: new ObjectId(userId) }); } catch {}
+      if (!user) user = await users.findOne({ id: userId });
+      if (!user) return res.status(404).json({ error: 'User tidak ditemukan' });
+
+      // Update saldo user
+      const saldoBaru = (user.saldo || 0) + Number(amount);
+      await users.updateOne(
+        { _id: user._id },
+        { $set: { saldo: saldoBaru } }
+      );
+
+      // Simpan record topup
+      const record = {
+        userId: user._id.toString(),
+        user_name: user.name,
+        kelas: user.kelas,
+        amount: Number(amount),
+        saldo_akhir: saldoBaru,
+        admin: adminName || 'Admin',
+        date: date || new Date().toISOString(),
+        type: 'topup'
+      };
+      const inserted = await topups.insertOne(record);
+
+      return res.status(200).json({
+        success: true,
+        _id: inserted.insertedId.toString(),
+        userName: user.name,
+        saldoAfter: saldoBaru,
+        ...record
+      });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
